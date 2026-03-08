@@ -27,54 +27,19 @@ mapboxgl.accessToken = INITIAL_TOKEN;
 // DATA ENGINE: ESTABELECIMENTOS RADAR (Importado de src/data/radar_locais.ts)
 // ID 1 é sempre a referência para cálculo de distância (Alfa Plaza)
 
-// Constante de referência para inicialização do mapa (ID 1)
-const HOTEL_COORDS = ESTABELECIMENTOS_RADAR[0].coords;
-
-// Estilos do Mapa
+// Estilos do Mapa (Mapbox Standard para Visual 3D Nativo)
 const STYLES = {
-  DAY: 'mapbox://styles/mapbox/light-v11', // Mais estável que standard
-  NIGHT: 'mapbox://styles/mapbox/dark-v11' // Mais estável e combina com Titanium
+  STANDARD: 'mapbox://styles/mapbox/standard'
 };
 
-// Limites do Distrito Federal (Quadrilátero de Elite)
-// const DF_BOUNDS = [
-//   [-48.35, -16.10], // Sudoeste (Gama / Entorno sul)
-//   [-47.25, -15.40]  // Nordeste (Planaltina / Formosa)
-// ] as [[number, number], [number, number]];
-
-// CIDADES SATÉLITES (Visão Macro)
-const SATELLITE_CITIES: FeatureCollection<Point> = {
-  'type': 'FeatureCollection',
-  'features': [
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8825, -15.7942] }, 'properties': { 'title': '📍\nPlano Piloto' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.0558, -15.8306] }, 'properties': { 'title': '📍\nTaguatinga' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.0258, -15.8394] }, 'properties': { 'title': '📍\nÁguas Claras' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9800, -15.8200] }, 'properties': { 'title': '📍\nGuará I' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9900, -15.8300] }, 'properties': { 'title': '📍\nGuará II' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9664, -15.8710] }, 'properties': { 'title': '📍\nN. Bandeirante' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.1102, -15.8197] }, 'properties': { 'title': '📍\nCeilândia' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8833, -15.8450] }, 'properties': { 'title': '📍\nLago Sul' } },
-    
-    // NOVAS ADIÇÕES (PEDIDO DO USUÁRIO)
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9100, -15.8150] }, 'properties': { 'title': '📍\nAsa Sul' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8800, -15.7600] }, 'properties': { 'title': '📍\nAsa Norte' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.0850, -15.8750] }, 'properties': { 'title': '📍\nSamambaia' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9420, -15.7950] }, 'properties': { 'title': '📍\nCruzeiro' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.0650, -15.9050] }, 'properties': { 'title': '📍\nRecanto das Emas' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-48.0150, -15.8800] }, 'properties': { 'title': '📍\nRiacho Fundo' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.9250, -15.7950] }, 'properties': { 'title': '📍\nSudoeste' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8750, -15.7050] }, 'properties': { 'title': '📍\nVarjão' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.7800, -15.7700] }, 'properties': { 'title': '📍\nParanoá' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.7600, -15.7500] }, 'properties': { 'title': '📍\nItapoã' } },
-    { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8300, -15.8600] }, 'properties': { 'title': '📍\nJardim Botânico' } }
-  ]
-};
+const BRASILIA_COORDS: [number, number] = [-47.8825, -15.7942]; // Visão Geral de Brasília
+const HOTEL_COORDS = ESTABELECIMENTOS_RADAR[0].coords;
 
 export default function RadarScreen() {
   const navigate = useNavigate();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]); // Ref para gerenciar marcadores
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -85,357 +50,145 @@ export default function RadarScreen() {
   const [mapError, setMapError] = useState<string | null>(null);
   const [showIntro, setShowIntro] = useState(true);
   const [introFadeOut, setIntroFadeOut] = useState(false);
-  const [accessToken] = useState<string>(INITIAL_TOKEN);
-
-  // Alternância manual de modo dia/noite
-  const toggleDayNight = () => {
-    if (!map.current) return;
-    const newMode = !isDayMode;
-    setIsDayMode(newMode);
-    const newStyle = newMode ? STYLES.DAY : STYLES.NIGHT;
-    map.current.setStyle(newStyle);
-    // add3DLayer será chamado pelo evento 'style.load' automaticamente
-  };
 
   // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
-  const add3DLayer = useCallback((forceMode?: 'day' | 'night') => {
+  const configureStandardStyle = useCallback(() => {
     if (!map.current) return;
     
-    const hour = new Date().getHours();
-    let isDay = true;
-
-    // LÓGICA DE HORÁRIO (PROTOCOLO ATMOSFERA VIVA)
-    if (forceMode) {
-      isDay = forceMode === 'day';
-    } else {
-      if (hour >= 6 && hour < 18) {
-        isDay = true;
-      } else {
-        isDay = false;
+    try {
+      // 1. CONFIGURAÇÃO MAPBOX STANDARD (3D NATIVO)
+      if ((map.current as any).setConfigProperty) {
+        // Iluminação Dusk (Crepúsculo) para harmonizar com Obsidian
+        (map.current as any).setConfigProperty('basemap', 'lightPreset', 'dusk');
+        
+        // Ativar Prédios 3D e detalhes realistas
+        (map.current as any).setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+        (map.current as any).setConfigProperty('basemap', 'showRoadLabels', true);
+        (map.current as any).setConfigProperty('basemap', 'showTransitLabels', true);
       }
-    }
 
-    setIsDayMode(isDay);
-
-    // 1. CONFIGURAÇÃO TITANIUM STEALTH (MAPBOX STANDARD - ADAPTADO V11)
-    try {
-        if ((map.current as any).setConfigProperty) {
-            (map.current as any).setConfigProperty('basemap', 'lightPreset', isDay ? 'dawn' : 'night');
-            (map.current as any).setConfigProperty('basemap', 'showPointOfInterestLabels', false);
-        }
-    } catch (e) {
-        console.warn('Mapbox config error:', e);
-    }
-
-    // 2. ATMOSFERA E HORIZONTE (REQ 4)
-    // Fog Chumbo Profundo (#121212) com range [0.5, 5]
-    try {
-        map.current.setFog({
-            'range': [0.5, 5],
-            'color': '#121212',
-            'horizon-blend': 0.3,
-            'high-color': '#202020', 
-            'space-color': '#000000',
-            'star-intensity': isDay ? 0 : 0.8
-        });
-    } catch (e) { console.warn('Fog config error:', e); }
-
-    // 3. SKY LAYER (ATMOSPHERE)
-    try {
-        // Apenas adiciona se não existir e se o estilo suportar (Standard já tem sky, mas reforçamos)
-        if (!map.current.getLayer('sky')) {
-             map.current.addLayer({
-                'id': 'sky',
-                'type': 'sky',
-                'paint': {
-                    'sky-type': 'atmosphere',
-                    'sky-atmosphere-sun': [0.0, 0.0], 
-                    'sky-atmosphere-sun-intensity': 15
-                }
-            });
-        }
-    } catch (e) { console.warn('Sky layer error:', e); }
-
-    // REMOVER POIS NATIVOS E RÓTULOS (LEGACY FALLBACK)
-    const layersToHide = [
-      'poi-label',
-      'settlement-label',
-      'settlement-subdivision-label',
-      'settlement-minor-label',
-      'settlement-major-label',
-      'state-label',
-      'country-label'
-    ];
-    
-    layersToHide.forEach(layer => {
-      if (map.current?.getLayer(layer)) {
-        map.current.setPaintProperty(layer, 'text-opacity', 0);
-        map.current.setPaintProperty(layer, 'icon-opacity', 0);
-      }
-    });
-
-    // 4. ADICIONAR MARCADORES DE CIDADES SATÉLITES (VISÃO MACRO)
-    try {
-      if (!map.current.getSource('satellite-cities')) {
-        map.current.addSource('satellite-cities', {
-          type: 'geojson',
-          data: SATELLITE_CITIES
-        });
-
-        map.current.addLayer({
-          'id': 'satellite-cities-labels',
-          'type': 'symbol',
-          'source': 'satellite-cities',
-          'maxzoom': 11,
-          'minzoom': 9.5,
-          'layout': {
-            'text-field': ['get', 'title'],
-            'text-size': 12,
-            'text-anchor': 'center',
-            'text-justify': 'center'
-          },
-          'paint': {
-            'text-color': '#ffffff',
-            'text-halo-color': '#000000',
-            'text-halo-width': 2
-          }
-        });
-      }
-    } catch (err) {
-      console.warn('Erro ao adicionar satellite-cities:', err);
-    }
-
-    // 5. ADICIONAR BORDA ELEGANTE NAS REGIÕES ADMINISTRATIVAS (VISÃO MACRO)
-    try {
-      if (!map.current.getLayer('admin-boundaries-gold')) {
-        const compositeSource = map.current.getSource('composite');
-        if (compositeSource) {
-          map.current.addLayer({
-            'id': 'admin-boundaries-gold',
-            'type': 'line',
-            'source': 'composite',
-            'source-layer': 'admin',
-            'filter': ['all', ['==', 'maritime', 0], ['>=', 'admin_level', 2]], 
-            'minzoom': 9.5,
-            'maxzoom': 11,
-            'paint': {
-              'line-color': '#D4AF37', // Dourado (Gold)
-              'line-width': 1.5,
-              'line-opacity': 0.8,
-              'line-blur': 0
-            }
-          });
-        }
-      }
-    } catch (err) {
-      console.warn('Erro ao adicionar admin-boundaries-gold:', err);
-    }
-
-  }, []); // Dependência isDayMode removida para evitar recriação do mapa
-
-  // TIMER AUTOMÁTICO DE DIA/NOITE
-  useEffect(() => {
-    // Checa a cada minuto se mudou de turno (dia/noite)
-    const interval = setInterval(() => {
-      if (!map.current) return;
-      
-      const hour = new Date().getHours();
-      const currentIsDay = hour >= 6 && hour < 18;
-      
-      // Só muda se o estado for diferente (evita re-renders desnecessários)
-      setIsDayMode(prevMode => {
-        if (prevMode !== currentIsDay) {
-          // Detectou mudança de turno! Atualiza o mapa.
-          const newStyle = currentIsDay ? STYLES.DAY : STYLES.NIGHT;
-          map.current?.setStyle(newStyle);
-          // add3DLayer será rechamado via evento 'style.load'
-          return currentIsDay;
-        }
-        return prevMode;
+      // 2. ZOOM DIVE (FLYTO) - De Brasília para o Hotel
+      map.current.flyTo({
+        center: HOTEL_COORDS,
+        zoom: 17,
+        pitch: 60,
+        bearing: -15,
+        speed: 0.5,
+        curve: 1,
+        essential: true
       });
-    }, 60000); // 60 segundos
 
-    return () => clearInterval(interval);
+    } catch (e) {
+      console.warn('Mapbox Standard config error:', e);
+    }
   }, []);
-
-  // Função para inicializar (Hotel + Radar) - FIXAÇÃO ABSOLUTA
-  const initMarkers = useCallback(() => {
-    if (!map.current) return;
-
-    // Limpar marcadores existentes para evitar duplicação (HMR Friendly)
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
-
-    // RENDERIZAR TODOS OS PARCEIROS (SEM EXCEÇÃO, SEM CULLING)
-    ESTABELECIMENTOS_RADAR.forEach((local) => {
-      // Calcular Distância do Hotel
-      const hotelLoc = new mapboxgl.LngLat(HOTEL_COORDS[0], HOTEL_COORDS[1]);
-      const localLoc = new mapboxgl.LngLat(local.coords[0], local.coords[1]);
-      const distance = hotelLoc.distanceTo(localLoc);
-      
-      const formattedDist = distance < 1000 
-        ? `${Math.round(distance)}m` 
-        : `${(distance / 1000).toFixed(1)}km`;
-
-      // Criar elemento DOM
-      const el = document.createElement('div');
-      el.className = 'marker-container';
-      el.dataset.id = local.id.toString(); 
-      
-      // Z-INDEX SUPREMO PARA O HOTEL
-      if (local.id === 1) {
-        el.style.zIndex = '9999';
-        el.classList.add('hotel-only-icon');
-      } else {
-        el.style.zIndex = '100'; 
-        // Entrada sem animação para evitar alterações de opacidade/visibility
-      }
-
-      // Renderizar Conteúdo (Emoji + Nome)
-      const markerRoot = createRoot(el);
-      markerRoot.render(
-        <>
-          <div className={local.id === 1 ? "poi-emoji-clean" : "poi-emoji filter drop-shadow-lg"}>
-            {local.emoji}
-          </div>
-        </>
-      );
-
-      // Popup de Conversão (Obsidian Theme)
-      const popup = new mapboxgl.Popup({ 
-        offset: [0, -10], // Offset para não cobrir o marcador
-        closeButton: false, 
-        className: 'obsidian-popup',
-        maxWidth: '300px'
-      })
-      .setHTML(`
-        <div class="flex flex-col gap-2 min-w-[200px]">
-          <!-- Cabeçalho -->
-          <div class="text-left">
-            <h3 class="font-bold text-lg text-white leading-tight mb-0.5">${local.nome}</h3>
-            <p class="text-xs text-[#D4AF37] font-bold uppercase tracking-wide mb-1">${local.descricao || 'Estabelecimento Parceiro'}</p>
-            ${local.horario ? `<p class="text-[10px] text-gray-300 mb-1 flex items-center gap-1">🕒 ${local.horario}</p>` : ''}
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-[#FFD700] text-sm tracking-widest">${'★'.repeat(Math.floor(local.avaliacao || 5)).padEnd(5, '☆')}</span>
-              <span class="text-[10px] text-gray-400 font-medium">(${local.avaliacao || '5.0'})</span>
-              <span class="text-[10px] text-gray-400 font-medium ml-auto border border-gray-700 px-1.5 py-0.5 rounded text-[#D4AF37]">${formattedDist}</span>
-            </div>
-          </div>
-
-          <!-- Botão de Ação (Gold) -->
-          <button 
-            onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${HOTEL_COORDS[1]},${HOTEL_COORDS[0]}&destination=${local.coords[1]},${local.coords[0]}&travelmode=driving', '_blank')"
-            class="w-full bg-[#D4AF37] hover:bg-[#b5952f] text-black font-bold text-sm py-3 px-4 rounded-lg shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-transform active:scale-95 flex items-center justify-center gap-2 mt-1"
-            style="min-height: 44px; background-color: #D4AF37 !important;"
-          >
-            <span>IR</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14 0"></path><path d="M13 18l6 -6"></path><path d="M13 6l6 6"></path></svg>
-          </button>
-        </div>
-      `);
-
-      // Adicionar ao Mapa (Permanência Garantida)
-      const marker = new mapboxgl.Marker({ 
-        element: el, 
-        anchor: local.id === 1 ? 'center' : 'bottom', // Hotel no centro para ficar 'em cima', outros na base
-        pitchAlignment: 'viewport', 
-        rotationAlignment: 'viewport' 
-      })
-      .setLngLat(local.coords)
-      .setPopup(popup)
-      .addTo(map.current!);
-
-      // Rastrear marcador
-      markersRef.current.push(marker);
-    });
-  }, []); // Executa apenas uma vez. Sem re-renders.
 
   // Inicializar Mapa
   useEffect(() => {
     if (!mapContainer.current) return;
     if (map.current) return;
 
-    // 1. Validação de Suporte WebGL (Aprimorada para Mobile)
     const checkWebGL = () => {
       try {
         const canvas = document.createElement('canvas');
         return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-      } catch (e) {
-        return false;
-      }
+      } catch (e) { return false; }
     };
 
     if (!checkWebGL()) {
-      setMapError('Seu dispositivo não suporta a tecnologia necessária (WebGL) para exibir o mapa. Tente desativar o modo de economia de energia ou use outro navegador.');
+      setMapError('Dispositivo incompatível com WebGL.');
       return;
     }
 
-    // 2. Validação de Token (Via .env)
     const token = INITIAL_TOKEN;
-    if (!token || token.trim() === '') {
-      setMapError('Chave de acesso do mapa não configurada. Verifique o arquivo .env');
+    if (!token) {
+      setMapError('Token Mapbox ausente.');
       return;
     }
 
-    // 3. Inicialização com Delay Estratégico para Mobile
     const initTimeout = setTimeout(() => {
       try {
         if (!mapContainer.current) return;
         
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
-          style: isDayMode ? STYLES.DAY : STYLES.NIGHT,
-          center: HOTEL_COORDS,
-          zoom: 15.5,
-          pitch: 65,
-          bearing: -17.6,
-          antialias: false, // Otimizado para Mobile
-          attributionControl: false,
-          trackResize: true,
-          failIfMajorPerformanceCaveat: false,
-          maxZoom: 20,
-          minZoom: 2
-        });
-
-        map.current.on('error', (e) => {
-          console.warn('Mapbox non-fatal error:', e);
-          const errorMessage = e.error?.message || '';
-          if (errorMessage.includes('unauthorized') || errorMessage.includes('Forbidden')) {
-            setMapError('Chave de acesso do mapa inválida.');
-          }
+          style: STYLES.STANDARD,
+          center: BRASILIA_COORDS, // Inicia em Brasília para o efeito Dive
+          zoom: 10,
+          pitch: 0,
+          bearing: 0,
+          antialias: false,
+          attributionControl: false
         });
 
         map.current.on('style.load', () => {
-          add3DLayer();
+          configureStandardStyle();
           initMarkers();
           
-          // Correção de Layout Mobile
-          setTimeout(() => {
-            map.current?.resize();
-          }, 300);
+          setTimeout(() => map.current?.resize(), 300);
+        });
 
-          const ensureIconVisibility = () => {
-            markersRef.current.forEach(marker => {
-              const element = marker.getElement();
-              if (element) {
-                element.style.opacity = '1';
-                element.style.visibility = 'visible';
-              }
-            });
-          };
-          map.current?.on('move', ensureIconVisibility);
-          map.current?.on('zoom', ensureIconVisibility);
-          ensureIconVisibility();
+        map.current.on('error', (e) => {
+          console.warn('Mapbox error:', e);
+          if (e.error?.message?.includes('unauthorized')) {
+            setMapError('Token inválido.');
+          }
         });
 
       } catch (err: any) {
-        console.error('Erro fatal ao iniciar mapa:', err);
-        setMapError(`Falha técnica: ${err.message || 'Erro desconhecido'}`);
+        setMapError(`Erro: ${err.message}`);
       }
-    }, 100); // Delay reduzido para resposta mais rápida
+    }, 100);
 
     return () => clearTimeout(initTimeout);
-  }, [add3DLayer, initMarkers, isDayMode]);
+  }, [configureStandardStyle]);
+
+  // Marcadores de Elite (Alfa Plaza com Pulse Gold + 3D Simplified)
+  const initMarkers = useCallback(() => {
+    if (!map.current) return;
+
+    markersRef.current.forEach(m => m.remove());
+    markersRef.current = [];
+
+    ESTABELECIMENTOS_RADAR.forEach((local) => {
+      const el = document.createElement('div');
+      el.className = 'marker-container';
+      
+      // Estilização Específica do Hotel (Pulsar Dourado)
+      if (local.id === 1) {
+        el.innerHTML = `
+          <div class="hotel-marker-pulse">
+            <div class="pulse-ring"></div>
+            <div class="hotel-pin-gold">📍</div>
+          </div>
+        `;
+        el.style.zIndex = '1000';
+      } else {
+        // Marcadores 3D Simplificados para Aeroporto, Rodoviária e ParkShopping
+        const isElite = [14, 15, 23].includes(local.id); // IDs dos locais de elite
+        el.innerHTML = `
+          <div class="poi-3d-marker ${isElite ? 'elite-poi' : ''}">
+            <span class="poi-emoji-3d">${local.emoji}</span>
+          </div>
+        `;
+      }
+
+      const popup = new mapboxgl.Popup({ offset: [0, -10], closeButton: false, className: 'obsidian-popup' })
+        .setHTML(`
+          <div class="p-2">
+            <h3 class="font-bold text-white">${local.nome}</h3>
+            <p class="text-[10px] text-gold uppercase">${local.descricao}</p>
+          </div>
+        `);
+
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+        .setLngLat(local.coords)
+        .setPopup(popup)
+        .addTo(map.current!);
+
+      markersRef.current.push(marker);
+    });
+  }, []);
 
   // Persistência e FlyTo no Style Load
   useEffect(() => {
@@ -679,7 +432,14 @@ export default function RadarScreen() {
 
       {/* MODO DIA/NOITE (CLICÁVEL) */}
       <button 
-        onClick={toggleDayNight}
+        onClick={() => {
+          if (!map.current) return;
+          const newMode = !isDayMode;
+          setIsDayMode(newMode);
+          try {
+            (map.current as any).setConfigProperty('basemap', 'lightPreset', newMode ? 'dawn' : 'night');
+          } catch (e) { console.warn(e); }
+        }}
         className={`absolute right-4 z-10 shadow-lg text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full flex items-center gap-2 border transition-all duration-500 top-6 sm:right-6 hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white text-gray-600 border-gray-100' : 'bg-gray-800 text-gray-300 border-gray-700'}`}
         title={`Alternar para modo ${isDayMode ? 'Noite' : 'Dia'}`}
       >

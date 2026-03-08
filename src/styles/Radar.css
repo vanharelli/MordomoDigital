@@ -103,142 +103,67 @@
 /* =========================================
    HOTEL MARKER PULSE ANIMATION (GOLD)
    ========================================= */
-@keyframes pulse-gold {
-  0% {
-    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6);
-    transform: scale(1.2);
-  }
-  50% {
-    box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
-    transform: scale(1.25);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
-    transform: scale(1.2);
-  }
-}
-
-/* Animação de Flutuação (Levitação) */
-@keyframes float-marker {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
-}
-
-.marker-container {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  cursor: pointer;
-  transform-origin: bottom center;
-  pointer-events: auto;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.marker-container:hover {
-  transform: scale(1.1);
-  z-index: 50;
-}
-
-/* =========================================
-   USER/HOTEL MARKER - GOLD STYLE
-   ========================================= */
-
-.user-pin-emoji {
-  font-size: 28px;
-  background-color: rgba(0, 0, 0, 0.9);
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 2px solid #D4AF37;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  /* Pulse Gold */
-  animation: pulse-gold 3s infinite;
-  margin-top: 0;
-  line-height: 1;
-  pointer-events: auto;
-  transform: scale(1.2);
-}
-
-/* =========================================
-   POI MARKERS (EMOJIS) - ELITE STYLE
-   ========================================= */
-
-/* Label Discreta */
-.poi-label {
+.hotel-marker-pulse {
   position: relative;
-  margin-bottom: 2px;
-  font-size: 8px;
-  font-weight: 600;
-  color: #D4AF37; /* Gold Text */
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 1px 3px;
-  border-radius: 4px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  letter-spacing: 0.5px;
-}
-
-/* Estilo do Emoji do POI (Elite Gold Border) */
-.poi-emoji {
-  font-size: 12px;
-  background-color: rgba(0, 0, 0, 0.7); /* Preto Translúcido */
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%; /* Circular */
-  border: 1px solid #D4AF37; /* Borda Dourada */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s;
-  pointer-events: auto;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #D4AF37;
+  border-radius: 50%;
+  animation: hotelPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+@keyframes hotelPulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.hotel-pin-gold {
+  font-size: 48px;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+  z-index: 2;
+  transform: translateY(-5px);
+}
+
+/* =========================================
+   3D SIMPLIFIED POI MARKERS
+   ========================================= */
+.poi-3d-marker {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 6px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   backdrop-filter: blur(4px);
 }
 
-.poi-emoji:hover {
-  transform: scale(1.15);
-  background-color: rgba(0, 0, 0, 0.9);
-  border-color: #FFD700; /* Bright Gold */
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+.poi-emoji-3d {
+  font-size: 20px;
 }
 
-/* =========================================
-   HOTEL MARKER OVERRIDES (ICON ONLY - CLEAN PIN)
-   ========================================= */
-.hotel-only-icon {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  animation: none !important;
+.elite-poi {
+  border: 2px solid #D4AF37;
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-.poi-emoji-clean {
-  font-size: 56px !important; /* Destaque máximo para o Pin */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  filter: none !important; /* Remove sombras e filtros */
-  pointer-events: auto;
-  z-index: 9999;
-}
-
-.hotel-only-icon .poi-label {
-  display: none !important;
+.poi-3d-marker:hover {
+  transform: scale(1.3) translateY(-5px);
+  border-color: #D4AF37;
+  z-index: 100;
 }
 
 /* =========================================

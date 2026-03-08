@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { 
   Navigation, Menu, Search, X, ArrowLeft
@@ -8,7 +7,6 @@ import {
 import { useNavigate } from 'react-router-dom';
  
 import { ESTABELECIMENTOS_RADAR } from '../data/radar_locais';
-import type { FeatureCollection, Point } from 'geojson';
 import '../styles/Radar.css';
 
 // Configuração global para mobile/touch
@@ -143,7 +141,7 @@ export default function RadarScreen() {
     return () => clearTimeout(initTimeout);
   }, [configureStandardStyle]);
 
-  // Marcadores de Elite (Alfa Plaza com Pulse Gold + 3D Simplified)
+  // Marcadores de Elite (Alfa Plaza com Pulse Gold + 3D Simplified + Rótulos Dinâmicos)
   const initMarkers = useCallback(() => {
     if (!map.current) return;
 
@@ -160,15 +158,17 @@ export default function RadarScreen() {
           <div class="hotel-marker-pulse">
             <div class="pulse-ring"></div>
             <div class="hotel-pin-gold">📍</div>
+            <div class="poi-dynamic-label active">${local.nome}</div>
           </div>
         `;
         el.style.zIndex = '1000';
       } else {
-        // Marcadores 3D Simplificados para Aeroporto, Rodoviária e ParkShopping
-        const isElite = [14, 15, 23].includes(local.id); // IDs dos locais de elite
+        // Marcadores 3D Simplificados
+        const isElite = [14, 15, 23].includes(local.id);
         el.innerHTML = `
           <div class="poi-3d-marker ${isElite ? 'elite-poi' : ''}">
             <span class="poi-emoji-3d">${local.emoji}</span>
+            <div class="poi-dynamic-label">${local.nome}</div>
           </div>
         `;
       }
@@ -188,6 +188,37 @@ export default function RadarScreen() {
 
       markersRef.current.push(marker);
     });
+
+    // Watchdog de Zoom para Rótulos (Aparecem apenas em Zoom aproximado)
+    const updateLabels = () => {
+      if (!map.current) return;
+      const zoom = map.current.getZoom();
+      
+      // Seleciona todos os rótulos dinâmicos via DOM (Mapbox markers estão fora do ciclo React)
+      const labels = document.querySelectorAll('.poi-dynamic-label');
+      
+      labels.forEach(label => {
+        const isHotelLabel = label.parentElement?.classList.contains('hotel-marker-pulse');
+        
+        // Regra: Hotel sempre visível. Outros apenas com Zoom > 16.2
+        if (isHotelLabel) {
+          label.classList.add('active');
+          return;
+        }
+
+        if (zoom > 16.2) {
+          label.classList.add('active');
+        } else {
+          label.classList.remove('active');
+        }
+      });
+    };
+
+    map.current.on('zoom', updateLabels);
+    map.current.on('move', updateLabels); // Garante atualização em qualquer movimento
+    
+    // Pequeno delay para garantir que o DOM dos marcadores foi injetado pelo Mapbox
+    setTimeout(updateLabels, 500);
   }, []);
 
   // Persistência e FlyTo no Style Load
@@ -195,7 +226,7 @@ export default function RadarScreen() {
     if (!map.current) return;
 
     const handleStyleLoad = () => {
-      add3DLayer();
+      configureStandardStyle();
       // Manter a posição atual ou resetar para o Hotel? 
       // Por padrão, ao trocar o estilo, o Mapbox mantém a câmera.
       // Vamos apenas garantir que as camadas sejam refeitas.
@@ -205,7 +236,7 @@ export default function RadarScreen() {
     return () => {
       map.current?.off('style.load', handleStyleLoad);
     };
-  }, [add3DLayer]);
+  }, [configureStandardStyle]);
 
   const flyToLocation = (coords: [number, number]) => {
     if (!map.current) return;
@@ -231,12 +262,12 @@ export default function RadarScreen() {
     <div className={`w-full h-full relative overflow-hidden font-sans transition-colors duration-500 ${isDayMode ? 'bg-gray-100' : 'bg-gray-900'}`}>
       
       {/* NAVEGAÇÃO SATÉLITE ELITE (INTRO) */}
-      {showIntro && accessToken && (
+      {showIntro && INITIAL_TOKEN && (
         <div className={`map-intro-overlay ${introFadeOut ? 'fade-out' : ''}`}>
           <div 
             className="map-zoom-sequence" 
             style={{ 
-              backgroundImage: `url('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/-47.9706,-15.8718,2,0/1280x1280?access_token=${accessToken}')` 
+              backgroundImage: `url('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/-47.9706,-15.8718,2,0/1280x1280?access_token=${INITIAL_TOKEN}')` 
             }}
             onAnimationEnd={() => {
               setIntroFadeOut(true);

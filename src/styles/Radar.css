@@ -160,10 +160,57 @@
   box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-.poi-3d-marker:hover {
-  transform: scale(1.3) translateY(-5px);
-  border-color: #D4AF37;
-  z-index: 100;
+/* =========================================
+   DYNAMIC LABELS (ZOOM-BASED)
+   ========================================= */
+.poi-dynamic-label {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+}
+
+.poi-dynamic-label.active {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  top: -35px;
+}
+
+/* Ajuste específico para o label do Hotel */
+.hotel-marker-pulse .poi-dynamic-label {
+  top: -15px;
+  background: #D4AF37;
+  color: black;
+  border-color: #000;
+  font-weight: 900;
+}
+
+.hotel-marker-pulse .poi-dynamic-label.active {
+  top: -25px;
+}
+
+.marker-container {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 /* =========================================

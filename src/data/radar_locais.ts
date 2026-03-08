@@ -17,7 +17,7 @@ export const ESTABELECIMENTOS_RADAR: RadarLocal[] = [
     id: 1, 
     nome: "ALFA PLAZA HOTEL", 
     emoji: "📍", 
-    coords: [-47.970651, -15.871861], 
+    coords: [-47.970692, -15.871756], 
     categoria: "hotel", 
     avaliacao: 4.8,
     descricao: "Voce esta aqui",

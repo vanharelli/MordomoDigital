@@ -3,12 +3,12 @@ import { useGuest } from '../context/GuestContext';
 import Carousel from '../components/Carousel';
 import AnnouncementTicker from '../components/AnnouncementTicker';
 import WhatsAppHook from '../components/WhatsAppHook';
-import { LogOut, Wifi, X } from 'lucide-react';
+import { Wifi, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const DashboardScreen: React.FC = () => {
-  const { guestName, roomNumber, logout } = useGuest();
+  const { guestName, roomNumber } = useGuest();
   const navigate = useNavigate();
   const [isWifiOpen, setIsWifiOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
@@ -17,11 +17,6 @@ const DashboardScreen: React.FC = () => {
   });
   const logoClicksRef = useRef(0);
   const [hideRestaurant, setHideRestaurant] = useState<boolean | null>(null);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const handleLogoClick = () => {
     logoClicksRef.current += 1;
@@ -154,9 +149,6 @@ const DashboardScreen: React.FC = () => {
                     aria-label="Wi-Fi Info"
                   >
                     <Wifi size={15} />
-                  </button>
-                  <button onClick={handleLogout} className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" aria-label="Logout">
-                    <LogOut size={18} />
                   </button>
                 </div>
               </div>

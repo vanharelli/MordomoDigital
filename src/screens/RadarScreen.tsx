@@ -253,8 +253,6 @@ export default function RadarScreen() {
 
   // EFEITOS VISUAIS - HUD (Refinado para TITANIUM)
   const hudBg = isDayMode ? 'bg-white/5' : 'bg-black/10'; // Transparência extrema (5% dia, 10% noite)
-  const hudTextMain = isDayMode ? 'text-gray-950' : 'text-white'; // Preto absoluto no dia para máximo contraste
-  const hudTextSub = isDayMode ? 'text-gray-900' : 'text-gray-100'; 
   const borderHighlight = isDayMode ? 'border-yellow-600/50' : 'border-white/5'; // Borda dourada no dia
   const itemHover = isDayMode ? 'hover:bg-yellow-500/10' : 'hover:bg-white/5'; // Hover dourado no dia
 

@@ -351,7 +351,7 @@ export default function RadarScreen() {
 
       {/* SIDEBAR - GLASSMORPHISM FROST */}
       <div className={`absolute top-0 left-0 h-full w-full sm:w-80 z-[200000] backdrop-blur-2xl shadow-2xl transform transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1) ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${hudBg} ${borderHighlight} border-r`}>
-        <div className="h-full overflow-y-auto p-6 pt-20 pb-24">
+        <div className="h-full overflow-y-auto p-6 pt-20 pb-24 sidebar-content-scroll">
           
           {/* HEADER */}
           <div className={`mb-8 border-b pb-6 text-center ${isDayMode ? 'border-yellow-600/30' : 'border-gray-800'}`}>

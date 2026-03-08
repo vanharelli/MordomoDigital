@@ -214,6 +214,18 @@
 }
 
 /* =========================================
+   HIDE SCROLLBAR (SIDEBAR)
+   ========================================= */
+.sidebar-content-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.sidebar-content-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* =========================================
    MAP FILTER (OBSIDIAN ATMOSPHERE)
    ========================================= */
 .mapboxgl-canvas { 

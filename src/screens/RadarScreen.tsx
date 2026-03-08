@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { ESTABELECIMENTOS_RADAR } from '../data/radar_locais';
 import '../styles/Radar.css';
 
+// Configuração global para mobile/touch
+mapboxgl.clearStorage(); // Limpa cache para evitar estilos corrompidos
+
 // TOKEN
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
@@ -67,11 +70,12 @@ export default function RadarScreen() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDayMode, setIsDayMode] = useState(() => {
-    // Estado inicial baseado na hora real (executado apenas uma vez)
     const hour = new Date().getHours();
     return hour >= 6 && hour < 18;
   });
   const [mapError, setMapError] = useState<string | null>(null);
+  const [showIntro, setShowIntro] = useState(true);
+  const [introFadeOut, setIntroFadeOut] = useState(false);
 
   // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
   const add3DLayer = useCallback((forceMode?: 'day' | 'night') => {
@@ -245,11 +249,8 @@ export default function RadarScreen() {
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Referência: ALFA PLAZA HOTEL
-    // const hotelData = ESTABELECIMENTOS_RADAR[0]; // Unused
-    
     // RENDERIZAR TODOS OS PARCEIROS (SEM EXCEÇÃO, SEM CULLING)
-    ESTABELECIMENTOS_RADAR.forEach(local => {
+    ESTABELECIMENTOS_RADAR.forEach((local, index) => {
       // Calcular Distância do Hotel
       const hotelLoc = new mapboxgl.LngLat(HOTEL_COORDS[0], HOTEL_COORDS[1]);
       const localLoc = new mapboxgl.LngLat(local.coords[0], local.coords[1]);
@@ -262,26 +263,31 @@ export default function RadarScreen() {
       // Criar elemento DOM
       const el = document.createElement('div');
       el.className = 'marker-container';
-      el.dataset.id = local.id.toString(); // ID para identificar VIPs (LOD)
+      el.dataset.id = local.id.toString(); 
       
       // Z-INDEX SUPREMO PARA O HOTEL
       if (local.id === 1) {
         el.style.zIndex = '9999';
         el.classList.add('hotel-marker');
+        // Novo estilo de PIN pulsante elite
+        el.classList.add('hotel-pin-elite');
       } else {
-        // Garantir que parceiros também fiquem acima de labels do mapa
         el.style.zIndex = '100'; 
+        // Adicionar classe de entrada stagger
+        el.classList.add('poi-entrance');
+        // Delay escalonado para Aeroporto, ParkShopping, Rodoviária (IDs 14, 91, 15)
+        const staggerDelay = local.id === 14 ? 0.2 : local.id === 91 ? 0.4 : local.id === 15 ? 0.6 : (index * 0.05);
+        el.style.animationDelay = `${staggerDelay}s`;
       }
 
       // Renderizar Conteúdo (Emoji + Nome)
       const markerRoot = createRoot(el);
       markerRoot.render(
         <>
-          {/* Nome invisível inicialmente (controlado por LOD) */}
-          <div className="poi-label" style={{ 
-            opacity: 0, 
+          <div className={`poi-label poi-label-elite`} style={{ 
+            opacity: local.id === 1 ? 1 : 0, 
             display: 'block',
-            transition: 'opacity 0.3s ease-in-out' // Suavidade extra
+            transition: 'opacity 0.3s ease-in-out'
           }}>
             {local.nome}
           </div>
@@ -343,39 +349,51 @@ export default function RadarScreen() {
     if (!mapContainer.current) return;
     if (map.current) return; // Prevent map re-initialization
 
-    try {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: isDayMode ? STYLES.DAY : STYLES.NIGHT, // Inicializa direto com o tema correto
-        center: HOTEL_COORDS,
-        zoom: 15.5,
-        pitch: 65, // Ângulo cinematográfico
-        bearing: -17.6,
-        antialias: true,
-        attributionControl: false // Minimalista
-      });
+    // Pequeno delay para garantir que o container DOM esteja pronto no mobile
+    const initTimeout = setTimeout(() => {
+      try {
+        if (!mapContainer.current) return;
+        
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: isDayMode ? STYLES.DAY : STYLES.NIGHT, // Inicializa direto com o tema correto
+          center: HOTEL_COORDS,
+          zoom: 15.5,
+          pitch: 65, // Ângulo cinematográfico
+          bearing: -17.6,
+          antialias: true,
+          attributionControl: false // Minimalista
+        });
 
-      // Erro handling para o carregamento do mapa
-      map.current.on('error', (e) => {
-        console.error('Mapbox error:', e);
-        if (e.error && e.error.message && (e.error.message.includes('Aborted') || e.error.message.includes('Network'))) {
-            // Ignorar erros de rede transientes/cancelamentos
-            return;
-        }
-        setMapError('Erro ao carregar o mapa. Verifique sua conexão.');
-      });
+        // Erro handling para o carregamento do mapa
+        map.current.on('error', (e) => {
+          console.error('Mapbox error:', e);
+          if (e.error && e.error.message && (e.error.message.includes('Aborted') || e.error.message.includes('Network'))) {
+              // Ignorar erros de rede transientes/cancelamentos
+              return;
+          }
+          setMapError('Erro ao carregar o mapa. Verifique sua conexão.');
+        });
 
-      map.current.on('style.load', () => {
-        // Quando o estilo termina de carregar, aplicamos as camadas 3D e marcadores
-        add3DLayer();
-        initMarkers();
-      });
+        map.current.on('style.load', () => {
+          // Quando o estilo termina de carregar, aplicamos as camadas 3D e marcadores
+          add3DLayer();
+          initMarkers();
+          
+          // Forçar redimensionamento após carregar (crucial para mobile)
+          setTimeout(() => {
+            map.current?.resize();
+          }, 100);
+        });
 
-    } catch (err) {
-      console.error('Erro fatal ao iniciar mapa:', err);
-      setMapError('Não foi possível inicializar o mapa.');
-    }
-  }, [add3DLayer]); // Dependência única (estável)
+      } catch (err) {
+        console.error('Erro fatal ao iniciar mapa:', err);
+        setMapError('Não foi possível inicializar o mapa.');
+      }
+    }, 300);
+
+    return () => clearTimeout(initTimeout);
+  }, [add3DLayer, initMarkers, isDayMode]); // Adicionadas dependências estáveis
 
   // Persistência e FlyTo no Style Load
   useEffect(() => {
@@ -417,6 +435,27 @@ export default function RadarScreen() {
   return (
     <div className={`w-full h-full relative overflow-hidden font-sans transition-colors duration-500 ${isDayMode ? 'bg-gray-100' : 'bg-gray-900'}`}>
       
+      {/* NAVEGAÇÃO SATÉLITE ELITE (INTRO) */}
+      {showIntro && (
+        <div className={`map-intro-overlay ${introFadeOut ? 'fade-out' : ''}`}>
+          <div 
+            className="map-zoom-sequence" 
+            style={{ 
+              backgroundImage: `url('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/-47.9706,-15.8718,2,0/1280x1280?access_token=${mapboxgl.accessToken}')` 
+            }}
+            onAnimationEnd={() => {
+              setIntroFadeOut(true);
+              setTimeout(() => setShowIntro(false), 500);
+            }} 
+          />
+          
+          {/* Overlay do Brasil Dourado (Simulado via SVG sobre o zoom) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-1/2 h-1/2 border-2 border-gold/30 rounded-full animate-pulse blur-2xl" />
+          </div>
+        </div>
+      )}
+
       {/* MAPA */}
       <div ref={mapContainer} className="w-full h-full absolute top-0 left-0" />
 

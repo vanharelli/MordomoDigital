@@ -126,21 +126,23 @@ const DashboardScreen: React.FC = () => {
           <div className="min-h-full flex flex-col">
             <div className="sticky top-0 z-50 flex flex-col">
               {/* Header */}
-              <div className="px-3 pt-3 pb-3 flex justify-between items-center border-b-[0.5px] border-gold bg-obsidian/70 backdrop-blur-md relative text-white">
-                <div className="z-10">
-                  <h1 className="text-xl font-bold tracking-widest uppercase mb-1">{guestName}</h1>
-                  <p className="text-xs text-gold uppercase tracking-widest font-bold">Quarto {roomNumber}</p>
-                </div>
-                
-                {/* Centralized Logo */}
+            <div className="px-3 pt-3 pb-3 flex justify-between items-center border-b-[0.5px] border-gold bg-obsidian/70 backdrop-blur-md relative text-white">
+              <div className="flex items-center gap-3 z-10">
+                {/* Logo on the left */}
                 <div 
-                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer active:scale-95 transition-transform"
+                  className="cursor-pointer active:scale-95 transition-transform"
                   onClick={handleLogoClick}
                 >
-                  <img src="/logo.webp" alt="Alfa Plaza" className="h-16 w-auto object-contain" />
+                  <img src="/logo.webp" alt="Alfa Plaza" className="h-12 w-auto object-contain" />
                 </div>
+                
+                <div>
+                  <h1 className="text-lg font-bold tracking-widest uppercase leading-tight">{guestName}</h1>
+                  <p className="text-[10px] text-gold uppercase tracking-widest font-bold">Quarto {roomNumber}</p>
+                </div>
+              </div>
 
-                <div className="flex items-center space-x-2 z-10">
+              <div className="flex items-center space-x-2 z-10">
                   <button 
                     onClick={() => setIsWifiOpen(true)} 
                     className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" 

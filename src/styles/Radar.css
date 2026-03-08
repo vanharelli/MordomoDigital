@@ -1,4 +1,106 @@
 /* =========================================
+   SATELLITE ELITE NAVIGATION ANIMATIONS
+   ========================================= */
+
+.map-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.map-zoom-sequence {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  animation: geoDive 3s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+
+@keyframes geoDive {
+  0% { 
+    transform: scale(1); 
+    filter: blur(0);
+  }
+  50% { 
+    transform: scale(5); 
+    filter: blur(1px); 
+  }
+  100% { 
+    transform: scale(15); 
+    filter: blur(0); 
+  }
+}
+
+.fade-out {
+  animation: crossFade 0.5s ease-out forwards;
+}
+
+@keyframes crossFade {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* =========================================
+   STAGGERED POI ENTRANCE
+   ========================================= */
+@keyframes poi-bounce-in {
+  0% { 
+    transform: scale(0) translateY(20px); 
+    opacity: 0; 
+  }
+  70% { 
+    transform: scale(1.1) translateY(-5px); 
+  }
+  100% { 
+    transform: scale(1) translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.poi-entrance {
+  animation: poi-bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* =========================================
+   HOTEL PIN PULSE (PURPLE/GOLD)
+   ========================================= */
+@keyframes pulse-elite {
+  0% {
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7), 0 0 0 0 rgba(212, 175, 55, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(147, 51, 234, 0), 0 0 0 10px rgba(212, 175, 55, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0), 0 0 0 0 rgba(212, 175, 55, 0);
+    transform: scale(1);
+  }
+}
+
+.hotel-pin-elite {
+  animation: pulse-elite 2s infinite !important;
+  border: 3px solid #D4AF37 !important;
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 100%) !important;
+}
+
+/* Rótulos em Branco Cirúrgico com sombra suave */
+.poi-label-elite {
+  color: #FFFFFF !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  font-weight: 700 !important;
+  border: none !important;
+  backdrop-filter: blur(4px);
+}
+
+/* =========================================
    HOTEL MARKER PULSE ANIMATION (GOLD)
    ========================================= */
 @keyframes pulse-gold {

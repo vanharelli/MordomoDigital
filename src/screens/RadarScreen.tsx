@@ -331,7 +331,7 @@ export default function RadarScreen() {
       )}
 
       {/* CONTROLES SUPERIORES */}
-      <div className="absolute left-4 z-[200001] flex items-center gap-3 top-6 sm:left-6 sm:gap-4">
+      <div className="absolute left-4 z-[199999] flex items-center gap-3 top-6 sm:left-6 sm:gap-4">
         <button 
           onClick={() => navigate('/dashboard')}
           className={`p-3 sm:p-4 shadow-lg border rounded-full transition-all hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white/90 text-yellow-600 border-yellow-500 shadow-yellow-500/20' : 'bg-gray-800 text-gray-300 border-gray-700'}`}
@@ -355,8 +355,8 @@ export default function RadarScreen() {
           
           {/* HEADER */}
           <div className={`mb-8 border-b pb-6 text-center ${isDayMode ? 'border-yellow-600/30' : 'border-gray-800'}`}>
-            <h1 className={`font-bold text-xl leading-tight ${hudTextMain} ${isDayMode ? 'text-yellow-700' : ''}`}>Mordomo Digital</h1>
-            <p className={`text-sm font-medium mt-2 ${hudTextSub} ${isDayMode ? 'text-yellow-600' : ''}`}>Alfa Plaza Hotel</p>
+            <h1 className={`font-bold text-xl leading-tight text-white`}>Mordomo Digital</h1>
+            <p className={`text-sm font-medium mt-2 text-white/80`}>Alfa Plaza Hotel</p>
           </div>
 
           <button 
@@ -372,7 +372,7 @@ export default function RadarScreen() {
 
           {/* LISTA DE POIs */}
           <div className="space-y-6">
-            <h2 className={`text-xs font-bold uppercase tracking-wider opacity-70 ${hudTextSub}`}>
+            <h2 className={`text-xs font-bold uppercase tracking-wider text-white/70`}>
               Explorar Região
             </h2>
 
@@ -384,12 +384,12 @@ export default function RadarScreen() {
                 placeholder="Buscar locais..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`w-full bg-transparent pl-10 pr-4 py-3 text-sm font-medium outline-none ${isDayMode ? 'text-yellow-900 placeholder-yellow-700/50' : 'text-white placeholder-opacity-50 placeholder-current'}`}
+                className={`w-full bg-transparent pl-10 pr-4 py-3 text-sm font-medium outline-none ${isDayMode ? 'text-white placeholder-white/50' : 'text-white placeholder-opacity-50 placeholder-current'}`}
               />
               {searchTerm && (
                 <button 
                   onClick={() => setSearchTerm('')}
-                  className={`absolute right-3 p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${isDayMode ? 'text-yellow-600' : 'text-gray-400'}`}
+                  className={`absolute right-3 p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${isDayMode ? 'text-white' : 'text-gray-400'}`}
                 >
                   <X size={14} />
                 </button>
@@ -437,19 +437,19 @@ export default function RadarScreen() {
                       flyToLocation(local.coords);
                       if (window.innerWidth < 640) setIsSidebarOpen(false);
                     }}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${itemHover} ${isDayMode ? 'text-yellow-900 border border-yellow-500/30 hover:border-yellow-500/60' : hudTextMain} text-left group`}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${itemHover} ${isDayMode ? 'text-white border border-yellow-500/30 hover:border-yellow-500/60' : 'text-white'} text-left group`}
                   >
                     <div className={`p-2 rounded-lg ${colorClass} group-hover:scale-110 transition-transform text-xl shadow-sm ${isDayMode ? 'shadow-yellow-500/10' : ''}`}>
                       {local.emoji}
                     </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-center">
-                        <p className={`font-bold text-sm leading-tight ${isDayMode ? 'text-yellow-800' : ''}`}>{local.nome}</p>
-                        <span className={`text-[10px] font-mono opacity-60 px-1.5 py-0.5 rounded ${isDayMode ? 'bg-yellow-500/10 text-yellow-800' : 'bg-black/10 dark:bg-white/10'}`}>{formattedDist}</span>
+                        <p className={`font-bold text-sm leading-tight text-white`}>{local.nome}</p>
+                        <span className={`text-[10px] font-mono opacity-60 px-1.5 py-0.5 rounded ${isDayMode ? 'bg-yellow-500/10 text-white' : 'bg-black/10 dark:bg-white/10'}`}>{formattedDist}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <p className={`text-xs opacity-60 capitalize ${isDayMode ? 'text-yellow-700' : ''}`}>{local.categoria}</p>
-                        {local.horario && <span className={`text-[10px] opacity-80 font-medium ${isDayMode ? 'text-yellow-700' : ''}`}>{local.horario}</span>}
+                        <p className={`text-xs opacity-60 capitalize text-white/70`}>{local.categoria}</p>
+                        {local.horario && <span className={`text-[10px] opacity-80 font-medium text-white/80`}>{local.horario}</span>}
                       </div>
                     </div>
                   </button>

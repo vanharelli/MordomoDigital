@@ -6,6 +6,10 @@ import RadarScreen from './screens/RadarScreen';
 import AdminScreen from './screens/AdminScreen';
 import ProductTableScreen from './screens/ProductTableScreen';
 import ExtrasScreen from './screens/ExtrasScreen';
+import RoomServiceScreen from './screens/RoomServiceScreen';
+import IronScreen from './screens/IronScreen';
+import HairDryerScreen from './screens/HairDryerScreen';
+import GarageScreen from './screens/GarageScreen';
 import { useSecurity } from './hooks/useSecurity';
 import { useDoubleBackExit } from './hooks/useDoubleBackExit';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -53,6 +57,38 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <ExtrasScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/room-service" 
+        element={
+          <ProtectedRoute>
+            <RoomServiceScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/iron" 
+        element={
+          <ProtectedRoute>
+            <IronScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/hair-dryer" 
+        element={
+          <ProtectedRoute>
+            <HairDryerScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/garage" 
+        element={
+          <ProtectedRoute>
+            <GarageScreen />
           </ProtectedRoute>
         } 
       />

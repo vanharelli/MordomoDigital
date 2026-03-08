@@ -2,10 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { 
-  Navigation, Menu, X, Search 
-} from 'lucide-react';
-import { ESTABELECIMENTOS_RADAR } from './data/radar_locais';
+import { Navigation, Menu, X, Search } from 'lucide-react';
+import { ESTABELECIMENTOS_RADAR, RadarLocal } from './data/radar_locais';
 
 // TOKEN
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
@@ -250,7 +248,7 @@ export default function App() {
     // const hotelData = ESTABELECIMENTOS_RADAR[0]; // Unused
     
     // RENDERIZAR TODOS OS PARCEIROS (SEM EXCEÇÃO, SEM CULLING)
-    ESTABELECIMENTOS_RADAR.forEach(local => {
+    ESTABELECIMENTOS_RADAR.forEach((local: RadarLocal) => {
       // Calcular Distância do Hotel
       const hotelLoc = new mapboxgl.LngLat(HOTEL_COORDS[0], HOTEL_COORDS[1]);
       const localLoc = new mapboxgl.LngLat(local.coords[0], local.coords[1]);
@@ -606,8 +604,8 @@ export default function App() {
 
             <div className="space-y-2">
               {ESTABELECIMENTOS_RADAR
-                .filter(local => local.id !== 1) // Remove o Hotel da lista (já tem botão dedicado)
-                .filter(local => {
+                .filter((local: RadarLocal) => local.id !== 1) // Remove o Hotel da lista (já tem botão dedicado)
+                .filter((local: RadarLocal) => {
                   if (!searchTerm) return true;
                   const term = searchTerm.toLowerCase();
                   return (
@@ -616,7 +614,7 @@ export default function App() {
                     (local.descricao && local.descricao.toLowerCase().includes(term))
                   );
                 })
-                .map((local) => {
+                .map((local: RadarLocal) => {
                 const isUtility = ['banco', 'juridico', 'taxi', 'transporte'].includes(local.categoria);
                 
                 // CORES DOS ÍCONES (Adaptado para Golden Mode no Dia)

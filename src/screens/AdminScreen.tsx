@@ -18,10 +18,12 @@ const AdminScreen: React.FC = () => {
       const { data, error } = await supabase
         .from('hotel_settings')
         .select('*')
-        .abortSignal(AbortSignal.timeout(5000));
+        .abortSignal(AbortSignal.timeout(10000));
       
       if (error) {
-           console.warn('Supabase Error:', error);
+           // Silencia erros esperados de timeout durante reconexão
+           if (error.message?.includes('AbortError')) return;
+           console.warn('Supabase Fetch Error:', error);
            setStatus('Erro ao carregar configurações.');
            return;
       }
@@ -77,15 +79,18 @@ const AdminScreen: React.FC = () => {
     try {
       const { error: error1 } = await supabase
         .from('hotel_settings')
-        .upsert({ key: 'announcement', value: announcement });
+        .upsert({ key: 'announcement', value: announcement })
+        .abortSignal(AbortSignal.timeout(10000));
 
       const { error: error2 } = await supabase
         .from('hotel_settings')
-        .upsert({ key: 'ticker_speed', value: speed.toString() });
+        .upsert({ key: 'ticker_speed', value: speed.toString() })
+        .abortSignal(AbortSignal.timeout(10000));
 
       const { error: error3 } = await supabase
         .from('hotel_settings')
-        .upsert({ key: 'hide_restaurante', value: hideRestaurant ? 'true' : 'false' });
+        .upsert({ key: 'hide_restaurante', value: hideRestaurant ? 'true' : 'false' })
+        .abortSignal(AbortSignal.timeout(10000));
 
       if (error1 || error2 || error3) {
         throw new Error(error1?.message || error2?.message || error3?.message);

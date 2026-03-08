@@ -12,9 +12,10 @@ const AnnouncementTicker: React.FC = () => {
       const { data, error } = await supabase
         .from('hotel_settings')
         .select('*')
-        .abortSignal(AbortSignal.timeout(5000));
+        .abortSignal(AbortSignal.timeout(10000));
 
       if (error) {
+        if (error.message?.includes('AbortError')) return;
         console.warn('Ticker Sync Failed:', error.message);
         return;
       }

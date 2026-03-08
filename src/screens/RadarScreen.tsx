@@ -18,7 +18,7 @@ try {
   console.warn('Mapbox clearStorage error:', e);
 }
 
-// TOKEN
+// TOKEN (Sincronizado via .env)
 const INITIAL_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 mapboxgl.accessToken = INITIAL_TOKEN;
 
@@ -368,8 +368,8 @@ export default function RadarScreen() {
       return;
     }
 
-    // 2. Validação de Token
-    const token = import.meta.env.VITE_MAPBOX_TOKEN;
+    // 2. Validação de Token (Via .env)
+    const token = INITIAL_TOKEN;
     if (!token || token.trim() === '') {
       setMapError('Chave de acesso do mapa não configurada. Verifique o arquivo .env');
       return;

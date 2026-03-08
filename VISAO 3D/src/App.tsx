@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Navigation, Menu, X, Search } from 'lucide-react';
-import { ESTABELECIMENTOS_RADAR, RadarLocal } from './data/radar_locais';
+import { ESTABELECIMENTOS_RADAR } from './data/radar_locais';
+import type { RadarLocal } from './data/radar_locais';
 
 // TOKEN
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
@@ -90,15 +91,11 @@ export default function App() {
 
     // 1. CONFIGURAÇÃO TITANIUM STEALTH (MAPBOX STANDARD)
     try {
-        // @ts-ignore - setConfigProperty é novo no Mapbox v3
         if (map.current.setConfigProperty) {
             // ILUMINAÇÃO DINÂMICA (PBR): 'dawn' para sombras dramáticas durante o dia
             const lightPreset = isDay ? 'dawn' : 'night';
-            // @ts-ignore
             map.current.setConfigProperty('basemap', 'lightPreset', lightPreset);
-            // @ts-ignore
             map.current.setConfigProperty('basemap', 'showPointOfInterestLabels', false); 
-            // @ts-ignore
             map.current.setConfigProperty('basemap', 'show3dObjects', true);
         }
     } catch (e) {

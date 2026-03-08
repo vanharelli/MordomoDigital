@@ -16,3 +16,4 @@ if (url === 'https://placeholder.supabase.co') {
 }
 
 export const supabase = createClient(url, key);
+export const isSupabaseConfigured = !!supabaseUrl && !!supabaseAnonKey;

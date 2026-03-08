@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const DEFAULT_ANNOUNCEMENT = "Mordomo Digital - Alfa Plaza Hotel";
 
@@ -9,6 +9,7 @@ const AnnouncementTicker: React.FC = () => {
 
   const fetchSettings = async () => {
     try {
+      if (!isSupabaseConfigured) return;
       const { data, error } = await supabase
         .from('hotel_settings')
         .select('*')
@@ -32,16 +33,17 @@ const AnnouncementTicker: React.FC = () => {
           setDuration(Number(speedSetting.value));
         }
       }
-    } catch (err) {
+    } catch {
        console.warn('Ticker Sync Error.');
     }
   };
 
   useEffect(() => {
     // Initial load
-    fetchSettings();
+    setTimeout(fetchSettings, 0);
 
     // Listen for realtime updates
+    if (!isSupabaseConfigured) return;
     const channel = supabase
       .channel('public:hotel_settings')
       .on(
@@ -79,7 +81,7 @@ const AnnouncementTicker: React.FC = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      if (isSupabaseConfigured) supabase.removeChannel(channel);
     };
   }, []);
 

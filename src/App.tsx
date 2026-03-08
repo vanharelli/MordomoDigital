@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { GuestProvider, useGuest } from './context/GuestContext';
+import { useSecurity } from './hooks/useSecurity';
+import { useDoubleBackExit } from './hooks/useDoubleBackExit';
+import { AnimatePresence, motion } from 'framer-motion';
 import LoginScreen from './screens/LoginScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import RadarScreen from './screens/RadarScreen';
@@ -10,9 +13,6 @@ import RoomServiceScreen from './screens/RoomServiceScreen';
 import IronScreen from './screens/IronScreen';
 import HairDryerScreen from './screens/HairDryerScreen';
 import GarageScreen from './screens/GarageScreen';
-import { useSecurity } from './hooks/useSecurity';
-import { useDoubleBackExit } from './hooks/useDoubleBackExit';
-import { AnimatePresence, motion } from 'framer-motion';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -92,7 +92,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } 
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

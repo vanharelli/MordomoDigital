@@ -3,10 +3,12 @@ import mapboxgl from 'mapbox-gl';
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { 
-  Navigation, Menu, Search, ArrowLeft, X
+  Navigation, Menu, Search, X, ArrowLeft
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+ 
 import { ESTABELECIMENTOS_RADAR } from '../data/radar_locais';
+import type { FeatureCollection, Point } from 'geojson';
 import '../styles/Radar.css';
 
 // Configuração global para mobile/touch
@@ -35,7 +37,7 @@ const STYLES = {
 // ] as [[number, number], [number, number]];
 
 // CIDADES SATÉLITES (Visão Macro)
-const SATELLITE_CITIES = {
+const SATELLITE_CITIES: FeatureCollection<Point> = {
   'type': 'FeatureCollection',
   'features': [
     { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-47.8825, -15.7942] }, 'properties': { 'title': '📍\nPlano Piloto' } },
@@ -79,6 +81,16 @@ export default function RadarScreen() {
   const [introFadeOut, setIntroFadeOut] = useState(false);
   const [accessToken] = useState<string>(INITIAL_TOKEN);
 
+  // Alternância manual de modo dia/noite
+  const toggleDayNight = () => {
+    if (!map.current) return;
+    const newMode = !isDayMode;
+    setIsDayMode(newMode);
+    const newStyle = newMode ? STYLES.DAY : STYLES.NIGHT;
+    map.current.setStyle(newStyle);
+    // add3DLayer será chamado pelo evento 'style.load' automaticamente
+  };
+
   // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
   const add3DLayer = useCallback((forceMode?: 'day' | 'night') => {
     if (!map.current) return;
@@ -101,12 +113,9 @@ export default function RadarScreen() {
 
     // 1. CONFIGURAÇÃO TITANIUM STEALTH (MAPBOX STANDARD - ADAPTADO V11)
     try {
-        // @ts-ignore - setConfigProperty é específico do estilo Standard, ignorar para v11
-        if (map.current.style && map.current.style.getName() === 'Standard') {
-            // @ts-ignore
-            map.current.setConfigProperty('basemap', 'lightPreset', isDay ? 'dawn' : 'night');
-            // @ts-ignore
-            map.current.setConfigProperty('basemap', 'showPointOfInterestLabels', false); 
+        if ((map.current as any).setConfigProperty) {
+            (map.current as any).setConfigProperty('basemap', 'lightPreset', isDay ? 'dawn' : 'night');
+            (map.current as any).setConfigProperty('basemap', 'showPointOfInterestLabels', false);
         }
     } catch (e) {
         console.warn('Mapbox config error:', e);
@@ -164,7 +173,7 @@ export default function RadarScreen() {
       if (!map.current.getSource('satellite-cities')) {
         map.current.addSource('satellite-cities', {
           type: 'geojson',
-          data: SATELLITE_CITIES as any
+          data: SATELLITE_CITIES
         });
 
         map.current.addLayer({
@@ -252,7 +261,7 @@ export default function RadarScreen() {
     markersRef.current = [];
 
     // RENDERIZAR TODOS OS PARCEIROS (SEM EXCEÇÃO, SEM CULLING)
-    ESTABELECIMENTOS_RADAR.forEach((local, index) => {
+    ESTABELECIMENTOS_RADAR.forEach((local) => {
       // Calcular Distância do Hotel
       const hotelLoc = new mapboxgl.LngLat(HOTEL_COORDS[0], HOTEL_COORDS[1]);
       const localLoc = new mapboxgl.LngLat(local.coords[0], local.coords[1]);
@@ -270,23 +279,19 @@ export default function RadarScreen() {
       // Z-INDEX SUPREMO PARA O HOTEL
       if (local.id === 1) {
         el.style.zIndex = '9999';
-        el.classList.add('hotel-marker');
-        // Novo estilo de PIN pulsante elite
-        el.classList.add('hotel-pin-elite');
+        el.classList.add('hotel-only-icon');
       } else {
         el.style.zIndex = '100'; 
-        // Adicionar classe de entrada stagger
-        el.classList.add('poi-entrance');
-        // Delay escalonado para Aeroporto, ParkShopping, Rodoviária (IDs 14, 91, 15)
-        const staggerDelay = local.id === 14 ? 0.2 : local.id === 91 ? 0.4 : local.id === 15 ? 0.6 : (index * 0.05);
-        el.style.animationDelay = `${staggerDelay}s`;
+        // Entrada sem animação para evitar alterações de opacidade/visibility
       }
 
       // Renderizar Conteúdo (Emoji + Nome)
       const markerRoot = createRoot(el);
       markerRoot.render(
         <>
-          <div className="poi-emoji filter drop-shadow-lg">{local.emoji}</div>
+          <div className={local.id === 1 ? "poi-emoji-clean" : "poi-emoji filter drop-shadow-lg"}>
+            {local.emoji}
+          </div>
         </>
       );
 
@@ -326,9 +331,9 @@ export default function RadarScreen() {
       // Adicionar ao Mapa (Permanência Garantida)
       const marker = new mapboxgl.Marker({ 
         element: el, 
-        anchor: 'bottom', // TRAVADO NO CHÃO
-        pitchAlignment: 'viewport', // CORREÇÃO: Ícones sempre em pé para legibilidade
-        rotationAlignment: 'viewport' // CORREÇÃO: Ícones sempre virados para a tela
+        anchor: local.id === 1 ? 'center' : 'bottom', // Hotel no centro para ficar 'em cima', outros na base
+        pitchAlignment: 'viewport', 
+        rotationAlignment: 'viewport' 
       })
       .setLngLat(local.coords)
       .setPopup(popup)
@@ -346,13 +351,13 @@ export default function RadarScreen() {
 
     // Validação de Segurança e Compatibilidade
     if (!mapboxgl.supported()) {
-      setMapError('Seu dispositivo não suporta WebGL (necessário para o mapa). Tente desativar o modo de economia de energia.');
+      setTimeout(() => setMapError('Seu dispositivo não suporta WebGL (necessário para o mapa). Tente desativar o modo de economia de energia.'), 0);
       return;
     }
 
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
     if (!token || token.trim() === '') {
-      setMapError('Chave de acesso do mapa não encontrada. Contate o suporte.');
+      setTimeout(() => setMapError('Chave de acesso do mapa não encontrada. Contate o suporte.'), 0);
       console.error('Mapbox Token Missing');
       return;
     }
@@ -380,7 +385,7 @@ export default function RadarScreen() {
           if (e.error && e.error.message && (e.error.message.includes('Aborted') || e.error.message.includes('Network'))) {
               return;
           }
-          setMapError('Erro de conexão com o servidor de mapas.');
+          setTimeout(() => setMapError('Erro de conexão com o servidor de mapas.'), 0);
         });
 
         map.current.on('style.load', () => {
@@ -415,7 +420,7 @@ export default function RadarScreen() {
 
       } catch (err) {
         console.error('Erro fatal ao iniciar mapa:', err);
-        setMapError('Falha técnica ao carregar o mapa.');
+        setTimeout(() => setMapError('Falha técnica ao carregar o mapa.'), 0);
       }
     }, 500); // Delay maior para estabilização do DOM mobile
 
@@ -512,10 +517,10 @@ export default function RadarScreen() {
               Tentar Novamente
             </button>
             <button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => window.location.reload()}
               className="w-full py-4 bg-white/5 text-white font-bold rounded-xl uppercase tracking-widest text-xs border border-white/10 active:scale-95 transition-all"
             >
-              Voltar ao Início
+              Recarregar
             </button>
           </div>
           
@@ -657,12 +662,16 @@ export default function RadarScreen() {
         </div>
       </div>
 
-      {/* SIDEBAR */}
-      <div className={`absolute right-4 z-10 shadow-lg text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full flex items-center gap-2 border transition-colors duration-500 top-6 sm:right-6 ${isDayMode ? 'bg-white text-gray-600 border-gray-100' : 'bg-gray-800 text-gray-300 border-gray-700'}`}>
-        <div className={`w-2 h-2 rounded-full ${isDayMode ? 'bg-yellow-500' : 'bg-blue-400'}`}></div>
+      {/* MODO DIA/NOITE (CLICÁVEL) */}
+      <button 
+        onClick={toggleDayNight}
+        className={`absolute right-4 z-10 shadow-lg text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full flex items-center gap-2 border transition-all duration-500 top-6 sm:right-6 hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white text-gray-600 border-gray-100' : 'bg-gray-800 text-gray-300 border-gray-700'}`}
+        title={`Alternar para modo ${isDayMode ? 'Noite' : 'Dia'}`}
+      >
+        <div className={`w-2 h-2 rounded-full ${isDayMode ? 'bg-yellow-500' : 'bg-blue-400'} animate-pulse`}></div>
         <span className="hidden sm:inline">{isDayMode ? 'Modo Dia (Ao Vivo)' : 'Modo Noite (Ao Vivo)'}</span>
         <span className="sm:hidden">{isDayMode ? 'Dia' : 'Noite'}</span>
-      </div>
+      </button>
 
     </div>
   );

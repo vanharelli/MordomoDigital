@@ -5,7 +5,7 @@ import AnnouncementTicker from '../components/AnnouncementTicker';
 import WhatsAppHook from '../components/WhatsAppHook';
 import { LogOut, Wifi, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const DashboardScreen: React.FC = () => {
   const { guestName, roomNumber, logout } = useGuest();
@@ -34,6 +34,10 @@ const DashboardScreen: React.FC = () => {
   useEffect(() => {
     const fetchModuleSettings = async () => {
       try {
+        if (!isSupabaseConfigured) {
+          setHideRestaurant(false);
+          return;
+        }
         const { data, error } = await supabase
           .from('hotel_settings')
           .select('*')
@@ -57,6 +61,7 @@ const DashboardScreen: React.FC = () => {
     };
     fetchModuleSettings();
 
+    if (!isSupabaseConfigured) return;
     const channel = supabase
       .channel('public:hotel_settings_dashboard')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'hotel_settings' }, () => {

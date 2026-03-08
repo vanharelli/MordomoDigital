@@ -1,0 +1,1 @@
+Mapa: remover badges, garantir ícones visíveis, habilitar acesso de rede (--host)

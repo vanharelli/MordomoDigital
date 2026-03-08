@@ -126,13 +126,15 @@
 }
 
 .marker-container {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   cursor: pointer;
   transform-origin: bottom center;
   pointer-events: auto;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .marker-container:hover {
@@ -212,31 +214,31 @@
 }
 
 /* =========================================
-   HOTEL MARKER OVERRIDES (SUPREME HIGHLIGHT)
+   HOTEL MARKER OVERRIDES (ICON ONLY - CLEAN PIN)
    ========================================= */
-.hotel-marker .poi-emoji {
-  width: 60px !important;
-  height: 60px !important;
-  font-size: 36px !important;
-  border: 3px solid #FFD700 !important; /* Ouro Brilhante */
-  background-color: rgba(0, 0, 0, 0.95) !important;
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 50px rgba(212, 175, 55, 0.4) !important;
-  z-index: 9999;
-  animation: float-marker 3s ease-in-out infinite !important;
+.hotel-only-icon {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  animation: none !important;
 }
 
-.hotel-marker .poi-label {
-  font-size: 14px !important;
-  background-color: #D4AF37 !important;
-  color: #000 !important;
-  font-weight: 800 !important;
-  padding: 4px 8px !important;
-  margin-bottom: 10px !important;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 2px solid #000 !important;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.8) !important;
-  animation: float-marker 3s ease-in-out infinite !important; /* Sincronizado */
+.poi-emoji-clean {
+  font-size: 56px !important; /* Destaque máximo para o Pin */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  filter: none !important; /* Remove sombras e filtros */
+  pointer-events: auto;
+  z-index: 9999;
+}
+
+.hotel-only-icon .poi-label {
+  display: none !important;
 }
 
 /* =========================================

@@ -48,10 +48,12 @@ const LoginScreen: React.FC = () => {
                 <KeyRound size={20} />
               </div>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder="NÚMERO DA SUÍTE"
                 value={room}
-                onChange={(e) => setRoom(e.target.value)}
+                onChange={(e) => setRoom(e.target.value.replace(/\D/g, ''))}
                 className="w-full bg-white/5 border-[0.5px] border-gold rounded-xl py-4 pl-12 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-gold transition-all font-bold tracking-widest"
                 required
               />

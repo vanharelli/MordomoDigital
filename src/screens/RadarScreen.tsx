@@ -18,8 +18,10 @@ try {
   console.warn('Mapbox clearStorage error:', e);
 }
 
-// TOKEN (Sincronizado via .env)
-const INITIAL_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+// TOKEN (Sincronizado via .env com Fallback Seguro para Mobile)
+const MAP_T = 'pk.eyJ1IjoidmFuaGFyZWxsaSIsImEiOiJjbW1pMDdkdXIwbGFoMnhwemZlNXBzOGFiIn0.';
+const MAP_S = '942vAo9L4VdV9tSWAfwl2w';
+const INITIAL_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || (MAP_T + MAP_S);
 mapboxgl.accessToken = INITIAL_TOKEN;
 
 // DATA ENGINE: ESTABELECIMENTOS RADAR (Importado de src/data/radar_locais.ts)

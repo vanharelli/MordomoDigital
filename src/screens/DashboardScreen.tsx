@@ -206,42 +206,46 @@ const DashboardScreen: React.FC = () => {
       {/* Wi-Fi Popup Modal */}
       {isWifiOpen && (
         <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-obsidian border border-gold rounded-xl p-6 w-full max-w-sm relative shadow-[0_0_15px_rgba(218,165,32,0.3)]">
+          <div className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-8 w-full max-w-sm relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
+            {/* Brilho Interno Glassmorphism */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+            
             <button 
               onClick={() => setIsWifiOpen(false)}
-              className="absolute top-4 right-4 text-gold hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors z-10"
             >
               <X size={24} />
             </button>
-            
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="bg-gold/10 p-4 rounded-full mb-2 border border-gold/30">
-                <Wifi size={32} className="text-gold" />
+
+            <div className="flex flex-col items-center text-center space-y-6 relative z-10">
+              <div className="bg-gold/20 p-5 rounded-full mb-2 border border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                <Wifi size={36} className="text-gold" />
               </div>
               
-              <h2 className="text-xl font-bold text-gold tracking-widest uppercase">Rede Wi-Fi</h2>
+              <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Conexão VIP</h2>
               
-              <div className="w-full space-y-3 bg-white/5 rounded-lg p-4 border border-white/10">
-                <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                  <span className="text-xs text-gray-400 uppercase tracking-wider">Rede</span>
-                  <span className="font-bold text-white tracking-wide select-all">ALFA_HOSPEDE</span>
+              <div className="w-full space-y-4 bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md">
+                <div className="flex flex-col items-start border-b border-white/10 pb-3">
+                  <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Rede Premium</span>
+                  <span className="font-bold text-white text-lg tracking-wide select-all">ALFA_HOSPEDE</span>
                 </div>
-                <div className="flex justify-between items-center pt-1">
-                  <span className="text-xs text-gray-400 uppercase tracking-wider">Senha</span>
+                
+                <div className="flex flex-col items-start pt-1">
+                  <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Chave de Acesso</span>
                   {hasSavedContact ? (
-                    <span className="font-bold text-gold tracking-widest text-lg select-all animate-fade-in">77921207</span>
+                    <span className="font-mono font-black text-gold tracking-[0.3em] text-2xl select-all animate-pulse">77921207</span>
                   ) : (
-                    <span className="text-gray-600 font-bold tracking-tighter text-xs uppercase bg-black/40 px-3 py-1 rounded border border-white/5 italic">
+                    <span className="text-white/30 font-bold tracking-tighter text-[10px] uppercase bg-black/40 px-3 py-1 rounded border border-white/5 italic">
                       Liberado após salvar contato
                     </span>
                   )}
                 </div>
               </div>
-              
-              <p className="text-[10px] text-gray-400 mt-2 leading-relaxed px-2">
+
+              <p className="text-[11px] text-white/50 leading-relaxed px-4 font-medium uppercase tracking-wider">
                 {hasSavedContact 
-                  ? "Conecte-se agora para aproveitar a melhor experiência digital do Alfa Plaza."
-                  : "Por segurança e para liberar benefícios VIP, adicione o contato do hotel abaixo para visualizar a senha do Wi-Fi."
+                  ? "Experiência digital de alta velocidade exclusiva Alfa Plaza."
+                  : "Salve o contato do hotel abaixo para visualizar sua chave de acesso VIP."
                 }
               </p>
 

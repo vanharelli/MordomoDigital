@@ -114,9 +114,9 @@ const SecurityLayer = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[99999] bg-[#0B1A30]/90 border border-[#D4AF37] text-[#D4AF37] px-6 py-3 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.4)] font-bold text-xs uppercase tracking-[0.2em] backdrop-blur-md whitespace-nowrap"
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[99999] bg-[#0B1A30]/95 border border-[#D4AF37] text-[#D4AF37] px-8 py-4 rounded-full shadow-[0_0_30px_rgba(212,175,55,0.5)] font-bold text-[10px] uppercase tracking-[0.2em] backdrop-blur-xl whitespace-nowrap text-center flex items-center justify-center min-w-[280px]"
           >
-            Press back again to exit
+            Pressione voltar novamente para sair
           </motion.div>
         )}
       </AnimatePresence>

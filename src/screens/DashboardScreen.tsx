@@ -222,7 +222,7 @@ const DashboardScreen: React.FC = () => {
                 <Wifi size={36} className="text-gold" />
               </div>
               
-              <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Conexão VIP</h2>
+              <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Alfa Plaza</h2>
               
               <div className="w-full space-y-4 bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md">
                 <div className="flex flex-col items-start border-b border-white/10 pb-3">

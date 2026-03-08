@@ -13,7 +13,8 @@ import '../styles/Radar.css';
 mapboxgl.clearStorage(); // Limpa cache para evitar estilos corrompidos
 
 // TOKEN
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
+const INITIAL_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+mapboxgl.accessToken = INITIAL_TOKEN;
 
 // DATA ENGINE: ESTABELECIMENTOS RADAR (Importado de src/data/radar_locais.ts)
 // ID 1 é sempre a referência para cálculo de distância (Alfa Plaza)
@@ -76,6 +77,7 @@ export default function RadarScreen() {
   const [mapError, setMapError] = useState<string | null>(null);
   const [showIntro, setShowIntro] = useState(true);
   const [introFadeOut, setIntroFadeOut] = useState(false);
+  const [accessToken, setAccessToken] = useState<string>(INITIAL_TOKEN);
 
   // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
   const add3DLayer = useCallback((forceMode?: 'day' | 'night') => {
@@ -347,53 +349,64 @@ export default function RadarScreen() {
   // Inicializar Mapa
   useEffect(() => {
     if (!mapContainer.current) return;
-    if (map.current) return; // Prevent map re-initialization
+    if (map.current) return;
 
-    // Pequeno delay para garantir que o container DOM esteja pronto no mobile
+    // Validação de Segurança e Compatibilidade
+    if (!mapboxgl.supported()) {
+      setMapError('Seu dispositivo não suporta WebGL (necessário para o mapa). Tente desativar o modo de economia de energia.');
+      return;
+    }
+
+    const token = import.meta.env.VITE_MAPBOX_TOKEN;
+    if (!token || token.trim() === '') {
+      setMapError('Chave de acesso do mapa não encontrada. Contate o suporte.');
+      console.error('Mapbox Token Missing');
+      return;
+    }
+
     const initTimeout = setTimeout(() => {
       try {
         if (!mapContainer.current) return;
         
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
-          style: isDayMode ? STYLES.DAY : STYLES.NIGHT, // Inicializa direto com o tema correto
+          style: isDayMode ? STYLES.DAY : STYLES.NIGHT,
           center: HOTEL_COORDS,
           zoom: 15.5,
-          pitch: 65, // Ângulo cinematográfico
+          pitch: 65,
           bearing: -17.6,
           antialias: true,
-          attributionControl: false // Minimalista
+          attributionControl: false,
+          preserveDrawingBuffer: true,
+          trackResize: true,
+          failIfMajorPerformanceCaveat: false // Permite rodar em dispositivos com GPU limitada
         });
 
-        // Erro handling para o carregamento do mapa
         map.current.on('error', (e) => {
           console.error('Mapbox error:', e);
           if (e.error && e.error.message && (e.error.message.includes('Aborted') || e.error.message.includes('Network'))) {
-              // Ignorar erros de rede transientes/cancelamentos
               return;
           }
-          setMapError('Erro ao carregar o mapa. Verifique sua conexão.');
+          setMapError('Erro de conexão com o servidor de mapas.');
         });
 
         map.current.on('style.load', () => {
-          // Quando o estilo termina de carregar, aplicamos as camadas 3D e marcadores
           add3DLayer();
           initMarkers();
           
-          // Forçar redimensionamento após carregar (crucial para mobile)
           setTimeout(() => {
             map.current?.resize();
-          }, 100);
+          }, 200); // Delay maior para mobile
         });
 
       } catch (err) {
         console.error('Erro fatal ao iniciar mapa:', err);
-        setMapError('Não foi possível inicializar o mapa.');
+        setMapError('Falha técnica ao carregar o mapa.');
       }
-    }, 300);
+    }, 500); // Delay maior para estabilização do DOM mobile
 
     return () => clearTimeout(initTimeout);
-  }, [add3DLayer, initMarkers, isDayMode]); // Adicionadas dependências estáveis
+  }, [add3DLayer, initMarkers, isDayMode]);
 
   // Persistência e FlyTo no Style Load
   useEffect(() => {
@@ -436,12 +449,12 @@ export default function RadarScreen() {
     <div className={`w-full h-full relative overflow-hidden font-sans transition-colors duration-500 ${isDayMode ? 'bg-gray-100' : 'bg-gray-900'}`}>
       
       {/* NAVEGAÇÃO SATÉLITE ELITE (INTRO) */}
-      {showIntro && (
+      {showIntro && accessToken && (
         <div className={`map-intro-overlay ${introFadeOut ? 'fade-out' : ''}`}>
           <div 
             className="map-zoom-sequence" 
             style={{ 
-              backgroundImage: `url('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/-47.9706,-15.8718,2,0/1280x1280?access_token=${mapboxgl.accessToken}')` 
+              backgroundImage: `url('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/-47.9706,-15.8718,2,0/1280x1280?access_token=${accessToken}')` 
             }}
             onAnimationEnd={() => {
               setIntroFadeOut(true);
@@ -457,7 +470,7 @@ export default function RadarScreen() {
       )}
 
       {/* MAPA */}
-      <div ref={mapContainer} className="w-full h-full absolute top-0 left-0" />
+      <div ref={mapContainer} className="w-full h-full absolute top-0 left-0 z-0" />
 
       {/* FILTRO CINEMATOGRÁFICO DINÂMICO */}
       {/* Dia: Dourado Sutil (Calor) | Noite: Azul Noturno (Frio/Cyber) */}
@@ -469,9 +482,33 @@ export default function RadarScreen() {
 
       {/* ERROR ALERT */}
       {mapError && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[200002] bg-red-600 text-white px-6 py-3 rounded-full shadow-xl font-bold text-sm flex items-center gap-2 animate-bounce">
-          <span className="text-xl">⚠️</span>
-          {mapError}
+        <div className="absolute inset-0 z-[200002] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center">
+          <div className="bg-red-500/10 p-6 rounded-full mb-6 border border-red-500/30">
+            <span className="text-5xl">⚠️</span>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2 uppercase tracking-widest">Ops! Algo deu errado</h2>
+          <p className="text-gray-400 text-sm mb-8 leading-relaxed max-w-xs">
+            {mapError}
+          </p>
+          <div className="flex flex-col w-full gap-3 max-w-xs">
+            <button 
+              onClick={() => window.location.reload()}
+              className="w-full py-4 bg-gold text-black font-black rounded-xl uppercase tracking-widest text-xs shadow-laser active:scale-95 transition-all"
+            >
+              Tentar Novamente
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard')}
+              className="w-full py-4 bg-white/5 text-white font-bold rounded-xl uppercase tracking-widest text-xs border border-white/10 active:scale-95 transition-all"
+            >
+              Voltar ao Início
+            </button>
+          </div>
+          
+          {/* Debug Info */}
+          <div className="mt-12 opacity-20 text-[8px] text-white font-mono uppercase tracking-[0.2em]">
+            Debug: {mapboxgl.supported() ? 'WebGL OK' : 'No WebGL'} | {import.meta.env.VITE_MAPBOX_TOKEN ? 'Token OK' : 'No Token'}
+          </div>
         </div>
       )}
 

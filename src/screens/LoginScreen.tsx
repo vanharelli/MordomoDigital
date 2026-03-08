@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { User, KeyRound } from 'lucide-react';
@@ -6,8 +6,14 @@ import { User, KeyRound } from 'lucide-react';
 const LoginScreen: React.FC = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const { setGuestData } = useGuest();
+  const { setGuestData, isAuthenticated } = useGuest();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

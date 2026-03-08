@@ -286,13 +286,6 @@ export default function RadarScreen() {
       const markerRoot = createRoot(el);
       markerRoot.render(
         <>
-          <div className={`poi-label poi-label-elite`} style={{ 
-            opacity: local.id === 1 ? 1 : 0, 
-            display: 'block',
-            transition: 'opacity 0.3s ease-in-out'
-          }}>
-            {local.nome}
-          </div>
           <div className="poi-emoji filter drop-shadow-lg">{local.emoji}</div>
         </>
       );
@@ -397,6 +390,27 @@ export default function RadarScreen() {
           setTimeout(() => {
             map.current?.resize();
           }, 200); // Delay maior para mobile
+
+          // Watchdog: garantir visibilidade dos ícones em qualquer zoom/movimento
+          const ensureIconVisibility = () => {
+            markersRef.current.forEach(marker => {
+              const element = marker.getElement();
+              if (!element) return;
+              element.style.opacity = '1';
+              element.style.visibility = 'visible';
+              element.style.pointerEvents = 'auto';
+              const emoji = element.querySelector('.poi-emoji') as HTMLElement | null;
+              if (emoji) {
+                emoji.style.opacity = '1';
+                emoji.style.display = 'flex';
+                emoji.style.visibility = 'visible';
+                emoji.style.pointerEvents = 'auto';
+              }
+            });
+          };
+          map.current?.on('move', ensureIconVisibility);
+          map.current?.on('zoom', ensureIconVisibility);
+          ensureIconVisibility();
         });
 
       } catch (err) {

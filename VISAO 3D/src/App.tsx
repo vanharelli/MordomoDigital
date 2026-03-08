@@ -276,14 +276,6 @@ export default function App() {
       const markerRoot = createRoot(el);
       markerRoot.render(
         <>
-          {/* Nome invisível inicialmente (controlado por LOD) */}
-          <div className="poi-label" style={{ 
-            opacity: 0, 
-            display: 'block',
-            transition: 'opacity 0.3s ease-in-out' // Suavidade extra
-          }}>
-            {local.nome}
-          </div>
           <div className="poi-emoji filter drop-shadow-lg">{local.emoji}</div>
         </>
       );
@@ -430,6 +422,27 @@ export default function App() {
       
       // Initial check (Garante que comece correto)
       updateLabelsVisibility();
+
+      // GARANTIA DE VISIBILIDADE DOS ÍCONES (Watchdog)
+      const ensureIconVisibility = () => {
+        markersRef.current.forEach(marker => {
+          const element = marker.getElement();
+          if (!element) return;
+          element.style.opacity = '1';
+          element.style.visibility = 'visible';
+          element.style.pointerEvents = 'auto';
+          const emoji = element.querySelector('.poi-emoji') as HTMLElement | null;
+          if (emoji) {
+            emoji.style.opacity = '1';
+            emoji.style.display = 'flex';
+            emoji.style.visibility = 'visible';
+            emoji.style.pointerEvents = 'auto';
+          }
+        });
+      };
+      map.current?.on('move', ensureIconVisibility);
+      map.current?.on('zoom', ensureIconVisibility);
+      ensureIconVisibility();
 
       // LANDING NO ALFA PLAZA (Executa uma vez ao carregar)
       map.current?.flyTo({

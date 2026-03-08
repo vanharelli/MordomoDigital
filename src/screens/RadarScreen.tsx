@@ -12,7 +12,11 @@ import type { FeatureCollection, Point } from 'geojson';
 import '../styles/Radar.css';
 
 // Configuração global para mobile/touch
-mapboxgl.clearStorage(); // Limpa cache para evitar estilos corrompidos
+try {
+  mapboxgl.clearStorage(); 
+} catch (e) {
+  console.warn('Mapbox clearStorage error:', e);
+}
 
 // TOKEN
 const INITIAL_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
@@ -349,19 +353,29 @@ export default function RadarScreen() {
     if (!mapContainer.current) return;
     if (map.current) return;
 
-    // Validação de Segurança e Compatibilidade
-    if (!mapboxgl.supported()) {
-      setTimeout(() => setMapError('Seu dispositivo não suporta WebGL (necessário para o mapa). Tente desativar o modo de economia de energia.'), 0);
+    // 1. Validação de Suporte WebGL (Aprimorada para Mobile)
+    const checkWebGL = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+      } catch (e) {
+        return false;
+      }
+    };
+
+    if (!checkWebGL()) {
+      setMapError('Seu dispositivo não suporta a tecnologia necessária (WebGL) para exibir o mapa. Tente desativar o modo de economia de energia ou use outro navegador.');
       return;
     }
 
+    // 2. Validação de Token
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
     if (!token || token.trim() === '') {
-      setTimeout(() => setMapError('Chave de acesso do mapa não encontrada. Contate o suporte.'), 0);
-      console.error('Mapbox Token Missing');
+      setMapError('Chave de acesso do mapa não configurada. Verifique o arquivo .env');
       return;
     }
 
+    // 3. Inicialização com Delay Estratégico para Mobile
     const initTimeout = setTimeout(() => {
       try {
         if (!mapContainer.current) return;
@@ -373,43 +387,37 @@ export default function RadarScreen() {
           zoom: 15.5,
           pitch: 65,
           bearing: -17.6,
-          antialias: true,
+          antialias: false, // Otimizado para Mobile
           attributionControl: false,
-          preserveDrawingBuffer: true,
           trackResize: true,
-          failIfMajorPerformanceCaveat: false // Permite rodar em dispositivos com GPU limitada
+          failIfMajorPerformanceCaveat: false,
+          maxZoom: 20,
+          minZoom: 2
         });
 
         map.current.on('error', (e) => {
-          console.error('Mapbox error:', e);
-          if (e.error && e.error.message && (e.error.message.includes('Aborted') || e.error.message.includes('Network'))) {
-              return;
+          console.warn('Mapbox non-fatal error:', e);
+          const errorMessage = e.error?.message || '';
+          if (errorMessage.includes('unauthorized') || errorMessage.includes('Forbidden')) {
+            setMapError('Chave de acesso do mapa inválida.');
           }
-          setTimeout(() => setMapError('Erro de conexão com o servidor de mapas.'), 0);
         });
 
         map.current.on('style.load', () => {
           add3DLayer();
           initMarkers();
           
+          // Correção de Layout Mobile
           setTimeout(() => {
             map.current?.resize();
-          }, 200); // Delay maior para mobile
+          }, 300);
 
-          // Watchdog: garantir visibilidade dos ícones em qualquer zoom/movimento
           const ensureIconVisibility = () => {
             markersRef.current.forEach(marker => {
               const element = marker.getElement();
-              if (!element) return;
-              element.style.opacity = '1';
-              element.style.visibility = 'visible';
-              element.style.pointerEvents = 'auto';
-              const emoji = element.querySelector('.poi-emoji') as HTMLElement | null;
-              if (emoji) {
-                emoji.style.opacity = '1';
-                emoji.style.display = 'flex';
-                emoji.style.visibility = 'visible';
-                emoji.style.pointerEvents = 'auto';
+              if (element) {
+                element.style.opacity = '1';
+                element.style.visibility = 'visible';
               }
             });
           };
@@ -418,11 +426,11 @@ export default function RadarScreen() {
           ensureIconVisibility();
         });
 
-      } catch (err) {
+      } catch (err: any) {
         console.error('Erro fatal ao iniciar mapa:', err);
-        setTimeout(() => setMapError('Falha técnica ao carregar o mapa.'), 0);
+        setMapError(`Falha técnica: ${err.message || 'Erro desconhecido'}`);
       }
-    }, 500); // Delay maior para estabilização do DOM mobile
+    }, 100); // Delay reduzido para resposta mais rápida
 
     return () => clearTimeout(initTimeout);
   }, [add3DLayer, initMarkers, isDayMode]);
@@ -501,7 +509,7 @@ export default function RadarScreen() {
 
       {/* ERROR ALERT */}
       {mapError && (
-        <div className="absolute inset-0 z-[200002] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center">
+        <div className="absolute inset-0 z-[200002] bg-[#000] backdrop-blur-md flex flex-col items-center justify-center p-8 text-center">
           <div className="bg-red-500/10 p-6 rounded-full mb-6 border border-red-500/30">
             <span className="text-5xl">⚠️</span>
           </div>
@@ -511,22 +519,27 @@ export default function RadarScreen() {
           </p>
           <div className="flex flex-col w-full gap-3 max-w-xs">
             <button 
-              onClick={() => window.location.reload()}
-              className="w-full py-4 bg-gold text-black font-black rounded-xl uppercase tracking-widest text-xs shadow-laser active:scale-95 transition-all"
+              onClick={() => {
+                setMapError(null);
+                window.location.reload();
+              }}
+              className="w-full py-4 bg-[#D4AF37] text-black font-black rounded-xl uppercase tracking-widest text-xs shadow-laser active:scale-95 transition-all"
             >
               Tentar Novamente
             </button>
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => navigate('/dashboard')}
               className="w-full py-4 bg-white/5 text-white font-bold rounded-xl uppercase tracking-widest text-xs border border-white/10 active:scale-95 transition-all"
             >
-              Recarregar
+              Voltar ao Início
             </button>
           </div>
           
-          {/* Debug Info */}
-          <div className="mt-12 opacity-20 text-[8px] text-white font-mono uppercase tracking-[0.2em]">
-            Debug: {mapboxgl.supported() ? 'WebGL OK' : 'No WebGL'} | {import.meta.env.VITE_MAPBOX_TOKEN ? 'Token OK' : 'No Token'}
+          {/* Debug Info (Aprimorado) */}
+          <div className="mt-12 opacity-40 text-[9px] text-white font-mono uppercase tracking-[0.2em] space-y-1">
+            <p>WebGL: {mapboxgl.supported() ? 'OK' : 'Falha'}</p>
+            <p>Token: {import.meta.env.VITE_MAPBOX_TOKEN ? 'Carregado' : 'Ausente'}</p>
+            <p>Modo: {window.innerWidth < 768 ? 'Mobile' : 'Desktop'}</p>
           </div>
         </div>
       )}

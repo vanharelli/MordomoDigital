@@ -77,7 +77,7 @@ export default function RadarScreen() {
   const [mapError, setMapError] = useState<string | null>(null);
   const [showIntro, setShowIntro] = useState(true);
   const [introFadeOut, setIntroFadeOut] = useState(false);
-  const [accessToken, setAccessToken] = useState<string>(INITIAL_TOKEN);
+  const [accessToken] = useState<string>(INITIAL_TOKEN);
 
   // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
   const add3DLayer = useCallback((forceMode?: 'day' | 'night') => {

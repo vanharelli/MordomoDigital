@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Rexton';
+  src: url('/fonts/Rexton-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rexton';
+  src: url('/fonts/Rexton-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rexton';
+  src: url('/fonts/Rexton-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none; /* 1. CSS SHIELD */
+  }
+
+  html, body {
+    overscroll-behavior-y: none !important; /* 2. SYNCHRONOUS RENDERING: Kill bounce */
+    touch-action: pan-y;
+    position: fixed; /* Lock viewport */
+    width: 100%;
+    height: 100%;
+    height: 100dvh; /* Mobile Browser Address Bar Fix */
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-obsidian text-white font-sans antialiased;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* 2. SYNCHRONOUS RENDERING: Static Layer Visual Weight */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('/backgroundalfa.webp');
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.01); /* Ultra-subtle tint */
+    backdrop-filter: blur(8px); /* Glassmorphism Base */
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* 1. CSS SHIELD: Protect Assets */
+  img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  /* Allow input interaction */
+  input, textarea, [contenteditable="true"] {
+    user-select: text;
+  }
+}
+
+/* =========================================
+   ELITE RESPONSIVE SHELL (MOBILE-FIRST)
+   ========================================= */
+#root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #000; /* Obsidian Base */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

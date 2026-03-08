@@ -1,0 +1,184 @@
+/* =========================================
+   HOTEL MARKER PULSE ANIMATION (GOLD)
+   ========================================= */
+@keyframes pulse-gold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6);
+    transform: scale(1.2);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
+    transform: scale(1.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    transform: scale(1.2);
+  }
+}
+
+/* Animação de Flutuação (Levitação) */
+@keyframes float-marker {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.marker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  transform-origin: bottom center;
+  pointer-events: auto;
+}
+
+.marker-container:hover {
+  transform: scale(1.1);
+  z-index: 50;
+}
+
+/* =========================================
+   USER/HOTEL MARKER - GOLD STYLE
+   ========================================= */
+
+.user-pin-emoji {
+  font-size: 28px;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #D4AF37;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  /* Pulse Gold */
+  animation: pulse-gold 3s infinite;
+  margin-top: 0;
+  line-height: 1;
+  pointer-events: auto;
+  transform: scale(1.2);
+}
+
+/* =========================================
+   POI MARKERS (EMOJIS) - ELITE STYLE
+   ========================================= */
+
+/* Label Discreta */
+.poi-label {
+  position: relative;
+  margin-bottom: 2px;
+  font-size: 8px;
+  font-weight: 600;
+  color: #D4AF37; /* Gold Text */
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1px 3px;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  opacity: 1;
+  pointer-events: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Estilo do Emoji do POI (Elite Gold Border) */
+.poi-emoji {
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.7); /* Preto Translúcido */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* Circular */
+  border: 1px solid #D4AF37; /* Borda Dourada */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  pointer-events: auto;
+  backdrop-filter: blur(4px);
+}
+
+.poi-emoji:hover {
+  transform: scale(1.15);
+  background-color: rgba(0, 0, 0, 0.9);
+  border-color: #FFD700; /* Bright Gold */
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* =========================================
+   HOTEL MARKER OVERRIDES (SUPREME HIGHLIGHT)
+   ========================================= */
+.hotel-marker .poi-emoji {
+  width: 60px !important;
+  height: 60px !important;
+  font-size: 36px !important;
+  border: 3px solid #FFD700 !important; /* Ouro Brilhante */
+  background-color: rgba(0, 0, 0, 0.95) !important;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 50px rgba(212, 175, 55, 0.4) !important;
+  z-index: 9999;
+  animation: float-marker 3s ease-in-out infinite !important;
+}
+
+.hotel-marker .poi-label {
+  font-size: 14px !important;
+  background-color: #D4AF37 !important;
+  color: #000 !important;
+  font-weight: 800 !important;
+  padding: 4px 8px !important;
+  margin-bottom: 10px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid #000 !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.8) !important;
+  animation: float-marker 3s ease-in-out infinite !important; /* Sincronizado */
+}
+
+/* =========================================
+   MAP FILTER (OBSIDIAN ATMOSPHERE)
+   ========================================= */
+.mapboxgl-canvas { 
+  filter: contrast(1.1) brightness(0.9) saturate(1.1);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* =========================================
+   OBSIDIAN POPUP (MODAL DE CONVERSÃO)
+   ========================================= */
+.mapboxgl-popup {
+  z-index: 99999 !important;
+}
+
+.obsidian-popup .mapboxgl-popup-content {
+  background-color: #000000 !important; /* Obsidian Black */
+  color: #ffffff !important; /* Absolute White */
+  border: 1px solid #D4AF37 !important; /* Golden Border */
+  border-radius: 12px !important;
+  padding: 16px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(212, 175, 55, 0.2) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: #D4AF37 !important;
+}
+
+.mapboxgl-popup-close-button {
+  display: none;
+}
+
+/* Satellite City Popup */
+.satellite-popup .mapboxgl-popup-content {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.satellite-popup .mapboxgl-popup-tip {
+  border-top-color: rgba(255, 255, 255, 0.95) !important;
+}

@@ -1,60 +1,46 @@
+import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
-import sharp from 'sharp';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const rootDir = path.resolve(__dirname, '../public');
 
 /**
- * 3. ASSET ENGINE (WEBP AUTOMATION)
- * Recursively converts all .png/.jpg to .webp (80% quality) and deletes original files.
+ * ASSET ENGINE (WEBP AUTOMATION)
+ * Converte recursivamente PNG/JPG para WebP (80% qualidade) e deleta originais.
  */
-
-const ROOT_DIR = path.resolve(__dirname, '../public'); // Adjust if images are in src/assets
-const QUALITY = 80;
-
-const processDirectory = async (directory) => {
+async function optimizeImages(directory) {
   const files = fs.readdirSync(directory);
 
   for (const file of files) {
     const fullPath = path.join(directory, file);
-    const stat = fs.statSync(fullPath);
+    const stats = fs.statSync(fullPath);
 
-    if (stat.isDirectory()) {
-      await processDirectory(fullPath);
-    } else {
-      const ext = path.extname(file).toLowerCase();
-      if (['.png', '.jpg', '.jpeg'].includes(ext)) {
-        const outputPath = fullPath.replace(ext, '.webp');
+    if (stats.isDirectory()) {
+      await optimizeImages(fullPath);
+    } else if (/\.(png|jpe?g)$/i.test(file)) {
+      const webpPath = fullPath.replace(/\.(png|jpe?g)$/i, '.webp');
+      
+      try {
+        await sharp(fullPath)
+          .webp({ quality: 80 })
+          .toFile(webpPath);
         
-        console.log(`Optimizing: ${file} -> .webp`);
-
-        try {
-          await sharp(fullPath)
-            .webp({ quality: QUALITY })
-            .toFile(outputPath);
-            
-          // Delete original
-          fs.unlinkSync(fullPath);
-          console.log(`Deleted: ${file}`);
-        } catch (err) {
-          console.error(`Error processing ${file}:`, err);
-        }
+        console.log(`Optimized: ${file} -> WebP`);
+        
+        // Deleta o arquivo original
+        fs.unlinkSync(fullPath);
+      } catch (err) {
+        console.error(`Error optimizing ${file}:`, err);
       }
     }
   }
-};
+}
 
-const main = async () => {
-  console.log('Starting Asset Engine Optimization...');
-  try {
-    // Check for sharp
-    require.resolve('sharp');
-  } catch (e) {
-    console.error('Sharp not found. Please run: npm install sharp');
-    process.exit(1);
-  }
-
-  await processDirectory(ROOT_DIR);
-  console.log('Optimization Complete.');
-};
-
-main();
+console.log('--- ASSET ENGINE STARTING ---');
+optimizeImages(rootDir)
+  .then(() => console.log('--- ASSET ENGINE FINISHED ---'))
+  .catch(err => console.error('Asset Engine failed:', err));

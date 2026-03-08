@@ -28,7 +28,7 @@ const LoginScreen: React.FC = () => {
       {/* Background Image Layer */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0" 
-        style={{ backgroundImage: "url('/FRENTEHOTEL.jpeg')" }}
+        style={{ backgroundImage: "url('/FRENTEHOTEL.webp')" }}
       />
       
       {/* Glassmorphism Overlay Layer */}

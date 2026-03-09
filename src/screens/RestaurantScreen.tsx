@@ -7,16 +7,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const RestaurantScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { guestName, roomNumber } = useGuest();
+  const { guestName: _guestName, roomNumber: _roomNumber } = useGuest();
   const [showHours, setShowHours] = useState(false);
   
   // Admin Mode States
-  const [clickCount, setClickCount] = useState(0);
+  const [_clickCount, setClickCount] = useState(0);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleClockClick = () => {
     setShowHours(true);

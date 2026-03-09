@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useGuest } from '../context/GuestContext';
-import { UtensilsCrossed, Wine, ChevronLeft, Eye, EyeOff } from 'lucide-react';
+import { Wine, ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const contingencyDishes = [

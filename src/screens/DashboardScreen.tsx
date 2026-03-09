@@ -105,7 +105,7 @@ const DashboardScreen: React.FC = () => {
   const displayedCoreServices = hideRestaurant === null ? [] : (hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices);
 
   const partnerNetwork = [
-    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/FRENTEHOTEL.webp' },
+    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/alfa maps.jpeg' },
   ];
 
   const handleContactSave = () => {

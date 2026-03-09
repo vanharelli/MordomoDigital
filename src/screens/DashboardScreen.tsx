@@ -107,19 +107,19 @@ const DashboardScreen: React.FC = () => {
   };
 
   const coreServices = [
-    { id: '1', title: 'Tabela de Produtos ', action: 'PEDIR AGORA', image: '/SNACKS.jpeg' },
-    { id: '2', title: 'Restaurante', action: 'SOLICITAR PEDIDO', image: '/RESTAURANTE.jpeg' },
-    { id: '3', title: 'Toalha e extras', action: 'SOLICITAR', image: '/TOALHA.jpeg' },
-    { id: '4', title: 'Serviço de Quarto', action: 'ARRUMAÇÃO', image: '/SERVIÇO DE QUARTO.jpeg' },
-    { id: '5', title: 'Ferro de Passar', action: 'SOLICITAR', image: '/FERRO DE PASSAR.jpeg' },
-    { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR', image: '/SECADOR DE CABELO.jpeg' },
-    { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.jpeg' },
+    { id: '1', title: 'Tabela de Produtos ', action: 'PEDIR AGORA', image: '/SNACKS.webp' },
+    { id: '2', title: 'Restaurante', action: 'SOLICITAR PEDIDO', image: '/RESTAURANTE.webp' },
+    { id: '3', title: 'Toalha e extras', action: 'SOLICITAR', image: '/TOALHA.webp' },
+    { id: '4', title: 'Serviço de Quarto', action: 'ARRUMAÇÃO', image: '/SERVIÇO DE QUARTO.webp' },
+    { id: '5', title: 'Ferro de Passar', action: 'SOLICITAR', image: '/FERRO DE PASSAR.webp' },
+    { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR', image: '/SECADOR DE CABELO.webp' },
+    { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.webp' },
   ];
 
   const displayedCoreServices = hideRestaurant === null ? [] : (hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices);
 
   const partnerNetwork = [
-    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/alfa maps.jpeg' },
+    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/alfa maps.webp' },
   ];
 
   const handleContactSave = () => {

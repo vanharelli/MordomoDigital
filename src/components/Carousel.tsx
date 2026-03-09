@@ -73,8 +73,8 @@ import React, { useRef, useEffect, useState } from 'react';
                   <div className={`absolute inset-0 bg-gold/5 transition-opacity pointer-events-none ${isActive ? 'opacity-100' : 'opacity-0'}`} />
                 )}
                 
-                <div className="relative z-10 space-y-4">
-                  <h3 className={`font-bold text-2xl leading-tight transition-colors drop-shadow-lg ${isActive ? 'text-gold' : 'text-white'}`}>
+                <div className="relative z-10 space-y-4 w-full flex justify-center">
+                  <h3 className="font-bold text-2xl leading-tight text-white drop-shadow-lg text-center">
                     {item.title}
                   </h3>
                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, MessageCircle, AlertTriangle, Info } from 'lucide-react';
+import ContingencyCarousel from '../components/ContingencyCarousel';
 
 const RoomServiceScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -94,6 +95,8 @@ const RoomServiceScreen: React.FC = () => {
               </ul>
             </div>
           </div>
+
+          <ContingencyCarousel />
 
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center italic text-[10px] text-gray-400 backdrop-blur-sm">
             O serviço de quarto está disponível das 08h às 16h diariamente.

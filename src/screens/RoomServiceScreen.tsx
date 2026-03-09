@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, MessageCircle, AlertTriangle, Info } from 'lucide-react';
-import ContingencyCarousel from '../components/ContingencyCarousel';
 
 const RoomServiceScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -96,24 +95,17 @@ const RoomServiceScreen: React.FC = () => {
             </div>
           </div>
 
-          <ContingencyCarousel />
-
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center italic text-[10px] text-gray-400 backdrop-blur-sm">
             O serviço de quarto está disponível das 08h às 16h diariamente.
           </div>
-        </div>
 
-        {/* Footer Button */}
-        <div className="fixed bottom-0 left-0 right-0 bg-black/30 backdrop-blur-md border-t border-gold p-6 shadow-laser z-50">
-          <div className="max-w-3xl mx-auto">
-            <button
-              onClick={handleWhatsAppRequest}
-              className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-lg"
-            >
-              <MessageCircle size={20} fill="black" />
-              Solicitar Arrumação
-            </button>
-          </div>
+          <button
+            onClick={handleWhatsAppRequest}
+            className="w-full bg-gold text-black font-black py-4 rounded-xl border-[0.5px] border-gold hover:bg-white transition-all tracking-widest shadow-laser uppercase flex items-center justify-center gap-2"
+          >
+            <MessageCircle size={20} />
+            Solicitar Arrumação
+          </button>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import AdminScreen from './screens/AdminScreen';
 import ProductTableScreen from './screens/ProductTableScreen';
 import ExtrasScreen from './screens/ExtrasScreen';
 import RoomServiceScreen from './screens/RoomServiceScreen';
+import RestaurantScreen from './screens/RestaurantScreen';
 import IronScreen from './screens/IronScreen';
 import HairDryerScreen from './screens/HairDryerScreen';
 import GarageScreen from './screens/GarageScreen';
@@ -65,6 +66,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <RoomServiceScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/restaurant" 
+        element={
+          <ProtectedRoute>
+            <RestaurantScreen />
           </ProtectedRoute>
         } 
       />

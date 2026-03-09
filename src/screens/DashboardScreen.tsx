@@ -87,9 +87,7 @@ const DashboardScreen: React.FC = () => {
       navigate('/products');
     }
     if (item.id === '2') {
-      // Restaurante agora redireciona para a tela de contingência (Room Service)
-      // que contém o carrossel de pratos e o protocolo
-      navigate('/room-service');
+      navigate('/restaurant');
     }
     if (item.id === '3') {
       navigate('/extras');

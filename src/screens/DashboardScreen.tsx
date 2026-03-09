@@ -93,19 +93,19 @@ const DashboardScreen: React.FC = () => {
   };
 
   const coreServices = [
-    { id: '1', title: 'Tabela de Produtos ', action: 'PEDIR AGORA' },
-    { id: '2', title: 'Restaurante', action: 'SOLICITAR PEDIDO' },
-    { id: '3', title: 'Toalha e extras', action: 'SOLICITAR' },
-    { id: '4', title: 'Serviço de Quarto', action: 'ARRUMAÇÃO' },
-    { id: '5', title: 'Ferro de Passar', action: 'SOLICITAR' },
-    { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR' },
-    { id: '7', title: 'Garagem', action: 'SOLICITAR' },
-      ];
+    { id: '1', title: 'Tabela de Produtos ', action: 'PEDIR AGORA', image: '/SNACKS.jpeg' },
+    { id: '2', title: 'Restaurante', action: 'SOLICITAR PEDIDO', image: '/RESTAURANTE.jpeg' },
+    { id: '3', title: 'Toalha e extras', action: 'SOLICITAR', image: '/TOALHA.jpeg' },
+    { id: '4', title: 'Serviço de Quarto', action: 'ARRUMAÇÃO', image: '/SERVIÇO DE QUARTO.jpeg' },
+    { id: '5', title: 'Ferro de Passar', action: 'SOLICITAR', image: '/FERRO DE PASSAR.jpeg' },
+    { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR', image: '/SECADOR DE CABELO.jpeg' },
+    { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.jpeg' },
+  ];
 
   const displayedCoreServices = hideRestaurant === null ? [] : (hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices);
 
   const partnerNetwork = [
-    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO' },
+    { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/FRENTEHOTEL.webp' },
   ];
 
   const handleContactSave = () => {

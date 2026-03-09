@@ -39,14 +39,14 @@ const LoginScreen: React.FC = () => {
       {/* Glassmorphism Overlay Layer */}
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[5px] z-10" />
 
-      <div className="w-full max-w-md relative z-20 bg-black/60 backdrop-blur-[15px] border border-white/10 rounded-3xl p-8 shadow-2xl">
-        <div className="text-center space-y-2 mb-8 flex flex-col items-center">
-          <img src="/logo.webp" alt="Alfa Plaza Logo" className="h-20 w-auto mb-4 object-contain" />
-          <h1 className="text-3xl font-bold tracking-tighter text-gold uppercase">Mordomo Digital</h1>
-          <p className="text-sm text-gray-400 tracking-widest uppercase font-bold text-center">Sofisticação e qualidade ao seu dispor</p>
+      <div className="w-full max-w-md relative z-20 bg-black/60 backdrop-blur-[15px] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <div className="text-center space-y-2 mb-6 md:mb-8 flex flex-col items-center">
+          <img src="/logo.webp" alt="Alfa Plaza Logo" className="h-16 md:h-20 w-auto mb-4 object-contain" />
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-gold uppercase">Mordomo Digital</h1>
+          <p className="text-xs md:text-sm text-gray-400 tracking-widest uppercase font-bold text-center">Sofisticação e qualidade ao seu dispor</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
           <div className="space-y-4">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gold/50 group-focus-within:text-gold transition-colors">

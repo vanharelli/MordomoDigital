@@ -164,17 +164,17 @@ const DashboardScreen: React.FC = () => {
               <div className="flex items-center space-x-2 z-10">
                   <button 
                     onClick={() => setIsInfoOpen(true)} 
-                    className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" 
+                    className="text-gold border-[0.5px] border-gold p-3 rounded-lg hover:bg-gold/10 transition-colors" 
                     aria-label="Hotel Info"
                   >
-                    <Info size={15} />
+                    <Info size={24} />
                   </button>
                   <button 
                     onClick={() => setIsWifiOpen(true)} 
-                    className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" 
+                    className="text-gold border-[0.5px] border-gold p-3 rounded-lg hover:bg-gold/10 transition-colors" 
                     aria-label="Wi-Fi Info"
                   >
-                    <Wifi size={15} />
+                    <Wifi size={24} />
                   </button>
                 </div>
               </div>

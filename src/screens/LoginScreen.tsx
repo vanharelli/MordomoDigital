@@ -7,7 +7,7 @@ import { validateSession, createSession } from '../lib/BrainFunctions';
 const LoginScreen: React.FC = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const { setGuestData, isAuthenticated } = useGuest();
+  const { setGuestData } = useGuest();
   const navigate = useNavigate();
 
   useEffect(() => {

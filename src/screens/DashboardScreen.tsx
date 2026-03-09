@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { validateSession } from '../lib/BrainFunctions';
 
 const DashboardScreen: React.FC = () => {
-  const { guestName, roomNumber } = useGuest();
+  const { guestName, roomNumber, logout } = useGuest();
   const navigate = useNavigate();
   const [isWifiOpen, setIsWifiOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -19,19 +19,18 @@ const DashboardScreen: React.FC = () => {
     return localStorage.getItem('md_contact_saved') === 'true';
   });
   const logoClicksRef = useRef(0);
-  const [hideRestaurant, setHideRestaurant] = useState<boolean | null>(null);
+  const [hideRestaurant, setHideRestaurant] = useState<boolean>(false);
 
   useEffect(() => {
     // 3. EXPIRAÇÃO E REDIRECIONAMENTO: Verifica sessão a cada carregamento do Dashboard
     const session = validateSession();
     if (!session) {
-      // Se não houver sessão válida (expirada ou inexistente), validateSession já redirecionou ou retornou null
-      // Caso o redirecionamento não tenha ocorrido (ex: sessão limpa manualmente), forçamos o login
+      logout(); // Limpa o contexto do hóspede e chaves antigas
       if (!window.location.href.includes('alfaplazahotel.com.br')) {
          navigate('/');
       }
     }
-  }, [navigate]);
+  }, [navigate, logout]);
 
   const handleLogoClick = () => {
     logoClicksRef.current += 1;
@@ -44,40 +43,42 @@ const DashboardScreen: React.FC = () => {
   useEffect(() => {
     const fetchModuleSettings = async () => {
       try {
-        if (!isSupabaseConfigured) {
-          setHideRestaurant(false);
-          return;
-        }
+        if (!isSupabaseConfigured) return;
+
         const { data, error } = await supabase
           .from('hotel_settings')
-          .select('*')
-          .abortSignal(AbortSignal.timeout(10000));
+          .select('*');
+          
         if (error) {
-          if (error.message?.includes('AbortError')) return;
           console.error('Error fetching settings:', error);
-          setHideRestaurant(false); 
           return;
         }
+
         if (data) {
           const hideRestaurantSetting = data.find(item => item.key === 'hide_restaurante');
           setHideRestaurant(hideRestaurantSetting?.value === 'true');
-        } else {
-          setHideRestaurant(false); // Caso não existam dados
         }
       } catch (err) {
         console.error('Connection failed:', err);
-        setHideRestaurant(false); // Fallback em erro fatal
       }
     };
+    
     fetchModuleSettings();
 
     if (!isSupabaseConfigured) return;
+    
     const channel = supabase
       .channel('public:hotel_settings_dashboard')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'hotel_settings' }, () => {
-        fetchModuleSettings();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'hotel_settings' }, (payload) => {
+        // Atualização otimista apenas se for a chave relevante
+        if (payload.new && (payload.new as any).key === 'hide_restaurante') {
+           setHideRestaurant((payload.new as any).value === 'true');
+        } else {
+           fetchModuleSettings();
+        }
       })
       .subscribe();
+      
     return () => { supabase.removeChannel(channel); };
   }, []);
 

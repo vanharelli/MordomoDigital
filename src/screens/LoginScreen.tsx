@@ -13,10 +13,10 @@ const LoginScreen: React.FC = () => {
   useEffect(() => {
     // 2. BYPASS DE LOGIN: Verifica se 'alfa_session' existe e é válida
     const session = validateSession();
-    if (session || isAuthenticated) {
+    if (session) {
       navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -86,6 +86,11 @@ const DashboardScreen: React.FC = () => {
     if (item.id === '1') {
       navigate('/products');
     }
+    if (item.id === '2') {
+      // Restaurante agora redireciona para a tela de contingência (Room Service)
+      // que contém o carrossel de pratos e o protocolo
+      navigate('/room-service');
+    }
     if (item.id === '3') {
       navigate('/extras');
     }
@@ -116,7 +121,7 @@ const DashboardScreen: React.FC = () => {
     { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.webp' },
   ];
 
-  const displayedCoreServices = hideRestaurant === null ? [] : (hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices);
+  const displayedCoreServices = hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices;
 
   const partnerNetwork = [
     { id: 'map-alpha', title: 'MAPA ALFA', action: 'EXPLORAR REGIÃO', image: '/alfa maps.webp' },

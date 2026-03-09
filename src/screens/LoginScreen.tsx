@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { User, KeyRound } from 'lucide-react';
+import { validateSession, createSession } from '../lib/BrainFunctions';
 
 const LoginScreen: React.FC = () => {
   const [name, setName] = useState('');
@@ -10,7 +11,9 @@ const LoginScreen: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    // 2. BYPASS DE LOGIN: Verifica se 'alfa_session' existe e é válida
+    const session = validateSession();
+    if (session || isAuthenticated) {
       navigate('/dashboard', { replace: true });
     }
   }, [isAuthenticated, navigate]);
@@ -18,6 +21,8 @@ const LoginScreen: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name && room) {
+      // 1. PERSISTÊNCIA: Salva a sessão no localStorage
+      createSession();
       setGuestData(name, room);
       navigate('/dashboard');
     }

@@ -7,6 +7,7 @@ import { Wifi, X, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
+import { validateSession } from '../lib/BrainFunctions';
 
 const DashboardScreen: React.FC = () => {
   const { guestName, roomNumber } = useGuest();
@@ -19,6 +20,18 @@ const DashboardScreen: React.FC = () => {
   });
   const logoClicksRef = useRef(0);
   const [hideRestaurant, setHideRestaurant] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // 3. EXPIRAÇÃO E REDIRECIONAMENTO: Verifica sessão a cada carregamento do Dashboard
+    const session = validateSession();
+    if (!session) {
+      // Se não houver sessão válida (expirada ou inexistente), validateSession já redirecionou ou retornou null
+      // Caso o redirecionamento não tenha ocorrido (ex: sessão limpa manualmente), forçamos o login
+      if (!window.location.href.includes('alfaplazahotel.com.br')) {
+         navigate('/');
+      }
+    }
+  }, [navigate]);
 
   const handleLogoClick = () => {
     logoClicksRef.current += 1;

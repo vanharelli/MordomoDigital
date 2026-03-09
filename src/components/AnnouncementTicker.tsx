@@ -9,11 +9,14 @@ const AnnouncementTicker: React.FC = () => {
 
   const fetchSettings = async () => {
     try {
-      if (!isSupabaseConfigured) return;
+      if (!isSupabaseConfigured) {
+        console.info('Ticker: Local Mode Active (No Database)');
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('hotel_settings')
-        .select('*')
-        .abortSignal(AbortSignal.timeout(10000));
+        .select('*');
 
       if (error) {
         if (error.message?.includes('AbortError')) return;

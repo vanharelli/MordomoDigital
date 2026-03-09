@@ -3,14 +3,16 @@ import { useGuest } from '../context/GuestContext';
 import Carousel from '../components/Carousel';
 import AnnouncementTicker from '../components/AnnouncementTicker';
 import WhatsAppHook from '../components/WhatsAppHook';
-import { Wifi, X } from 'lucide-react';
+import { Wifi, X, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const DashboardScreen: React.FC = () => {
   const { guestName, roomNumber } = useGuest();
   const navigate = useNavigate();
   const [isWifiOpen, setIsWifiOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [hasSavedContact, setHasSavedContact] = useState(() => {
     return localStorage.getItem('md_contact_saved') === 'true';
@@ -144,6 +146,13 @@ const DashboardScreen: React.FC = () => {
 
               <div className="flex items-center space-x-2 z-10">
                   <button 
+                    onClick={() => setIsInfoOpen(true)} 
+                    className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" 
+                    aria-label="Hotel Info"
+                  >
+                    <Info size={15} />
+                  </button>
+                  <button 
                     onClick={() => setIsWifiOpen(true)} 
                     className="text-gold border-[0.5px] border-gold p-2 rounded-lg hover:bg-gold/10 transition-colors" 
                     aria-label="Wi-Fi Info"
@@ -194,6 +203,79 @@ const DashboardScreen: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Info Modal */}
+      <AnimatePresence>
+        {isInfoOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-8 w-full max-w-sm relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
+            >
+              {/* Brilho Interno Glassmorphism */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+              
+              <button 
+                onClick={() => setIsInfoOpen(false)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors z-10"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="flex flex-col items-center text-center space-y-6 relative z-10">
+                <div className="bg-gold/20 p-5 rounded-full mb-2 border border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                  <Info size={36} className="text-gold" />
+                </div>
+                
+                <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Informações</h2>
+                
+                <div className="w-full space-y-4 bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md text-left">
+                  
+                  {/* Horários */}
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-gold text-xs font-bold uppercase tracking-widest mb-2">Check-in / Check-out</h3>
+                    <p className="text-gray-300 text-xs font-medium">Início: 13:00</p>
+                    <p className="text-gray-300 text-xs font-medium">Término: 12:00 (Meio-dia)</p>
+                  </div>
+
+                  {/* Café da Manhã */}
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-gold text-xs font-bold uppercase tracking-widest mb-2">Café da Manhã</h3>
+                    <div className="space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400 text-[10px]">Seg a Sáb</span>
+                        <span className="text-white text-[10px] font-bold">06:00 - 10:00</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400 text-[10px]">Dom e Feriados</span>
+                        <span className="text-white text-[10px] font-bold">07:00 - 10:30</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Aviso */}
+                  <div className="flex items-center gap-3 pt-1">
+                    <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse" />
+                    <span className="text-gray-300 text-[10px] font-bold uppercase tracking-wider">Quartos para não fumantes</span>
+                  </div>
+
+                </div>
+
+                <p className="text-[11px] text-white/50 leading-relaxed px-4 font-medium uppercase tracking-wider">
+                  Desejamos uma excelente estadia no Alfa Plaza.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Wi-Fi Popup Modal */}
       {isWifiOpen && (
@@ -249,58 +331,78 @@ const DashboardScreen: React.FC = () => {
       )}
 
       {/* Terms of Use Modal */}
-      {isTermsOpen && (
-        <div className="absolute inset-0 z-[110] flex items-center justify-center bg-black/95 backdrop-blur-xl p-6 animate-fade-in">
-          <div className="bg-obsidian border border-gold/30 rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
-            <div className="p-6 border-b border-gold/20 flex justify-between items-center bg-gold/5">
-              <h2 className="text-sm font-bold text-gold uppercase tracking-widest">Termos de Uso e Responsabilidade</h2>
-              <button onClick={() => setIsTermsOpen(false)} className="text-gold hover:text-white transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-gray-300 leading-relaxed scrollbar-hide">
-              <section className="space-y-2">
-                <h3 className="text-gold font-bold uppercase tracking-wider">1. Aceitação dos Termos</h3>
-                <p>Ao utilizar o Mordomo Digital do Alfa Plaza Hotel, você concorda integralmente com as condições aqui estabelecidas para garantir a segurança e o conforto de sua estadia.</p>
-              </section>
+      <AnimatePresence>
+        {isTermsOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-md p-6"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden relative"
+            >
+              {/* Brilho Interno Glassmorphism */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
 
-              <section className="space-y-2">
-                <h3 className="text-gold font-bold uppercase tracking-wider">2. Uso dos Serviços</h3>
-                <p>Os serviços de pedidos, extras e informações locais são fornecidos exclusivamente para hóspedes em estadia ativa. O uso indevido ou solicitações falsas podem resultar em cobranças administrativas.</p>
-              </section>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 backdrop-blur-md">
+                  <h2 className="text-sm font-black text-white tracking-[0.2em] uppercase">Termos de Uso</h2>
+                  <button 
+                    onClick={() => setIsTermsOpen(false)} 
+                    className="text-white/50 hover:text-white transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-gray-300 leading-relaxed scrollbar-hide">
+                  <section className="space-y-2">
+                    <h3 className="text-gold font-bold uppercase tracking-wider text-[10px]">1. Aceitação dos Termos</h3>
+                    <p>Ao utilizar o Mordomo Digital do Alfa Plaza Hotel, você concorda integralmente com as condições aqui estabelecidas para garantir a segurança e o conforto de sua estadia.</p>
+                  </section>
 
-              <section className="space-y-2">
-                <h3 className="text-gold font-bold uppercase tracking-wider">3. Privacidade e Dados</h3>
-                <p>O hotel respeita a LGPD. Seus dados (nome e quarto) são utilizados apenas para a prestação dos serviços internos e não são compartilhados com terceiros, exceto conforme necessário para o funcionamento técnico do sistema.</p>
-              </section>
+                  <section className="space-y-2">
+                    <h3 className="text-gold font-bold uppercase tracking-wider text-[10px]">2. Uso dos Serviços</h3>
+                    <p>Os serviços de pedidos, extras e informações locais são fornecidos exclusivamente para hóspedes em estadia ativa. O uso indevido ou solicitações falsas podem resultar em cobranças administrativas.</p>
+                  </section>
 
-              <section className="space-y-2">
-                <h3 className="text-gold font-bold uppercase tracking-wider">4. Responsabilidade</h3>
-                <p>O hotel não se responsabiliza por indisponibilidades técnicas momentâneas da rede Wi-Fi ou do servidor Supabase, embora envide todos os esforços para manter a estabilidade total.</p>
-              </section>
+                  <section className="space-y-2">
+                    <h3 className="text-gold font-bold uppercase tracking-wider text-[10px]">3. Privacidade e Dados</h3>
+                    <p>O hotel respeita a LGPD. Seus dados (nome e quarto) são utilizados apenas para a prestação dos serviços internos e não são compartilhados com terceiros, exceto conforme necessário para o funcionamento técnico do sistema.</p>
+                  </section>
 
-              <section className="space-y-2">
-                <h3 className="text-gold font-bold uppercase tracking-wider">5. Desenvolvimento</h3>
-                <p>Esta plataforma foi desenvolvida pela Marketelli. Para suporte técnico ou informações sobre o sistema, acesse www.marketelli.com.</p>
-              </section>
+                  <section className="space-y-2">
+                    <h3 className="text-gold font-bold uppercase tracking-wider text-[10px]">4. Responsabilidade</h3>
+                    <p>O hotel não se responsabiliza por indisponibilidades técnicas momentâneas da rede Wi-Fi ou do servidor Supabase, embora envide todos os esforços para manter a estabilidade total.</p>
+                  </section>
 
-              <div className="pt-4 border-t border-white/5 italic text-[10px] text-gray-500">
-                Última atualização: {new Date().toLocaleDateString('pt-BR')}
+                  <section className="space-y-2">
+                    <h3 className="text-gold font-bold uppercase tracking-wider text-[10px]">5. Desenvolvimento</h3>
+                    <p>Esta plataforma foi desenvolvida pela Marketelli. Para suporte técnico ou informações sobre o sistema, acesse www.marketelli.com.</p>
+                  </section>
+
+                  <div className="pt-4 border-t border-white/10 italic text-[10px] text-gray-500">
+                    Última atualização: {new Date().toLocaleDateString('pt-BR')}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-black/40 border-t border-white/10 backdrop-blur-md">
+                  <button 
+                    onClick={() => setIsTermsOpen(false)}
+                    className="w-full bg-gold text-black py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-white transition-all shadow-lg"
+                  >
+                    Compreendi e Aceito
+                  </button>
+                </div>
               </div>
-            </div>
-
-            <div className="p-4 bg-black/50 border-t border-gold/10">
-              <button 
-                onClick={() => setIsTermsOpen(false)}
-                className="w-full bg-gold/10 border border-gold text-gold py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-gold hover:text-black transition-all"
-              >
-                Compreendi e Aceito
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

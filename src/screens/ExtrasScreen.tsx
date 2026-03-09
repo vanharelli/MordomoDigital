@@ -52,69 +52,83 @@ const ExtrasScreen: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full bg-obsidian flex flex-col text-white relative">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-obsidian/80 backdrop-blur-md border-b border-gold/30 px-6 py-4 flex items-center justify-between">
-        <button 
-          onClick={() => navigate('/dashboard')}
-          className="p-2 -ml-2 text-gold hover:bg-gold/10 rounded-lg transition-colors"
-        >
-          <ArrowLeft size={24} />
-        </button>
-        <div className="text-center">
-          <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Toalha e Extras</h1>
-          <p className="text-[10px] text-gray-400 uppercase tracking-tighter">Quarto {roomNumber} • {guestName}</p>
-        </div>
-        <div className="w-10" /> {/* Spacer */}
-      </div>
+    <div className="h-full w-full flex flex-col text-white relative overflow-hidden">
+      {/* Background Image Layer */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center z-0" 
+        style={{ backgroundImage: "url('/backgroundalfa.webp')" }}
+      />
+      
+      {/* Glassmorphism Overlay Layer */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" />
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        <div className="bg-black/40 border border-white/5 rounded-2xl p-4 mb-4">
-          <p className="text-xs text-gray-400 text-center italic">
-            Selecione os itens extras que deseja receber em sua suíte.
-          </p>
-        </div>
-
-        {extrasList.map((extra) => (
-          <div 
-            key={extra.id}
-            className="bg-black/60 border border-gold/10 rounded-2xl p-4 flex items-center justify-between shadow-lg"
+      {/* Content Wrapper */}
+      <div className="relative z-20 flex flex-col h-full">
+        {/* Header */}
+        <div className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gold px-6 py-4 flex items-center gap-4">
+          <button 
+            onClick={() => navigate('/dashboard')}
+            className="p-2 border border-gold rounded-lg text-gold hover:bg-gold hover:text-black transition-colors"
           >
-            <div>
-              <h3 className="font-bold text-lg tracking-tight">{extra.name}</h3>
-              <p className="text-[10px] text-gold uppercase tracking-widest">Disponível</p>
-            </div>
-
-            <div className="flex items-center gap-4 bg-black/80 rounded-xl p-1 border border-white/5">
-              <button
-                onClick={() => updateQuantity(extra.id, -1)}
-                className="w-8 h-8 flex items-center justify-center text-gold hover:bg-gold/10 rounded-lg transition-colors"
-              >
-                <Minus size={18} />
-              </button>
-              <span className="w-6 text-center font-bold text-lg">{quantities[extra.id] || 0}</span>
-              <button
-                onClick={() => updateQuantity(extra.id, 1)}
-                className="w-8 h-8 flex items-center justify-center text-gold hover:bg-gold/10 rounded-lg transition-colors"
-              >
-                <Plus size={18} />
-              </button>
-            </div>
+            <ArrowLeft size={20} />
+          </button>
+          <div className="flex-1">
+            <h1 className="text-xl font-bold tracking-widest text-gold uppercase">Toalha e Extras</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-wider">Quarto {roomNumber} • {guestName}</p>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Footer Button */}
-      <div className="p-6 bg-obsidian/80 backdrop-blur-md border-t border-gold/30">
-        <button
-          onClick={handleConfirmOrder}
-          disabled={totalItems === 0}
-          className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser disabled:opacity-30 disabled:grayscale"
-        >
-          <ShoppingCart size={20} />
-          Solicitar Agora ({totalItems})
-        </button>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 pb-32 scrollbar-hide">
+          <div className="bg-black/40 border border-white/10 rounded-2xl p-4 mb-6 backdrop-blur-sm">
+            <p className="text-xs text-gray-300 text-center italic font-medium">
+              Selecione os itens extras que deseja receber em sua suíte.
+            </p>
+          </div>
+
+          {extrasList.map((extra) => (
+            <div 
+              key={extra.id}
+              className="bg-white/5 border border-gold/20 rounded-xl p-4 flex items-center justify-between shadow-lg backdrop-blur-sm transition-all hover:bg-white/10"
+            >
+              <div>
+                <h3 className="font-bold text-white text-lg tracking-tight">{extra.name}</h3>
+                <p className="text-[10px] text-gold uppercase tracking-widest font-semibold mt-1">Disponível</p>
+              </div>
+
+              <div className="flex items-center gap-4 bg-black/40 rounded-lg p-2 border border-gold/30">
+                <button
+                  onClick={() => updateQuantity(extra.id, -1)}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-gold/10 text-gold hover:bg-gold hover:text-black transition-colors disabled:opacity-50"
+                  disabled={!quantities[extra.id]}
+                >
+                  <Minus size={16} />
+                </button>
+                <span className="w-6 text-center font-bold text-white text-lg">{quantities[extra.id] || 0}</span>
+                <button
+                  onClick={() => updateQuantity(extra.id, 1)}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-gold/10 text-gold hover:bg-gold hover:text-black transition-colors"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer Button */}
+        <div className="fixed bottom-0 left-0 right-0 bg-black/30 backdrop-blur-md border-t border-gold p-6 shadow-laser z-50">
+          <div className="max-w-3xl mx-auto">
+            <button
+              onClick={handleConfirmOrder}
+              disabled={totalItems === 0}
+              className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ShoppingCart size={20} />
+              Solicitar Agora ({totalItems})
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

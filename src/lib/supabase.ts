@@ -4,7 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase credentials missing! Please check your .env file and restart the server.');
+  console.warn('Supabase credentials missing. The system will run in "Local Mode" without database persistence.');
 }
 
 // Prevent crash if credentials are missing during dev
@@ -12,7 +12,7 @@ const url = supabaseUrl || 'https://placeholder.supabase.co';
 const key = supabaseAnonKey || 'placeholder';
 
 if (url === 'https://placeholder.supabase.co') {
-    console.error('⚠️ SUPABASE NOT CONFIGURED: Using placeholder URL. Realtime features will fail. Restart the server after editing .env');
+    console.info('ℹ️ SUPABASE NOT CONFIGURED: Using placeholder client. Features like Announcements and Admin Panel will use local mock data.');
 }
 
 export const supabase = createClient(url, key);

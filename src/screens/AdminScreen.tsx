@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const AdminScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -15,10 +15,10 @@ const AdminScreen: React.FC = () => {
 
   const fetchSettings = async () => {
     try {
+      if (!isSupabaseConfigured) return;
       const { data, error } = await supabase
         .from('hotel_settings')
-        .select('*')
-        .abortSignal(AbortSignal.timeout(10000));
+        .select('*');
       
       if (error) {
            // Silencia erros esperados de timeout durante reconexão
@@ -48,6 +48,7 @@ const AdminScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     const channel = supabase
       .channel('public:hotel_settings_admin')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'hotel_settings' }, () => {
@@ -68,18 +69,22 @@ const AdminScreen: React.FC = () => {
   };
 
   const handlePublish = async () => {
-    if (!announcement.trim()) {
-      setStatus('O anúncio não pode estar vazio.');
-      return;
-    }
+    // Se estiver vazio, usa o padrão silenciosamente
+    const finalAnnouncement = announcement.trim() || "Mordomo Digital - Alfa Plaza Hotel";
 
     setStatus('Publicando...');
     setIsPublishing(true);
 
     try {
+      if (!isSupabaseConfigured) {
+        setStatus('Modo Local: As alterações não serão salvas no banco de dados.');
+        setIsPublishing(false);
+        return;
+      }
+
       const { error: error1 } = await supabase
         .from('hotel_settings')
-        .upsert({ key: 'announcement', value: announcement })
+        .upsert({ key: 'announcement', value: finalAnnouncement })
         .abortSignal(AbortSignal.timeout(10000));
 
       const { error: error2 } = await supabase

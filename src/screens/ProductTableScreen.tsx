@@ -101,10 +101,10 @@ const ProductTableScreen: React.FC = () => {
   return (
     <div className="text-white flex flex-col h-full w-full overflow-hidden relative">
       {/* Background Image Layer */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center z-0" 
-              style={{ backgroundImage: "url('/backgroundalfa.webp')" }}
-            />
+      <div 
+        className="absolute inset-0 bg-cover bg-center z-0" 
+        style={{ backgroundImage: "url('/background2.webp')" }}
+      />
       
       {/* Glassmorphism Overlay Layer */}
       <div className="absolute inset-0 bg-black/30 backdrop-blur-md z-10" />

@@ -118,7 +118,7 @@ const DashboardScreen: React.FC = () => {
       {/* Background Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30 pointer-events-none"
-        style={{ backgroundImage: 'url("/backgroundalfa.webp")' }}
+        style={{ backgroundImage: 'url("/background2.webp")' }}
       />
       
       {/* Content Wrapper */}

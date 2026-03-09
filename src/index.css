@@ -50,7 +50,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url('/backgroundalfa.webp');
+    background-image: url('/background2.webp');
     background-size: cover;
     background-position: center;
     z-index: -2;

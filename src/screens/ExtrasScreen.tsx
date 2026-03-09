@@ -56,7 +56,7 @@ const ExtrasScreen: React.FC = () => {
       {/* Background Image Layer */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0" 
-        style={{ backgroundImage: "url('/backgroundalfa.webp')" }}
+        style={{ backgroundImage: "url('/background2.webp')" }}
       />
       
       {/* Glassmorphism Overlay Layer */}

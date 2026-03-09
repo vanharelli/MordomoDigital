@@ -27,7 +27,8 @@ mapboxgl.accessToken = INITIAL_TOKEN;
 
 // Estilos do Mapa (Mapbox Standard para Visual 3D Nativo)
 const STYLES = {
-  STANDARD: 'mapbox://styles/mapbox/standard'
+  // Use o estilo padrão, mas evite camadas que dependam de tokens expirados ou serviços descontinuados
+  STANDARD: 'mapbox://styles/mapbox/streets-v12' 
 };
 
 const BRASILIA_COORDS: [number, number] = [-47.8825, -15.7942]; // Visão Geral de Brasília
@@ -49,35 +50,60 @@ export default function RadarScreen() {
   const [showIntro, setShowIntro] = useState(true);
   const [introFadeOut, setIntroFadeOut] = useState(false);
 
-  // Função para configurar o estilo GAME ENGINE / CINEMATIC REALISM
+  // Função para configurar o estilo (Simplificado para evitar erros DEM)
   const configureStandardStyle = useCallback(() => {
     if (!map.current) return;
     
     try {
-      // 1. CONFIGURAÇÃO MAPBOX STANDARD (3D NATIVO)
-      if ((map.current as any).setConfigProperty) {
-        // Iluminação Dusk (Crepúsculo) para harmonizar com Obsidian
-        (map.current as any).setConfigProperty('basemap', 'lightPreset', 'dusk');
-        
-        // Ativar Prédios 3D e detalhes realistas
-        (map.current as any).setConfigProperty('basemap', 'showPointOfInterestLabels', false);
-        (map.current as any).setConfigProperty('basemap', 'showRoadLabels', true);
-        (map.current as any).setConfigProperty('basemap', 'showTransitLabels', true);
-      }
+      // Remover configurações avançadas do estilo 'standard' que podem falhar
+      // Se usar streets-v12, setConfigProperty não existe da mesma forma
 
-      // 2. ZOOM DIVE (FLYTO) - De Brasília para o Hotel
-      map.current.flyTo({
-        center: HOTEL_COORDS,
-        zoom: 17,
-        pitch: 60,
-        bearing: -15,
-        speed: 0.5,
-        curve: 1,
-        essential: true
-      });
+      // Apenas adicionar edifícios 3D se suportado
+      if (map.current.getLayer('building')) return;
+
+      const layers = map.current.getStyle().layers;
+      const labelLayerId = layers?.find(
+        (layer) => layer.type === 'symbol' && layer.layout?.['text-field']
+      )?.id;
+
+      if (!map.current.getSource('composite')) return;
+
+      map.current.addLayer(
+        {
+          'id': 'add-3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        },
+        labelLayerId
+      );
 
     } catch (e) {
-      console.warn('Mapbox Standard config error:', e);
+      console.warn('Mapbox 3D buildings config error:', e);
     }
   }, []);
 
@@ -124,6 +150,17 @@ export default function RadarScreen() {
           initMarkers();
           
           setTimeout(() => map.current?.resize(), 300);
+          
+          // Efeito de FlyTo inicial (restaurado)
+          map.current?.flyTo({
+            center: HOTEL_COORDS,
+            zoom: 17,
+            pitch: 60,
+            bearing: -15,
+            speed: 0.5,
+            curve: 1,
+            essential: true
+          });
         });
 
         map.current.on('error', (e) => {

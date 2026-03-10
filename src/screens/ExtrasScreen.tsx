@@ -21,7 +21,8 @@ const ExtrasScreen: React.FC = () => {
       const current = prev[id] || 0;
       const next = Math.max(0, current + delta);
       if (next === 0) {
-        const { [id]: _, ...rest } = prev;
+        const rest = { ...prev };
+        delete rest[id];
         return rest;
       }
       return { ...prev, [id]: next };
@@ -34,7 +35,7 @@ const ExtrasScreen: React.FC = () => {
     if (totalItems === 0) return;
 
     const selectedExtras = Object.entries(quantities)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .map(([id, qty]) => {
         const extra = extrasList.find(e => e.id === id);
         return extra ? `• ${qty}x ${extra.name}` : '';

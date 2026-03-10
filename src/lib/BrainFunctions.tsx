@@ -15,7 +15,7 @@ export const validateSession = () => {
     }
     
     return session;
-  } catch (e) {
+  } catch {
     localStorage.removeItem('alfa_session');
     return null;
   }

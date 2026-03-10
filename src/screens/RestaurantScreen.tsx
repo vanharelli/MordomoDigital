@@ -1,21 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, Clock, X, Lock } from 'lucide-react';
 import ContingencyCarousel from '../components/ContingencyCarousel';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RestaurantScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { guestName: _guestName, roomNumber: _roomNumber } = useGuest();
   const [showHours, setShowHours] = useState(false);
   
   // Admin Mode States
-  const [_clickCount, setClickCount] = useState(0);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const clickCountRef = useRef(0);
   const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleClockClick = () => {
@@ -23,30 +21,22 @@ const RestaurantScreen: React.FC = () => {
   };
 
   const handleSecretTrigger = () => {
-    // Increment click count
-    setClickCount(prev => {
-      const newCount = prev + 1;
-      
-      // Reset timeout on each click
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-      
-      // Set timeout to reset count if user stops clicking
-      clickTimeoutRef.current = setTimeout(() => {
-        setClickCount(0);
-      }, 2000); // 2 seconds to chain clicks
+    clickCountRef.current += 1;
 
-      // If 10 clicks reached
-      if (newCount >= 10) {
-        setShowHours(false); // Close hours modal
-        setShowAdminLogin(true); // Open admin login
-        setClickCount(0);
-        if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
-      }
-      
-      return newCount;
-    });
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+    }, 2000);
+
+    if (clickCountRef.current >= 10) {
+      setShowHours(false);
+      setShowAdminLogin(true);
+      clickCountRef.current = 0;
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    }
   };
 
   const handleLogin = () => {

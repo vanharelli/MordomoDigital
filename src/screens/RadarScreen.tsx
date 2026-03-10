@@ -107,6 +107,78 @@ export default function RadarScreen() {
     }
   }, []);
 
+  // Marcadores de Elite (Alfa Plaza com Pulse Gold + 3D Simplified + Rótulos Dinâmicos)
+  const initMarkers = useCallback(() => {
+    if (!map.current) return;
+
+    markersRef.current.forEach(m => m.remove());
+    markersRef.current = [];
+
+    ESTABELECIMENTOS_RADAR.forEach((local) => {
+      const el = document.createElement('div');
+      el.className = 'marker-container';
+      
+      if (local.id === 1) {
+        el.innerHTML = `
+          <div class="hotel-marker-pulse">
+            <div class="pulse-ring"></div>
+            <div class="hotel-pin-gold">📍</div>
+            <div class="poi-dynamic-label active">${local.nome}</div>
+          </div>
+        `;
+        el.style.zIndex = '1000';
+      } else {
+        const isElite = [14, 15, 23].includes(local.id);
+        el.innerHTML = `
+          <div class="poi-3d-marker ${isElite ? 'elite-poi' : ''}">
+            <span class="poi-emoji-3d">${local.emoji}</span>
+            <div class="poi-dynamic-label">${local.nome}</div>
+          </div>
+        `;
+      }
+
+      const popup = new mapboxgl.Popup({ offset: [0, -10], closeButton: false, className: 'obsidian-popup' })
+        .setHTML(`
+          <div class="p-2">
+            <h3 class="font-bold text-white">${local.nome}</h3>
+            <p class="text-[10px] text-gold uppercase">${local.descricao}</p>
+          </div>
+        `);
+
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+        .setLngLat(local.coords)
+        .setPopup(popup)
+        .addTo(map.current!);
+
+      markersRef.current.push(marker);
+    });
+
+    const updateLabels = () => {
+      if (!map.current) return;
+      const zoom = map.current.getZoom();
+      const labels = document.querySelectorAll('.poi-dynamic-label');
+      
+      labels.forEach(label => {
+        const isHotelLabel = label.parentElement?.classList.contains('hotel-marker-pulse');
+        
+        if (isHotelLabel) {
+          label.classList.add('active');
+          return;
+        }
+
+        if (zoom > 16.2) {
+          label.classList.add('active');
+        } else {
+          label.classList.remove('active');
+        }
+      });
+    };
+
+    map.current.on('zoom', updateLabels);
+    map.current.on('move', updateLabels);
+    setTimeout(updateLabels, 500);
+  }, []);
+
   // Inicializar Mapa
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -116,7 +188,7 @@ export default function RadarScreen() {
       try {
         const canvas = document.createElement('canvas');
         return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-      } catch (e) { return false; }
+      } catch { return false; }
     };
 
     if (!checkWebGL()) {
@@ -170,93 +242,14 @@ export default function RadarScreen() {
           }
         });
 
-      } catch (err: any) {
-        setMapError(`Erro: ${err.message}`);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Erro desconhecido';
+        setMapError(`Erro: ${message}`);
       }
     }, 100);
 
     return () => clearTimeout(initTimeout);
-  }, [configureStandardStyle]);
-
-  // Marcadores de Elite (Alfa Plaza com Pulse Gold + 3D Simplified + Rótulos Dinâmicos)
-  const initMarkers = useCallback(() => {
-    if (!map.current) return;
-
-    markersRef.current.forEach(m => m.remove());
-    markersRef.current = [];
-
-    ESTABELECIMENTOS_RADAR.forEach((local) => {
-      const el = document.createElement('div');
-      el.className = 'marker-container';
-      
-      // Estilização Específica do Hotel (Pulsar Dourado)
-      if (local.id === 1) {
-        el.innerHTML = `
-          <div class="hotel-marker-pulse">
-            <div class="pulse-ring"></div>
-            <div class="hotel-pin-gold">📍</div>
-            <div class="poi-dynamic-label active">${local.nome}</div>
-          </div>
-        `;
-        el.style.zIndex = '1000';
-      } else {
-        // Marcadores 3D Simplificados
-        const isElite = [14, 15, 23].includes(local.id);
-        el.innerHTML = `
-          <div class="poi-3d-marker ${isElite ? 'elite-poi' : ''}">
-            <span class="poi-emoji-3d">${local.emoji}</span>
-            <div class="poi-dynamic-label">${local.nome}</div>
-          </div>
-        `;
-      }
-
-      const popup = new mapboxgl.Popup({ offset: [0, -10], closeButton: false, className: 'obsidian-popup' })
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-bold text-white">${local.nome}</h3>
-            <p class="text-[10px] text-gold uppercase">${local.descricao}</p>
-          </div>
-        `);
-
-      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
-        .setLngLat(local.coords)
-        .setPopup(popup)
-        .addTo(map.current!);
-
-      markersRef.current.push(marker);
-    });
-
-    // Watchdog de Zoom para Rótulos (Aparecem apenas em Zoom aproximado)
-    const updateLabels = () => {
-      if (!map.current) return;
-      const zoom = map.current.getZoom();
-      
-      // Seleciona todos os rótulos dinâmicos via DOM (Mapbox markers estão fora do ciclo React)
-      const labels = document.querySelectorAll('.poi-dynamic-label');
-      
-      labels.forEach(label => {
-        const isHotelLabel = label.parentElement?.classList.contains('hotel-marker-pulse');
-        
-        // Regra: Hotel sempre visível. Outros apenas com Zoom > 16.2
-        if (isHotelLabel) {
-          label.classList.add('active');
-          return;
-        }
-
-        if (zoom > 16.2) {
-          label.classList.add('active');
-        } else {
-          label.classList.remove('active');
-        }
-      });
-    };
-
-    map.current.on('zoom', updateLabels);
-    map.current.on('move', updateLabels); // Garante atualização em qualquer movimento
-    
-    // Pequeno delay para garantir que o DOM dos marcadores foi injetado pelo Mapbox
-    setTimeout(updateLabels, 500);
-  }, []);
+  }, [configureStandardStyle, initMarkers]);
 
   // Persistência e FlyTo no Style Load
   useEffect(() => {
@@ -512,7 +505,10 @@ export default function RadarScreen() {
           const newMode = !isDayMode;
           setIsDayMode(newMode);
           try {
-            (map.current as any).setConfigProperty('basemap', 'lightPreset', newMode ? 'dawn' : 'night');
+            const mapInstance = map.current as unknown as {
+              setConfigProperty?: (config: string, property: string, value: string) => void;
+            };
+            mapInstance.setConfigProperty?.('basemap', 'lightPreset', newMode ? 'dawn' : 'night');
           } catch (e) { console.warn(e); }
         }}
         className={`absolute right-4 z-10 shadow-lg text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full flex items-center gap-2 border transition-all duration-500 top-6 sm:right-6 hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white text-gray-600 border-gray-100' : 'bg-gray-800 text-gray-300 border-gray-700'}`}

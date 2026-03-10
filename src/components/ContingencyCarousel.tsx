@@ -8,31 +8,31 @@ const contingencyDishes = [
     id: 1,
     name: 'Strogonoff Clássico',
     description: '(Frango ou Carne), Arroz Branco e Batata Palha.',
-    image: 'https://images.unsplash.com/photo-1574484284008-59d73054522d?q=80&w=1935&auto=format&fit=crop'
+    image: '/RESTAURANTE.webp'
   },
   {
     id: 2,
     name: 'Lagarto ao Madeira',
     description: 'Lagarto fatiado, Molho Madeira, Arroz e Purê.',
-    image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop'
+    image: '/SNACKS.webp'
   },
   {
     id: 3,
     name: 'Frango às Ervas',
     description: 'Filé Grelhado, Molho de Laranja/Ervas e Legumes.',
-    image: 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?q=80&w=2070&auto=format&fit=crop'
+    image: '/RESTAURANTE.webp'
   },
   {
     id: 4,
     name: 'Peixe Nobre',
     description: 'Tilápia Grelhada, Arroz com Brócolis e Purê.',
-    image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=2070&auto=format&fit=crop'
+    image: '/RESTAURANTE.webp'
   },
   {
     id: 5,
     name: 'Sobrecoxa Dourada',
     description: 'Sobrecoxa Assada com Batatas Coradas e Arroz.',
-    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=1888&auto=format&fit=crop'
+    image: '/RESTAURANTE.webp'
   }
 ];
 

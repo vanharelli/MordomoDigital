@@ -71,8 +71,9 @@ const DashboardScreen: React.FC = () => {
       .channel('public:hotel_settings_dashboard')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'hotel_settings' }, (payload) => {
         // Atualização otimista apenas se for a chave relevante
-        if (payload.new && (payload.new as any).key === 'hide_restaurante') {
-           setHideRestaurant((payload.new as any).value === 'true');
+        const newRow = payload.new as { key?: string; value?: string } | null;
+        if (newRow?.key === 'hide_restaurante') {
+          setHideRestaurant(newRow.value === 'true');
         } else {
            fetchModuleSettings();
         }

@@ -34,7 +34,8 @@ const ProductTableScreen: React.FC = () => {
       const current = prev[id] || 0;
       const next = Math.max(0, current + delta);
       if (next === 0) {
-        const { [id]: _, ...rest } = prev;
+        const rest = { ...prev };
+        delete rest[id];
         return rest;
       }
       return { ...prev, [id]: next };
@@ -54,7 +55,7 @@ const ProductTableScreen: React.FC = () => {
     if (total === 0) return;
 
     const selectedProducts = Object.entries(quantities)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .map(([id, qty]) => {
         const product = products.find(p => p.id === id);
         return product ? `• ${qty}x ${product.name} - ${formatCurrency(product.price * qty)}` : '';

@@ -227,7 +227,7 @@ const DashboardScreen: React.FC = () => {
                   <div className="w-1 h-1 bg-gold rounded-full" />
                   <span className="text-gold">SERVIÇOS</span>
                 </h2>
-                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['1', '2'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
                       <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
@@ -236,7 +236,7 @@ const DashboardScreen: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                 {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
                   <div key={item.id} className="snap-center shrink-0">
                     <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
@@ -244,7 +244,7 @@ const DashboardScreen: React.FC = () => {
                 ))}
               </div>
 
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                 {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
                   <div key={item.id} className="snap-center shrink-0">
                     <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
@@ -253,7 +253,7 @@ const DashboardScreen: React.FC = () => {
               </div>
 
               <div className="pb-8">
-                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   <div className="snap-center shrink-0">
                     <ModuleCard item={displayedCoreServices.find(s => s.id === '7')!} isSelected={selectedModuleId === '7'} onClick={() => handleServiceClick({ id: '7' })} />
                   </div>
@@ -268,7 +268,7 @@ const DashboardScreen: React.FC = () => {
                   <div className="w-1 h-1 bg-gold rounded-full" />
                   <span className="text-gold">ONDE ESTAMOS?</span>
                 </h2>
-                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {partnerNetwork.map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
                       <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />

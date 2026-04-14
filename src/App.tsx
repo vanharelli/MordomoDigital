@@ -127,14 +127,16 @@ const SecurityLayer = () => {
     <>
       <AnimatePresence>
         {showDoubleBackToast && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-12 left-1/2 transform -translate-x-1/2 z-[999999] bg-[#0B1A30]/95 border border-[#D4AF37] text-[#D4AF37] px-8 py-4 rounded-full shadow-[0_0_40px_rgba(212,175,55,0.6)] font-bold text-[10px] uppercase tracking-[0.2em] backdrop-blur-2xl whitespace-nowrap text-center flex items-center justify-center min-w-[300px]"
+            className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
           >
-            Pressione voltar novamente para sair
+            <div className="bg-[#0B1A30]/95 border border-[#D4AF37] text-[#D4AF37] px-8 py-6 rounded-2xl shadow-[0_0_60px_rgba(212,175,55,0.8)] font-bold text-sm uppercase tracking-[0.2em] text-center">
+              Pressione voltar novamente para sair
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

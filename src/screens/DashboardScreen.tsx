@@ -20,15 +20,42 @@ const DashboardScreen: React.FC = () => {
   });
   const logoClicksRef = useRef(0);
   const [hideRestaurant, setHideRestaurant] = useState<boolean>(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem('dashboard_scroll');
+    if (savedScroll && scrollRef.current) {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo(0, parseInt(savedScroll, 10));
+      }, 100);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current) {
+        sessionStorage.setItem('dashboard_scroll', scrollRef.current.scrollTop.toString());
+      }
+    };
+    
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+    }
+    
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // 3. EXPIRAÇÃO E REDIRECIONAMENTO: Verifica sessão a cada carregamento do Dashboard
     const session = validateSession();
     if (!session) {
-      logout(); // Limpa o contexto do hóspede e chaves antigas
-      if (!window.location.href.includes('alfaplazahotel.com.br')) {
-         navigate('/');
-      }
+      logout();
+      navigate('/');
     }
   }, [navigate, logout]);
 
@@ -105,6 +132,9 @@ const DashboardScreen: React.FC = () => {
     if (item.id === '7') {
       navigate('/garage');
     }
+    if (item.id === '8') {
+      navigate('/printing');
+    }
     if (item.id === 'map-alpha') {
       navigate('/radar');
     }
@@ -115,9 +145,10 @@ const DashboardScreen: React.FC = () => {
     { id: '2', title: 'Restaurante', action: 'SOLICITAR PEDIDO', image: '/RESTAURANTE.webp' },
     { id: '3', title: 'Toalha e extras', action: 'SOLICITAR', image: '/TOALHA.webp' },
     { id: '4', title: 'Serviço de Quarto', action: 'ARRUMAÇÃO', image: '/SERVIÇO DE QUARTO.webp' },
-    { id: '5', title: 'Ferro de Passar', action: 'SOLICITAR', image: '/FERRO DE PASSAR.webp' },
+    { id: '5', title: 'Lavar e Passar', action: 'SOLICITAR', image: '/FERRO DE PASSAR.webp' },
     { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR', image: '/SECADOR DE CABELO.webp' },
     { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.webp' },
+    { id: '8', title: 'Impressão', action: 'SOLICITAR', image: '/impressao.png' },
   ];
 
   const displayedCoreServices = hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices;
@@ -142,7 +173,7 @@ const DashboardScreen: React.FC = () => {
       {/* Content Wrapper */}
       <div className="relative z-10 h-full flex flex-col">
         {/* Scrollable Content Wrapper */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-hide">
           <div className="min-h-full flex flex-col">
             <div className="sticky top-0 z-50 flex flex-col">
               {/* Header */}
@@ -153,7 +184,7 @@ const DashboardScreen: React.FC = () => {
                   className="cursor-pointer active:scale-95 transition-transform"
                   onClick={handleLogoClick}
                 >
-                  <img src="/logo.webp" alt="Alfa Plaza" className="h-12 w-auto object-contain" />
+                  <img src="/logo1.png" alt="Alfa Plaza" className="h-12 w-auto object-contain" />
                 </div>
                 
                 <div>
@@ -232,62 +263,66 @@ const DashboardScreen: React.FC = () => {
             className="absolute inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
           >
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-8 w-full max-w-sm relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
-            >
-              {/* Brilho Interno Glassmorphism */}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 w-full max-w-[320px] relative shadow-2xl"
+              >
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-              
               <button 
                 onClick={() => setIsInfoOpen(false)}
-                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors z-10"
+                className="absolute top-3 right-3 text-white/50 hover:text-white transition-colors z-10"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
 
-              <div className="flex flex-col items-center text-center space-y-6 relative z-10">
-                <div className="bg-gold/20 p-5 rounded-full mb-2 border border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                  <Info size={36} className="text-gold" />
+              <div className="flex flex-col items-center text-center space-y-5">
+                <div className="bg-gold/20 p-4 rounded-full border border-gold/30">
+                  <Info size={28} className="text-gold" />
                 </div>
                 
-                <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Informações</h2>
+                <h2 className="text-lg font-black text-white tracking-[0.15em] uppercase">Informações</h2>
                 
-                <div className="w-full space-y-4 bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md text-left">
+                <div className="w-full space-y-3 bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-sm text-left">
                   
-                  {/* Horários */}
-                  <div className="border-b border-white/10 pb-4">
-                    <h3 className="text-gold text-xs font-bold uppercase tracking-widest mb-2">Check-in / Check-out</h3>
-                    <p className="text-gray-300 text-xs font-medium">Início: 13:00</p>
-                    <p className="text-gray-300 text-xs font-medium">Término: 12:00 (Meio-dia)</p>
-                  </div>
-
-                  {/* Café da Manhã */}
-                  <div className="border-b border-white/10 pb-4">
-                    <h3 className="text-gold text-xs font-bold uppercase tracking-widest mb-2">Café da Manhã</h3>
-                    <div className="space-y-1">
-                      <div className="flex justify-between">
-                        <span className="text-gray-400 text-[10px]">Seg a Sáb</span>
-                        <span className="text-white text-[10px] font-bold">06:00 - 10:00</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-400 text-[10px]">Dom e Feriados</span>
-                        <span className="text-white text-[10px] font-bold">07:00 - 10:30</span>
-                      </div>
+                  <div className="space-y-2">
+                    <h3 className="text-gold text-[10px] font-bold uppercase tracking-widest">Check-in / Check-out</h3>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400">Check-in</span>
+                      <span className="text-white font-bold">13:00</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400">Check-out</span>
+                      <span className="text-white font-bold">12:00</span>
                     </div>
                   </div>
 
-                  {/* Aviso */}
-                  <div className="flex items-center gap-3 pt-1">
-                    <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse" />
-                    <span className="text-gray-300 text-[10px] font-bold uppercase tracking-wider">Quartos para não fumantes</span>
+                  <div className="border-t border-white/10 pt-2 space-y-2">
+                    <h3 className="text-gold text-[10px] font-bold uppercase tracking-widest">Café da Manhã</h3>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400">Seg a Sáb</span>
+                      <span className="text-white font-bold">06:00 - 10:00</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400">Dom e Feriados</span>
+                      <span className="text-white font-bold">07:00 - 10:30</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-2 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)] animate-pulse" />
+                    <span className="text-white text-[10px] font-bold uppercase tracking-wider">Recepção 24 Horas</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse" />
+                    <span className="text-white text-[10px] font-bold uppercase tracking-wider">Quartos p/ Não Fumantes</span>
                   </div>
 
                 </div>
 
-                <p className="text-[11px] text-white/50 leading-relaxed px-4 font-medium uppercase tracking-wider">
-                  Desejamos uma excelente estadia no Alfa Plaza.
+                <p className="text-[10px] text-white/40 font-medium uppercase tracking-wider">
+                  Desejamos uma excelente estadia
                 </p>
               </div>
             </motion.div>
@@ -297,35 +332,34 @@ const DashboardScreen: React.FC = () => {
 
       {/* Wi-Fi Popup Modal */}
       {isWifiOpen && (
-        <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-8 w-full max-w-sm relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
-            {/* Brilho Interno Glassmorphism */}
+          <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
+            <div className="bg-black/40 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 w-full max-w-[320px] relative shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
             
             <button 
               onClick={() => setIsWifiOpen(false)}
-              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors z-10"
+              className="absolute top-3 right-3 text-white/50 hover:text-white transition-colors z-10"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
 
-            <div className="flex flex-col items-center text-center space-y-6 relative z-10">
-              <div className="bg-gold/20 p-5 rounded-full mb-2 border border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                <Wifi size={36} className="text-gold" />
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="bg-gold/20 p-4 rounded-full border border-gold/30">
+                <Wifi size={28} className="text-gold" />
               </div>
               
-              <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">Alfa Plaza</h2>
+              <h2 className="text-lg font-black text-white tracking-[0.15em] uppercase">Alfa Plaza</h2>
               
-              <div className="w-full space-y-4 bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md">
-                <div className="flex flex-col items-start border-b border-white/10 pb-3">
+              <div className="w-full space-y-3 bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
+                <div className="flex flex-col items-start border-b border-white/10 pb-2">
                   <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Rede Premium</span>
-                  <span className="font-bold text-white text-lg tracking-wide select-all">ALFA_HOSPEDE</span>
+                  <span className="font-bold text-white text-base tracking-wide select-all">ALFA_HOSPEDE</span>
                 </div>
                 
-                <div className="flex flex-col items-start pt-1">
+                <div className="flex flex-col items-start pt-2">
                   <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Chave de Acesso</span>
                   {hasSavedContact ? (
-                    <span className="font-mono font-black text-gold tracking-[0.3em] text-2xl select-all animate-pulse">77921207</span>
+                    <span className="font-mono font-black text-gold tracking-[0.3em] text-xl select-all animate-pulse">77921207</span>
                   ) : (
                     <span className="text-white/30 font-bold tracking-tighter text-[10px] uppercase bg-black/40 px-3 py-1 rounded border border-white/5 italic">
                       Liberado após salvar contato
@@ -334,14 +368,13 @@ const DashboardScreen: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-[11px] text-white/50 leading-relaxed px-4 font-medium uppercase tracking-wider">
+              <p className="text-[10px] text-white/40 font-medium uppercase tracking-wider px-2">
                 {hasSavedContact 
                   ? "Experiência digital de alta velocidade exclusiva Alfa Plaza."
-                  : "Salve o contato do hotel abaixo para visualizar sua chave de acesso VIP."
+                  : "Salve o contato do hotel para visualizar sua chave de acesso VIP."
                 }
               </p>
 
-              {/* VIP Contact Save Hook inside Wi-Fi Modal */}
               {!hasSavedContact && <WhatsAppHook variant="inline" onAction={handleContactSave} />}
             </div>
           </div>
@@ -366,8 +399,8 @@ const DashboardScreen: React.FC = () => {
               {/* Brilho Interno Glassmorphism */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
 
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 backdrop-blur-md">
+              <div className="relative z-10 flex flex-col h-full min-h-0">
+                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 backdrop-blur-md shrink-0">
                   <h2 className="text-sm font-black text-white tracking-[0.2em] uppercase">Termos de Uso</h2>
                   <button 
                     onClick={() => setIsTermsOpen(false)} 

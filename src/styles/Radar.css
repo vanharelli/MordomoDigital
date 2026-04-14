@@ -168,27 +168,27 @@
   top: -25px;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.75);
   color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
   white-space: nowrap;
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  pointer-events: none;
   opacity: 0;
+  pointer-events: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  z-index: 10;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .poi-dynamic-label.active {
   opacity: 1;
   transform: translateX(-50%) scale(1);
-  top: -35px;
+  top: -30px;
 }
 
 /* Ajuste específico para o label do Hotel */
@@ -198,10 +198,13 @@
   color: black;
   border-color: #000;
   font-weight: 900;
+  font-size: 10px;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 .hotel-marker-pulse .poi-dynamic-label.active {
-  top: -25px;
+  top: -20px;
 }
 
 .marker-container {

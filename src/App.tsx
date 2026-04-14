@@ -14,6 +14,7 @@ import RestaurantScreen from './screens/RestaurantScreen';
 import IronScreen from './screens/IronScreen';
 import HairDryerScreen from './screens/HairDryerScreen';
 import GarageScreen from './screens/GarageScreen';
+import PrintingScreen from './screens/PrintingScreen';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -98,6 +99,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <GarageScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/printing" 
+        element={
+          <ProtectedRoute>
+            <PrintingScreen />
           </ProtectedRoute>
         } 
       />

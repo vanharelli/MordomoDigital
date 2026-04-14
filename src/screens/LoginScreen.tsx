@@ -41,7 +41,7 @@ const LoginScreen: React.FC = () => {
 
       <div className="w-full max-w-md relative z-20 bg-black/60 backdrop-blur-[15px] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
         <div className="text-center space-y-2 mb-6 md:mb-8 flex flex-col items-center">
-          <img src="/logo.webp" alt="Alfa Plaza Logo" className="h-16 md:h-20 w-auto mb-4 object-contain" />
+          <img src="/logo1.png" alt="Alfa Plaza Logo" className="h-16 md:h-20 w-auto mb-4 object-contain" />
           <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-gold uppercase">Mordomo Digital</h1>
           <p className="text-xs md:text-sm text-gray-400 tracking-widest uppercase font-bold text-center">Sofisticação e qualidade ao seu dispor</p>
         </div>
@@ -83,7 +83,7 @@ const LoginScreen: React.FC = () => {
             type="submit"
             className="w-full bg-gold text-black font-black py-4 rounded-xl border-[0.5px] border-gold hover:bg-white transition-all tracking-widest shadow-laser uppercase"
           >
-            Acessar Portal
+            Acessar Serviços
           </button>
         </form>
 

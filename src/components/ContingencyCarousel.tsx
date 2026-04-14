@@ -8,31 +8,31 @@ const contingencyDishes = [
     id: 1,
     name: 'Strogonoff Clássico',
     description: '(Frango ou Carne), Arroz Branco e Batata Palha.',
-    image: '/RESTAURANTE.webp'
+    image: 'https://images.unsplash.com/photo-1574484284008-59d73054522d?q=80&w=1935&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 2,
     name: 'Lagarto ao Madeira',
     description: 'Lagarto fatiado, Molho Madeira, Arroz e Purê.',
-    image: '/SNACKS.webp'
+    image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 3,
     name: 'Frango às Ervas',
     description: 'Filé Grelhado, Molho de Laranja/Ervas e Legumes.',
-    image: '/RESTAURANTE.webp'
+    image: 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 4,
     name: 'Peixe Nobre',
     description: 'Tilápia Grelhada, Arroz com Brócolis e Purê.',
-    image: '/RESTAURANTE.webp'
+    image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 5,
     name: 'Sobrecoxa Dourada',
     description: 'Sobrecoxa Assada com Batatas Coradas e Arroz.',
-    image: '/RESTAURANTE.webp'
+    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=1888&auto=format&fit=crop&fm=jpg'
   }
 ];
 
@@ -173,10 +173,14 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
                       </button>
                     )}
 
-                    {/* Image Background */}
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${dish.image})` }}
+                    <img
+                      src={dish.image}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      crossOrigin="anonymous"
+                      draggable={false}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
 

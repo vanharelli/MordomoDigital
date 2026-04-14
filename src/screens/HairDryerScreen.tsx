@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, Info, CheckSquare } from 'lucide-react';
@@ -6,6 +6,7 @@ import { ArrowLeft, Info, CheckSquare } from 'lucide-react';
 const HairDryerScreen: React.FC = () => {
   const navigate = useNavigate();
   const { guestName, roomNumber } = useGuest();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleWhatsAppRequest = () => {
     const message = `*SOLICITAÇÃO DE SECADOR DE CABELO - MORDOMO DIGITAL*\n\n` +
@@ -73,7 +74,7 @@ const HairDryerScreen: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>A devolução deve ser feita na recepção no momento do checkout.</span>
+                  <span>Ao sair do quarto, o secador deve ser devolvido à recepção.</span>
                 </li>
               </ul>
             </div>
@@ -86,13 +87,34 @@ const HairDryerScreen: React.FC = () => {
 
         {/* Footer Button */}
         <div className="p-6 bg-black/30 backdrop-blur-md border-t border-gold/30">
-          <button
-            onClick={handleWhatsAppRequest}
-            className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser"
-          >
-            <CheckSquare size={20} />
-            Solicitar Empréstimo
-          </button>
+          {showConfirm ? (
+            <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
+              <p className="text-xs text-gray-300 text-center">
+                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+              </p>
+              <button
+                onClick={handleWhatsAppRequest}
+                className="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 uppercase tracking-widest hover:bg-green-600 transition-all"
+              >
+                <CheckSquare size={18} />
+                Confirmar e Enviar
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="w-full py-2 text-gray-400 text-xs uppercase tracking-wider hover:text-white transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowConfirm(true)}
+              className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser"
+            >
+              <CheckSquare size={20} />
+              Solicitar Empréstimo
+            </button>
+          )}
         </div>
       </div>
     </div>

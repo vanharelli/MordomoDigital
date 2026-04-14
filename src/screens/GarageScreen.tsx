@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, Car, Info } from 'lucide-react';
@@ -6,6 +6,7 @@ import { ArrowLeft, Car, Info } from 'lucide-react';
 const GarageScreen: React.FC = () => {
   const navigate = useNavigate();
   const { guestName, roomNumber } = useGuest();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleWhatsAppRequest = () => {
     const message = `*SOLICITAÇÃO DE VEÍCULO - MORDOMO DIGITAL*\n\n` +
@@ -20,11 +21,12 @@ const GarageScreen: React.FC = () => {
   return (
     <div className="h-full w-full flex flex-col text-white relative overflow-hidden">
       {/* Background Image Layer */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0" 
-        style={{ backgroundImage: "url('/GARAGEM.webp')" }}
+      <img
+        src="/strogonoff.webp"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover z-0"
       />
-      
+
       {/* Glassmorphism Overlay Layer */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" />
 
@@ -58,22 +60,24 @@ const GarageScreen: React.FC = () => {
             </h2>
             
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
-              <p>
-                Para sua comodidade, você pode solicitar seu veículo com antecedência. Nossa equipe o deixará pronto na entrada do hotel.
-              </p>
+
 
               <ul className="space-y-3 pt-2">
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Clique no botão abaixo para notificar a recepção.</span>
+                  <span>A garagem fica localizada ao lado do hotel. Se preferir, a recepção guarda seu carro.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Aguarde alguns instantes enquanto preparamos seu carro.</span>
+                  <span>A vaga na garagem é rotativa, mas seu carro fica garantido lá dentro.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Dirija-se à entrada principal para retirar seu veículo.</span>
+                  <span>Se seu carro ficar atrás de outro, a chave deve ficar na recepção. (Obrigatório)</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
+                  <span>Para permanência do carro sem hospedagem, o valor é de R$ 35 o dia.</span>
                 </li>
               </ul>
             </div>
@@ -86,13 +90,34 @@ const GarageScreen: React.FC = () => {
 
         {/* Footer Button */}
         <div className="p-6 bg-black/30 backdrop-blur-md border-t border-gold/30">
-          <button
-            onClick={handleWhatsAppRequest}
-            className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser"
-          >
-            <Car size={20} />
-            Solicitar Veículo
-          </button>
+          {showConfirm ? (
+            <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
+              <p className="text-xs text-gray-300 text-center">
+                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+              </p>
+              <button
+                onClick={handleWhatsAppRequest}
+                className="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 uppercase tracking-widest hover:bg-green-600 transition-all"
+              >
+                <Car size={18} />
+                Confirmar e Enviar
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="w-full py-2 text-gray-400 text-xs uppercase tracking-wider hover:text-white transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowConfirm(true)}
+              className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser"
+            >
+              <Car size={20} />
+              Solicitar Vaga na Garagem
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -342,8 +342,8 @@ export default function App() {
       container: mapContainer.current,
       style: initialStyle,
       center: HOTEL_COORDS,
-      zoom: 17, // REQ 6: TITANIUM ZOOM
-      pitch: 65, // REQ 6: TITANIUM PITCH
+      zoom: 18, // REQ 6: TITANIUM ZOOM
+      pitch: 75, // REQ 6: TITANIUM PITCH
       bearing: -20, // REQ 6: TITANIUM BEARING
       antialias: true,
       maxBounds: DF_BOUNDS, // TRAVA NO QUADRILÁTERO DE ELITE
@@ -354,7 +354,7 @@ export default function App() {
       console.error('Mapbox Error:', e);
       const error = e.error as any;
       if (error?.status === 401 || error?.status === 403) {
-        setMapError('Token do Mapbox inválido ou não autorizado para este domínio (ngrok).');
+        setMapError('Token do Mapbox inválido ou não autorizado para este domínio.');
       }
     });
 
@@ -444,10 +444,10 @@ export default function App() {
       // LANDING NO ALFA PLAZA (Executa uma vez ao carregar)
       map.current?.flyTo({
         center: HOTEL_COORDS,
-        zoom: 17, // REQ 6
-        pitch: 65, // REQ 6
-        bearing: -20, // REQ 6
-        speed: 2.0, // Ação Imediata
+        zoom: 18,
+        pitch: 75,
+        bearing: -20,
+        speed: 2.0,
         curve: 1
       });
 
@@ -518,7 +518,7 @@ export default function App() {
     map.current.flyTo({
       center: coords,
       zoom: 18,
-      pitch: 60,
+      pitch: 75,
       bearing: Math.random() * 40 - 20,
       speed: 1.2,
       curve: 1

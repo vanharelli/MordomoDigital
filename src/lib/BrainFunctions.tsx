@@ -10,7 +10,6 @@ export const validateSession = () => {
     
     if (isExpired) {
       localStorage.removeItem('alfa_session');
-      window.location.href = "https://www.alfaplazahotel.com.br";
       return null;
     }
     

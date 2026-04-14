@@ -123,7 +123,7 @@ export default function RadarScreen() {
           <div class="hotel-marker-pulse">
             <div class="pulse-ring"></div>
             <div class="hotel-pin-gold">📍</div>
-            <div class="poi-dynamic-label active">${local.nome}</div>
+            <div class="poi-dynamic-label active" data-lat="${local.coords[1]}" data-lng="${local.coords[0]}">${local.nome}</div>
           </div>
         `;
         el.style.zIndex = '1000';
@@ -132,7 +132,7 @@ export default function RadarScreen() {
         el.innerHTML = `
           <div class="poi-3d-marker ${isElite ? 'elite-poi' : ''}">
             <span class="poi-emoji-3d">${local.emoji}</span>
-            <div class="poi-dynamic-label">${local.nome}</div>
+            <div class="poi-dynamic-label" data-lat="${local.coords[1]}" data-lng="${local.coords[0]}">${local.nome}</div>
           </div>
         `;
       }
@@ -156,6 +156,7 @@ export default function RadarScreen() {
     const updateLabels = () => {
       if (!map.current) return;
       const zoom = map.current.getZoom();
+      const center = map.current.getCenter();
       const labels = document.querySelectorAll('.poi-dynamic-label');
       
       labels.forEach(label => {
@@ -166,8 +167,18 @@ export default function RadarScreen() {
           return;
         }
 
-        if (zoom > 16.2) {
-          label.classList.add('active');
+        if (zoom > 19.5) {
+          const markerLngLat = new mapboxgl.LngLat(
+            parseFloat(label.dataset.lng || '0'),
+            parseFloat(label.dataset.lat || '0')
+          );
+          const distance = center.distanceTo(markerLngLat);
+          
+          if (distance <= 100) {
+            label.classList.add('active');
+          } else {
+            label.classList.remove('active');
+          }
         } else {
           label.classList.remove('active');
         }
@@ -226,9 +237,9 @@ export default function RadarScreen() {
           // Efeito de FlyTo inicial (restaurado)
           map.current?.flyTo({
             center: HOTEL_COORDS,
-            zoom: 17,
-            pitch: 60,
-            bearing: -15,
+            zoom: 18,
+            pitch: 75,
+            bearing: -20,
             speed: 0.5,
             curve: 1,
             essential: true
@@ -274,11 +285,16 @@ export default function RadarScreen() {
     map.current.flyTo({
       center: coords,
       zoom: 18,
-      pitch: 60,
+      pitch: 75,
       bearing: Math.random() * 40 - 20,
       speed: 1.2,
       curve: 1
     });
+  };
+
+  const openGpsRoute = (coords: [number, number], name: string) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${coords[1]},${coords[0]}&travelmode=driving`;
+    window.open(url, '_blank');
   };
 
   // EFEITOS VISUAIS - HUD (Refinado para TITANIUM)
@@ -468,12 +484,8 @@ export default function RadarScreen() {
                   : `${(distance / 1000).toFixed(1)}km`;
 
                 return (
-                  <button
+                  <div
                     key={local.id}
-                    onClick={() => {
-                      flyToLocation(local.coords);
-                      if (window.innerWidth < 640) setIsSidebarOpen(false);
-                    }}
                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${itemHover} ${isDayMode ? 'text-white border border-yellow-500/30 hover:border-yellow-500/60' : 'text-white'} text-left group`}
                   >
                     <div className={`p-2 rounded-lg ${colorClass} group-hover:scale-110 transition-transform text-xl shadow-sm ${isDayMode ? 'shadow-yellow-500/10' : ''}`}>
@@ -489,7 +501,14 @@ export default function RadarScreen() {
                         {local.horario && <span className={`text-[10px] opacity-80 font-medium text-white/80`}>{local.horario}</span>}
                       </div>
                     </div>
-                  </button>
+                    <button
+                      onClick={() => openGpsRoute(local.coords, local.nome)}
+                      className="flex-shrink-0 p-2 bg-gold/80 hover:bg-gold text-black rounded-lg transition-all"
+                      title="Traçar rota"
+                    >
+                      <Navigation size={16} />
+                    </button>
+                  </div>
                 );
               })}
             </div>

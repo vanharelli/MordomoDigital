@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true, // Permite acesso pela rede (0.0.0.0)
-    allowedHosts: true // LIBERAÇÃO TOTAL: Aceita qualquer domínio (ngrok, localhost, ip)
+    allowedHosts: true // LIBERAÇÃO TOTAL: Aceita qualquer domínio (acesso remoto, localhost, ip)
   }
 })

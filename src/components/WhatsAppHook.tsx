@@ -62,13 +62,13 @@ const WhatsAppHook: React.FC<WhatsAppHookProps> = ({ variant = 'floating', onAct
         {/* Text Content */}
         <div className="relative flex flex-col">
           <span className="text-[10px] text-gold uppercase tracking-[0.2em] font-black mb-1">
-            Benefícios Exclusivos
+            Condições Especiais
           </span>
           <p className="text-[11px] text-white/90 leading-tight font-medium mb-1">
-            {isLoading ? 'Sincronizando com agenda...' : 'Adicione nosso hotel à sua agenda para liberar seu acesso VIP.'}
+            {isLoading ? 'Sincronizando...' : 'Adicione-nos à sua agenda e desbloqueie benefícios exclusivos.'}
           </p>
           <span className={`text-[10px] font-bold text-gold uppercase tracking-widest bg-gold/10 px-2 py-1 rounded border border-gold/20 inline-block w-fit transition-all ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
-            {isLoading ? 'ABRINDO AGENDA...' : 'ADICIONAR HOTEL À AGENDA (LIBERAR VIP)'}
+            {isLoading ? 'AGUARDE...' : 'GANHE ATÉ 20% DE DESCONTO'}
           </span>
         </div>
       </button>

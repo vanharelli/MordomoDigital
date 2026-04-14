@@ -225,7 +225,7 @@ const DashboardScreen: React.FC = () => {
               <div>
                 <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2">
                   <div className="w-1 h-1 bg-gold rounded-full" />
-                  <span className="text-gold">SERVIÇOS</span>
+                  <span className="text-gold">RESTAURANTE E SNACKS</span>
                 </h2>
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['1', '2'].includes(s.id)).map((item) => (
@@ -236,23 +236,39 @@ const DashboardScreen: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
-                {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
-                  <div key={item.id} className="snap-center shrink-0">
-                    <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
-                  </div>
-                ))}
+              <div>
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">TOALHA E SERVIÇO DE QUARTO</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
-                {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
-                  <div key={item.id} className="snap-center shrink-0">
-                    <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
-                  </div>
-                ))}
+              <div>
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">LAVAR E PASSAR</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="pb-8">
+              <div>
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">GARAGEM E IMPRESSÃO</span>
+                </h2>
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   <div className="snap-center shrink-0">
                     <ModuleCard item={displayedCoreServices.find(s => s.id === '7')!} isSelected={selectedModuleId === '7'} onClick={() => handleServiceClick({ id: '7' })} />

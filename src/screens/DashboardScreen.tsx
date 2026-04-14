@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useGuest } from '../context/GuestContext';
-import Carousel from '../components/Carousel';
+import ModuleCard from '../components/ModuleCard';
 import AnnouncementTicker from '../components/AnnouncementTicker';
 import WhatsAppHook from '../components/WhatsAppHook';
 import { Wifi, X, Info } from 'lucide-react';
@@ -221,10 +221,60 @@ const DashboardScreen: React.FC = () => {
               <AnnouncementTicker />
             </div>
 
-            <div className="space-y-12 mt-4 transition-opacity duration-300 flex-1" style={{ opacity: hideRestaurant === null ? 0 : 1 }}>
-              <Carousel title={<span className="text-gold">SERVIÇOS</span>} items={displayedCoreServices} onItemClick={handleServiceClick} selectedModuleId={selectedModuleId} />
+            <div className="space-y-8 mt-4 transition-opacity duration-300 flex-1 px-4" style={{ opacity: hideRestaurant === null ? 0 : 1 }}>
+              <div>
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">SERVIÇOS</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  {displayedCoreServices.filter(s => ['1', '2'].includes(s.id)).map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
+                  <div key={item.id} className="snap-center shrink-0">
+                    <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
+                  <div key={item.id} className="snap-center shrink-0">
+                    <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                  </div>
+                ))}
+              </div>
+
               <div className="pb-8">
-                <Carousel title={<span className="text-gold">ONDE ESTAMOS?</span>} items={partnerNetwork} onItemClick={handleServiceClick} selectedModuleId={selectedModuleId} />
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  <div className="snap-center shrink-0">
+                    <ModuleCard item={displayedCoreServices.find(s => s.id === '7')!} isSelected={selectedModuleId === '7'} onClick={() => handleServiceClick({ id: '7' })} />
+                  </div>
+                  <div className="snap-center shrink-0">
+                    <ModuleCard item={displayedCoreServices.find(s => s.id === '8')!} isSelected={selectedModuleId === '8'} onClick={() => handleServiceClick({ id: '8' })} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pb-8">
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">ONDE ESTAMOS?</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  {partnerNetwork.map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Footer Information */}

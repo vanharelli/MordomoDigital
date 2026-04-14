@@ -21,12 +21,8 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick, hasS
       className={`
         snap-center shrink-0 rounded-2xl border border-gold/20 bg-black/40 backdrop-blur-xl
         transition-all duration-500 ease-out flex flex-col justify-end p-4 relative overflow-hidden group cursor-pointer
-        ${isSelected 
-          ? 'scale-100 opacity-100 blur-0 shadow-laser ring-2 ring-gold' 
-          : hasSibling 
-            ? 'scale-[0.85] opacity-40 blur-[2px]' 
-            : 'scale-95 opacity-70 hover:opacity-90 hover:scale-100'
-        }
+        hover:scale-105 hover:shadow-laser
+        ${isSelected ? 'ring-2 ring-gold' : ''}
         w-[250px] aspect-[4/5]
       `}
     >

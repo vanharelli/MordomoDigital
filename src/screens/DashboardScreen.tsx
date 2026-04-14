@@ -21,6 +21,9 @@ const DashboardScreen: React.FC = () => {
   const logoClicksRef = useRef(0);
   const [hideRestaurant, setHideRestaurant] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(() => {
+    return sessionStorage.getItem('md_last_module') || null;
+  });
 
   useEffect(() => {
     const savedScroll = sessionStorage.getItem('dashboard_scroll');
@@ -111,6 +114,9 @@ const DashboardScreen: React.FC = () => {
   }, []);
 
   const handleServiceClick = (item: { id: string }) => {
+    setSelectedModuleId(item.id);
+    sessionStorage.setItem('md_last_module', item.id);
+    
     if (item.id === '1') {
       navigate('/products');
     }
@@ -216,9 +222,9 @@ const DashboardScreen: React.FC = () => {
             </div>
 
             <div className="space-y-12 mt-4 transition-opacity duration-300 flex-1" style={{ opacity: hideRestaurant === null ? 0 : 1 }}>
-              <Carousel title={<span className="text-gold">SERVIÇOS</span>} items={displayedCoreServices} onItemClick={handleServiceClick} />
+              <Carousel title={<span className="text-gold">SERVIÇOS</span>} items={displayedCoreServices} onItemClick={handleServiceClick} selectedModuleId={selectedModuleId} />
               <div className="pb-8">
-                <Carousel title={<span className="text-gold">ONDE ESTAMOS?</span>} items={partnerNetwork} onItemClick={handleServiceClick} />
+                <Carousel title={<span className="text-gold">ONDE ESTAMOS?</span>} items={partnerNetwork} onItemClick={handleServiceClick} selectedModuleId={selectedModuleId} />
               </div>
 
               {/* Footer Information */}

@@ -4,16 +4,29 @@ import React, { useRef, useEffect, useState } from 'react';
     title: React.ReactNode;
     items: { id: string; title: string; image?: string; action?: string }[];
     onItemClick?: (item: { id: string; title: string; image?: string; action?: string }) => void;
+    selectedModuleId?: string | null;
   }
   
-  const Carousel: React.FC<CarouselProps> = ({ title, items, onItemClick }) => {
+  const Carousel: React.FC<CarouselProps> = ({ title, items, onItemClick, selectedModuleId }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+  
+    useEffect(() => {
+      if (selectedModuleId) {
+        const moduleIndex = items.findIndex(item => item.id === selectedModuleId);
+        if (moduleIndex !== -1 && containerRef.current) {
+          const cardWidth = 266;
+          const targetScroll = moduleIndex * cardWidth;
+          containerRef.current.scrollTo({ left: targetScroll, behavior: 'smooth' });
+          setActiveIndex(moduleIndex);
+        }
+      }
+    }, [selectedModuleId, items]);
   
     const handleScroll = () => {
       if (containerRef.current) {
         const scrollPosition = containerRef.current.scrollLeft;
-        const cardWidth = 266; // w-[250px] + gap-4
+        const cardWidth = 266;
         const index = Math.round(scrollPosition / cardWidth);
         setActiveIndex(index);
       }

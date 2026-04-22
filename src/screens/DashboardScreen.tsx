@@ -113,37 +113,22 @@ const DashboardScreen: React.FC = () => {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const handleServiceClick = (item: { id: string }) => {
+  const handleServiceClick = (item: { id: string; title: string }) => {
     setSelectedModuleId(item.id);
     sessionStorage.setItem('md_last_module', item.id);
     
-    if (item.id === '1') {
-      navigate('/products');
-    }
-    if (item.id === '2') {
-      navigate('/restaurant');
-    }
-    if (item.id === '3') {
-      navigate('/extras');
-    }
-    if (item.id === '4') {
-      navigate('/room-service');
-    }
-    if (item.id === '5') {
-      navigate('/iron');
-    }
-    if (item.id === '6') {
-      navigate('/hair-dryer');
-    }
-    if (item.id === '7') {
-      navigate('/garage');
-    }
-    if (item.id === '8') {
-      navigate('/printing');
-    }
+    // Se for o mapa, mantém a navegação interna
     if (item.id === 'map-alpha') {
       navigate('/radar');
+      return;
     }
+
+    // Redirecionamento para WhatsApp (6132639131)
+    const phoneNumber = '556132639131';
+    const message = encodeURIComponent(`Olá, gostaria de solicitar o serviço: ${item.title.trim()}.\nHóspede: ${guestName}\nQuarto: ${roomNumber}`);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+    window.open(whatsappUrl, '_blank');
   };
 
   const coreServices = [
@@ -270,12 +255,24 @@ const DashboardScreen: React.FC = () => {
                   <span className="text-gold">GARAGEM E IMPRESSÃO</span>
                 </h2>
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
-                  <div className="snap-center shrink-0">
-                    <ModuleCard item={displayedCoreServices.find(s => s.id === '7')!} isSelected={selectedModuleId === '7'} onClick={() => handleServiceClick({ id: '7' })} />
-                  </div>
-                  <div className="snap-center shrink-0">
-                    <ModuleCard item={displayedCoreServices.find(s => s.id === '8')!} isSelected={selectedModuleId === '8'} onClick={() => handleServiceClick({ id: '8' })} />
-                  </div>
+                  {displayedCoreServices.find(s => s.id === '7') && (
+                    <div className="snap-center shrink-0">
+                      <ModuleCard 
+                        item={displayedCoreServices.find(s => s.id === '7')!} 
+                        isSelected={selectedModuleId === '7'} 
+                        onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '7')!)} 
+                      />
+                    </div>
+                  )}
+                  {displayedCoreServices.find(s => s.id === '8') && (
+                    <div className="snap-center shrink-0">
+                      <ModuleCard 
+                        item={displayedCoreServices.find(s => s.id === '8')!} 
+                        isSelected={selectedModuleId === '8'} 
+                        onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '8')!)} 
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -70,7 +70,7 @@ const ProductTableScreen: React.FC = () => {
       `_Por favor, confirme o recebimento._`;
 
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/5561982062229?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
   };
 
   const renderProductRow = (product: Product) => (

@@ -160,6 +160,7 @@ export default function RadarScreen() {
       const labels = document.querySelectorAll('.poi-dynamic-label');
       
       labels.forEach(label => {
+        const htmlLabel = label as HTMLElement;
         const isHotelLabel = label.parentElement?.classList.contains('hotel-marker-pulse');
         
         if (isHotelLabel) {
@@ -169,8 +170,8 @@ export default function RadarScreen() {
 
         if (zoom > 19.5) {
           const markerLngLat = new mapboxgl.LngLat(
-            parseFloat(label.dataset.lng || '0'),
-            parseFloat(label.dataset.lat || '0')
+            parseFloat(htmlLabel.dataset.lng || '0'),
+            parseFloat(htmlLabel.dataset.lat || '0')
           );
           const distance = center.distanceTo(markerLngLat);
           
@@ -292,7 +293,7 @@ export default function RadarScreen() {
     });
   };
 
-  const openGpsRoute = (coords: [number, number], name: string) => {
+  const openGpsRoute = (coords: [number, number]) => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${coords[1]},${coords[0]}&travelmode=driving`;
     window.open(url, '_blank');
   };
@@ -502,7 +503,7 @@ export default function RadarScreen() {
                       </div>
                     </div>
                     <button
-                      onClick={() => openGpsRoute(local.coords, local.nome)}
+                      onClick={() => openGpsRoute(local.coords)}
                       className="flex-shrink-0 p-2 bg-gold/80 hover:bg-gold text-black rounded-lg transition-all"
                       title="Traçar rota"
                     >

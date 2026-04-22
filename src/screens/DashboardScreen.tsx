@@ -230,7 +230,7 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['1', '2'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
                     </div>
                   ))}
                 </div>
@@ -244,7 +244,7 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
                     </div>
                   ))}
                 </div>
@@ -258,7 +258,7 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} hasSibling />
+                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
                     </div>
                   ))}
                 </div>

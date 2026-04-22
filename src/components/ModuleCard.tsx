@@ -11,10 +11,9 @@ interface ModuleCardProps {
   item: ModuleItem;
   isSelected: boolean;
   onClick: () => void;
-  hasSibling?: boolean;
 }
 
-const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick, hasSibling = false }) => {
+const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick }) => {
   return (
     <div
       onClick={onClick}

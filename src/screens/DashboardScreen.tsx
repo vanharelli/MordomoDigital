@@ -113,22 +113,31 @@ const DashboardScreen: React.FC = () => {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const handleServiceClick = (item: { id: string; title: string }) => {
+  const handleServiceClick = (item: { id: string }) => {
     setSelectedModuleId(item.id);
     sessionStorage.setItem('md_last_module', item.id);
-    
-    // Se for o mapa, mantém a navegação interna
-    if (item.id === 'map-alpha') {
-      navigate('/radar');
-      return;
-    }
+  };
 
-    // Redirecionamento para WhatsApp (6132639131)
-    const phoneNumber = '556132639131';
-    const message = encodeURIComponent(`Olá, gostaria de solicitar o serviço: ${item.title.trim()}.\nHóspede: ${guestName}\nQuarto: ${roomNumber}`);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    window.open(whatsappUrl, '_blank');
+  const handleExecuteAction = (item: { id: string; title: string }) => {
+    if (item.id === '1') {
+      navigate('/products');
+    } else if (item.id === '2') {
+      navigate('/restaurant');
+    } else if (item.id === '3') {
+      navigate('/extras');
+    } else if (item.id === '4') {
+      navigate('/room-service');
+    } else if (item.id === '5') {
+      navigate('/iron');
+    } else if (item.id === '6') {
+      navigate('/hair-dryer');
+    } else if (item.id === '7') {
+      navigate('/garage');
+    } else if (item.id === '8') {
+      navigate('/printing');
+    } else if (item.id === 'map-alpha') {
+      navigate('/radar');
+    }
   };
 
   const coreServices = [
@@ -215,7 +224,12 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['1', '2'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
+                      <ModuleCard 
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
+                      />
                     </div>
                   ))}
                 </div>
@@ -229,7 +243,12 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['3', '4'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
+                      <ModuleCard 
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
+                      />
                     </div>
                   ))}
                 </div>
@@ -243,7 +262,12 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
+                      <ModuleCard 
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
+                      />
                     </div>
                   ))}
                 </div>
@@ -261,6 +285,7 @@ const DashboardScreen: React.FC = () => {
                         item={displayedCoreServices.find(s => s.id === '7')!} 
                         isSelected={selectedModuleId === '7'} 
                         onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '7')!)} 
+                        onAction={() => handleExecuteAction(displayedCoreServices.find(s => s.id === '7')!)}
                       />
                     </div>
                   )}
@@ -270,6 +295,7 @@ const DashboardScreen: React.FC = () => {
                         item={displayedCoreServices.find(s => s.id === '8')!} 
                         isSelected={selectedModuleId === '8'} 
                         onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '8')!)} 
+                        onAction={() => handleExecuteAction(displayedCoreServices.find(s => s.id === '8')!)}
                       />
                     </div>
                   )}
@@ -284,7 +310,12 @@ const DashboardScreen: React.FC = () => {
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
                   {partnerNetwork.map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
-                      <ModuleCard item={item} isSelected={selectedModuleId === item.id} onClick={() => handleServiceClick(item)} />
+                      <ModuleCard 
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
+                      />
                     </div>
                   ))}
                 </div>

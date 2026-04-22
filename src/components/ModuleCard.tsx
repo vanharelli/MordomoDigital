@@ -11,9 +11,10 @@ interface ModuleCardProps {
   item: ModuleItem;
   isSelected: boolean;
   onClick: () => void;
+  onAction?: () => void;
 }
 
-const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick }) => {
+const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick, onAction }) => {
   return (
     <div
       onClick={onClick}
@@ -41,7 +42,13 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ item, isSelected, onClick }) =>
         </h3>
         
         <div className={`w-full transition-all duration-500 ${isSelected ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <button className="w-full text-[10px] text-white/90 uppercase tracking-widest border border-gold/50 rounded-xl px-4 py-3 font-bold hover:bg-gold hover:text-black hover:border-gold transition-all shadow-lg backdrop-blur-sm bg-black/30">
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onAction && onAction();
+            }}
+            className="w-full text-[10px] text-white/90 uppercase tracking-widest border border-gold/50 rounded-xl px-4 py-3 font-bold hover:bg-gold hover:text-black hover:border-gold transition-all shadow-lg backdrop-blur-sm bg-black/30"
+          >
             {item.action || 'ACESSAR'}
           </button>
         </div>

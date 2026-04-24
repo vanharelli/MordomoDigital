@@ -39,7 +39,7 @@ const LoginScreen: React.FC = () => {
       {/* Glassmorphism Overlay Layer */}
       <div className="absolute inset-0 bg-white/10 backdrop-blur-[5px] z-10" />
 
-      <div className="w-full max-w-md relative z-20 bg-black/60 backdrop-blur-[15px] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+      <div className="w-full max-w-md relative z-20 bg-black/60 backdrop-blur-[15px] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl">
         <div className="text-center space-y-2 mb-6 md:mb-8 flex flex-col items-center">
           <img src="/logo1.png" alt="Alfa Plaza Logo" className="h-16 md:h-20 w-auto mb-4 object-contain" />
           <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-gold uppercase">Mordomo Digital</h1>
@@ -86,23 +86,6 @@ const LoginScreen: React.FC = () => {
             Acessar Serviços
           </button>
         </form>
-
-        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col items-center space-y-4">
-          <p className="text-[8px] text-gray-500 uppercase tracking-widest text-center">
-            © {new Date().getFullYear()} Alfa Plaza Hotel. <br/> Todos os direitos reservados.
-          </p>
-          <div className="flex items-center gap-1">
-            <span className="text-[8px] text-gray-600 uppercase tracking-widest">Desenvolvido por:</span>
-            <a 
-              href="https://www.marketelli.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-[9px] font-bold text-gold hover:text-white transition-colors tracking-widest"
-            >
-              WWW.MARKETELLI.COM
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   );

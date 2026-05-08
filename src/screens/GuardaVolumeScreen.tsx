@@ -9,7 +9,7 @@ const GuardaVolumeScreen: React.FC = () => {
     <div className="h-full w-full flex flex-col text-white relative overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: "url('/backgroundalfa.webp')" }}
+        style={{ backgroundImage: "url('/guardavolume.webp')" }}
       />
 
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" />

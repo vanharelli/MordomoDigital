@@ -154,7 +154,7 @@ const DashboardScreen: React.FC = () => {
     { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.webp' },
     { id: '8', title: 'Impressão', action: 'SOLICITAR', image: '/impressao.png' },
     { id: '9', title: 'Xerox', action: 'SOLICITAR', image: '/impressao.png' },
-    { id: '10', title: 'Guarda Volume', action: 'VER VALOR', image: '/backgroundalfa.webp' },
+    { id: '10', title: 'Guarda Volume', action: 'VER VALOR', image: '/guardavolume.webp' },
   ];
 
   const displayedCoreServices = hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices;

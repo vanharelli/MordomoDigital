@@ -158,6 +158,15 @@ export default function RadarScreen() {
       const zoom = map.current.getZoom();
       const center = map.current.getCenter();
       const labels = document.querySelectorAll('.poi-dynamic-label');
+
+      const maxDistanceByZoom = (() => {
+        if (zoom < 13) return 0;
+        if (zoom < 14.5) return 900;
+        if (zoom < 16) return 450;
+        if (zoom < 17.5) return 220;
+        if (zoom < 19) return 130;
+        return 80;
+      })();
       
       labels.forEach(label => {
         const htmlLabel = label as HTMLElement;
@@ -168,21 +177,17 @@ export default function RadarScreen() {
           return;
         }
 
-        if (zoom > 19.5) {
-          const markerLngLat = new mapboxgl.LngLat(
-            parseFloat(htmlLabel.dataset.lng || '0'),
-            parseFloat(htmlLabel.dataset.lat || '0')
-          );
-          const distance = center.distanceTo(markerLngLat);
-          
-          if (distance <= 100) {
-            label.classList.add('active');
-          } else {
-            label.classList.remove('active');
-          }
-        } else {
+        if (maxDistanceByZoom <= 0) {
           label.classList.remove('active');
+          return;
         }
+
+        const markerLngLat = new mapboxgl.LngLat(
+          parseFloat(htmlLabel.dataset.lng || '0'),
+          parseFloat(htmlLabel.dataset.lat || '0')
+        );
+        const distance = center.distanceTo(markerLngLat);
+        label.classList.toggle('active', distance <= maxDistanceByZoom);
       });
     };
 
@@ -452,7 +457,7 @@ export default function RadarScreen() {
 
             <div className="space-y-2">
               {ESTABELECIMENTOS_RADAR
-                .filter(local => local.id !== 1) // Remove o Hotel da lista (já tem botão dedicado)
+                .filter(local => local.id !== 1)
                 .filter(local => {
                   if (!searchTerm) return true;
                   const term = searchTerm.toLowerCase();

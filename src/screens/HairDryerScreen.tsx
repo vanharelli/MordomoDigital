@@ -60,7 +60,7 @@ const HairDryerScreen: React.FC = () => {
             
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                O secador de cabelo é um item de empréstimo e deve ser manuseado com cuidado. Siga as condições abaixo:
+                Siga as condições abaixo:
               </p>
 
               <ul className="space-y-3 pt-2">

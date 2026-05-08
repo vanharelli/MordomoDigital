@@ -17,6 +17,7 @@ const products: Product[] = [
   { id: '3', name: 'Guaraná Antártica (Lata)', price: 5.00, category: 'drinks' },
   { id: '4', name: 'Água Mineral (Sem Gás)', price: 4.00, category: 'drinks' },
   { id: '5', name: 'Água Mineral (Com Gás)', price: 5.00, category: 'drinks' },
+  { id: '10', name: 'Energético Monster', price: 20.00, category: 'drinks' },
   // Snacks e Doces
   { id: '6', name: 'Chocolate KitKat', price: 5.00, category: 'snacks' },
   { id: '7', name: 'Chocolate Snickers', price: 5.00, category: 'snacks' },

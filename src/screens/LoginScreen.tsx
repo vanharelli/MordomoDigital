@@ -14,7 +14,7 @@ const LoginScreen: React.FC = () => {
     // 2. BYPASS DE LOGIN: Verifica se 'alfa_session' existe e é válida
     const session = validateSession();
     if (session) {
-      navigate('/dashboard', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 
@@ -24,7 +24,7 @@ const LoginScreen: React.FC = () => {
       // 1. PERSISTÊNCIA: Salva a sessão no localStorage
       createSession();
       setGuestData(name, room);
-      navigate('/dashboard');
+      navigate('/', { replace: true });
     }
   };
 

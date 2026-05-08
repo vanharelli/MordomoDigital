@@ -15,28 +15,28 @@ import IronScreen from './screens/IronScreen';
 import HairDryerScreen from './screens/HairDryerScreen';
 import GarageScreen from './screens/GarageScreen';
 import PrintingScreen from './screens/PrintingScreen';
+import GuardaVolumeScreen from './screens/GuardaVolumeScreen';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useGuest();
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   return <>{children}</>;
+};
+
+const HomeRoute: React.FC = () => {
+  const { isAuthenticated } = useGuest();
+  return isAuthenticated ? <DashboardScreen /> : <LoginScreen />;
 };
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<LoginScreen />} />
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <DashboardScreen />
-          </ProtectedRoute>
-        } 
-      />
+      <Route path="/" element={<HomeRoute />} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route path="/dashboard" element={<Navigate to="/" replace />} />
       <Route 
         path="/radar" 
         element={
@@ -110,7 +110,22 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } 
       />
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route 
+        path="/xerox" 
+        element={
+          <ProtectedRoute>
+            <PrintingScreen />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/guarda-volume" 
+        element={
+          <ProtectedRoute>
+            <GuardaVolumeScreen />
+          </ProtectedRoute>
+        } 
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

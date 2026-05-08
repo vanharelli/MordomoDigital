@@ -135,6 +135,10 @@ const DashboardScreen: React.FC = () => {
       navigate('/garage');
     } else if (item.id === '8') {
       navigate('/printing');
+    } else if (item.id === '9') {
+      navigate('/xerox');
+    } else if (item.id === '10') {
+      navigate('/guarda-volume');
     } else if (item.id === 'map-alpha') {
       navigate('/radar');
     }
@@ -149,6 +153,8 @@ const DashboardScreen: React.FC = () => {
     { id: '6', title: 'Secador de Cabelo', action: 'SOLICITAR', image: '/SECADOR DE CABELO.webp' },
     { id: '7', title: 'Garagem', action: 'SOLICITAR', image: '/GARAGEM.webp' },
     { id: '8', title: 'Impressão', action: 'SOLICITAR', image: '/impressao.png' },
+    { id: '9', title: 'Xerox', action: 'SOLICITAR', image: '/impressao.png' },
+    { id: '10', title: 'Guarda Volume', action: 'VER VALOR', image: '/backgroundalfa.webp' },
   ];
 
   const displayedCoreServices = hideRestaurant ? coreServices.filter(s => s.id !== '2') : coreServices;
@@ -260,7 +266,7 @@ const DashboardScreen: React.FC = () => {
                   <span className="text-gold">LAVAR E PASSAR</span>
                 </h2>
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
-                  {displayedCoreServices.filter(s => ['5', '6'].includes(s.id)).map((item) => (
+                  {displayedCoreServices.filter(s => ['5', '6', '10'].includes(s.id)).map((item) => (
                     <div key={item.id} className="snap-center shrink-0">
                       <ModuleCard 
                         item={item} 
@@ -276,29 +282,38 @@ const DashboardScreen: React.FC = () => {
               <div>
                 <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
                   <div className="w-1 h-1 bg-gold rounded-full" />
-                  <span className="text-gold">GARAGEM E IMPRESSÃO</span>
+                  <span className="text-gold">IMPRESSÃO E XEROX</span>
                 </h2>
                 <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
-                  {displayedCoreServices.find(s => s.id === '7') && (
-                    <div className="snap-center shrink-0">
+                  {displayedCoreServices.filter(s => ['8', '9'].includes(s.id)).map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
                       <ModuleCard 
-                        item={displayedCoreServices.find(s => s.id === '7')!} 
-                        isSelected={selectedModuleId === '7'} 
-                        onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '7')!)} 
-                        onAction={() => handleExecuteAction(displayedCoreServices.find(s => s.id === '7')!)}
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
                       />
                     </div>
-                  )}
-                  {displayedCoreServices.find(s => s.id === '8') && (
-                    <div className="snap-center shrink-0">
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80 flex items-center gap-2 px-2">
+                  <div className="w-1 h-1 bg-gold rounded-full" />
+                  <span className="text-gold">GARAGEM E TRANSLADO</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide py-8 px-4" style={{ paddingLeft: 'calc(-100px + 40vw)' }}>
+                  {displayedCoreServices.filter(s => ['7'].includes(s.id)).map((item) => (
+                    <div key={item.id} className="snap-center shrink-0">
                       <ModuleCard 
-                        item={displayedCoreServices.find(s => s.id === '8')!} 
-                        isSelected={selectedModuleId === '8'} 
-                        onClick={() => handleServiceClick(displayedCoreServices.find(s => s.id === '8')!)} 
-                        onAction={() => handleExecuteAction(displayedCoreServices.find(s => s.id === '8')!)}
+                        item={item} 
+                        isSelected={selectedModuleId === item.id} 
+                        onClick={() => handleServiceClick(item)} 
+                        onAction={() => handleExecuteAction(item)}
                       />
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
 
@@ -452,7 +467,7 @@ const DashboardScreen: React.FC = () => {
               
               <div className="w-full space-y-3 bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-col items-start border-b border-white/10 pb-2">
-                  <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Rede Premium</span>
+                  <span className="text-[10px] text-gold/60 uppercase tracking-widest mb-1 font-bold">Rede Wi-Fi</span>
                   <span className="font-bold text-white text-base tracking-wide select-all">ALFA_HOSPEDE</span>
                 </div>
                 

@@ -1,18 +1,21 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import { ArrowLeft, Info, Printer } from 'lucide-react';
 
 const PrintingScreen: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { guestName, roomNumber } = useGuest();
+  const isXerox = location.pathname === '/xerox';
+  const title = isXerox ? 'Xerox' : 'Impressão';
 
   const handleWhatsAppRequest = () => {
-    const message = `*SOLICITAÇÃO DE IMPRESSÃO - MORDOMO DIGITAL*\n\n` +
+    const message = `*SOLICITAÇÃO DE ${isXerox ? 'XEROX' : 'IMPRESSÃO'} - MORDOMO DIGITAL*\n\n` +
       `👤 *Hóspede:* ${guestName}\n` +
       `🚪 *Quarto:* ${roomNumber}\n\n` +
-      `Estou ciente que cada folha custa *R$ 1,00*.\n\n` +
-      `_Por favor, solicito impressão na recepção._`;
+      `Estou ciente que cada ${isXerox ? 'cópia' : 'folha'} custa *R$ 1,00*.\n\n` +
+      `_Por favor, solicito ${isXerox ? 'xerox' : 'impressão'} na recepção._`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
@@ -36,7 +39,7 @@ const PrintingScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Impressão</h1>
+            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">{title}</h1>
             <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Solicitação na Recepção</p>
           </div>
           <div className="w-10" />
@@ -55,10 +58,10 @@ const PrintingScreen: React.FC = () => {
 
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                Cada folha impressa custa <span className="text-white font-bold">R$ 1,00</span>.
+                Cada {isXerox ? 'cópia' : 'folha impressa'} custa <span className="text-white font-bold">R$ 1,00</span>.
               </p>
               <p>
-                Basta enviar o documento clicando no botão abaixo para solicitar a impressão diretamente na recepção.
+                Basta enviar o documento clicando no botão abaixo para solicitar diretamente na recepção.
               </p>
             </div>
           </div>
@@ -70,7 +73,7 @@ const PrintingScreen: React.FC = () => {
             className="w-full bg-gold text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 uppercase tracking-widest hover:bg-white transition-all shadow-laser"
           >
             <Printer size={20} />
-            Solicitar Impressão
+            Solicitar {title}
           </button>
         </div>
       </div>

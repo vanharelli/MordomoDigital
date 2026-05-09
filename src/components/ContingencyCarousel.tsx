@@ -8,7 +8,7 @@ const contingencyDishes = [
     id: 1,
     name: 'Strogonoff Clássico',
     description: '(Frango ou Carne), Arroz Branco e Batata Palha.',
-    image: 'https://images.unsplash.com/photo-1574484284008-59d73054522d?q=80&w=1935&auto=format&fit=crop&fm=jpg'
+    image: '/strogonoff.webp'
   },
   {
     id: 2,

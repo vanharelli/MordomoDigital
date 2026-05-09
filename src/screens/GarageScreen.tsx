@@ -20,14 +20,8 @@ const GarageScreen: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col text-white relative overflow-hidden">
-      {/* Background Image Layer */}
-      <img
-        src="/strogonoff.webp"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      />
-
       {/* Glassmorphism Overlay Layer */}
+      <div className="absolute inset-0 bg-obsidian z-0" />
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" />
 
       {/* Content Wrapper */}

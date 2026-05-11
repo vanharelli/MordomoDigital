@@ -7,6 +7,7 @@ const GarageScreen: React.FC = () => {
   const navigate = useNavigate();
   const { guestName, roomNumber } = useGuest();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [status, setStatus] = useState('');
 
   const handleWhatsAppRequest = () => {
     const message = `*SOLICITAÇÃO DE VEÍCULO - MORDOMO DIGITAL*\n\n` +
@@ -14,8 +15,9 @@ const GarageScreen: React.FC = () => {
       `🚪 *Quarto:* ${roomNumber}\n\n` +
       `_Por favor, solicito que preparem meu veículo para saída._`;
 
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
+    navigator.clipboard?.writeText(message);
+    setStatus('Mensagem copiada. Envie no WhatsApp para a recepção.');
+    setTimeout(() => setStatus(''), 3000);
   };
 
   return (
@@ -87,15 +89,20 @@ const GarageScreen: React.FC = () => {
           {showConfirm ? (
             <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
               <p className="text-xs text-gray-300 text-center">
-                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+                Ao clicar no botão abaixo, a mensagem será copiada. Abra o WhatsApp e envie para a recepção.
               </p>
               <button
                 onClick={handleWhatsAppRequest}
                 className="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 uppercase tracking-widest hover:bg-green-600 transition-all"
               >
                 <Car size={18} />
-                Confirmar e Enviar
+                Copiar Mensagem
               </button>
+              {status && (
+                <div className="text-[10px] uppercase tracking-widest text-gray-300 text-center">
+                  {status}
+                </div>
+              )}
               <button
                 onClick={() => setShowConfirm(false)}
                 className="w-full py-2 text-gray-400 text-xs uppercase tracking-wider hover:text-white transition-colors"

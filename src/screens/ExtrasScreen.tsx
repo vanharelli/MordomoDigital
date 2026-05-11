@@ -15,6 +15,7 @@ const ExtrasScreen: React.FC = () => {
   const navigate = useNavigate();
   const { guestName, roomNumber } = useGuest();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [status, setStatus] = useState('');
 
   const updateQuantity = (id: string, delta: number) => {
     setQuantities(prev => {
@@ -48,8 +49,9 @@ const ExtrasScreen: React.FC = () => {
       `*Itens Solicitados:*\n${selectedExtras}\n\n` +
       `_Por favor, confirme a entrega._`;
 
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
+    navigator.clipboard?.writeText(message);
+    setStatus('Mensagem copiada. Envie no WhatsApp para a recepção.');
+    setTimeout(() => setStatus(''), 3000);
   };
 
   return (
@@ -128,6 +130,11 @@ const ExtrasScreen: React.FC = () => {
               <ShoppingCart size={20} />
               Solicitar Agora ({totalItems})
             </button>
+            {status && (
+              <div className="pt-3 text-[10px] uppercase tracking-widest text-gray-300 text-center">
+                {status}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ const WhatsAppHook: React.FC<WhatsAppHookProps> = ({ variant = 'floating', onAct
 
     // Micro-loading para feedback visual antes de disparar a ação do sistema
     setTimeout(() => {
-      const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Alfa Plaza Hotel 🏨\nTEL;TYPE=CELL;VOICE:+556132639131\nEMAIL:reservas@alfaplazahotel.com.br\nURL:www.alfaplazahotel.com.br\nEND:VCARD"; 
+      const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Alfa Plaza Hotel 🏨\nTEL;TYPE=CELL;VOICE:+556132639131\nEND:VCARD"; 
       const blob = new Blob([vcard], { type: "text/x-vcard" }); 
       const url = URL.createObjectURL(blob); 
       

@@ -299,7 +299,9 @@ export default function RadarScreen() {
   };
 
   const openGpsRoute = (coords: [number, number]) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${coords[1]},${coords[0]}&travelmode=driving`;
+    const origin = `${HOTEL_COORDS[1]},${HOTEL_COORDS[0]}`;
+    const destination = `${coords[1]},${coords[0]}`;
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
     window.open(url, '_blank');
   };
 

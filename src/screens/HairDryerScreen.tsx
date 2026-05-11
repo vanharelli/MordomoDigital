@@ -70,7 +70,7 @@ const HairDryerScreen: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>O item será entregue em sua suíte pela nossa equipe.</span>
+                  <span>É obrigatório assinar um termo de responsabilidade na recepção.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />

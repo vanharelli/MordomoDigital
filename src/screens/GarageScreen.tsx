@@ -59,7 +59,7 @@ const GarageScreen: React.FC = () => {
               <ul className="space-y-3 pt-2">
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>A garagem fica localizada ao lado do hotel. Se preferir, a recepção guarda seu carro.</span>
+                  <span>Temos serviço de Valet.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
@@ -67,11 +67,11 @@ const GarageScreen: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Se seu carro ficar atrás de outro, a chave deve ficar na recepção. (Obrigatório)</span>
+                  <span>A chave fica na recepção (OBRIGATORIO)</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Para permanência do carro sem hospedagem, o valor é de R$ 35 o dia.</span>
+                  <span>Para permanência do carro sem hospedagem, o valor é de R$ 50 o dia.</span>
                 </li>
               </ul>
             </div>

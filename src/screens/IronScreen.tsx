@@ -74,8 +74,8 @@ const IronScreen: React.FC = () => {
       `💰 *VALOR TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n` +
       `_Por favor, solicito a retirada das peças acima._`;
 
-    navigator.clipboard?.writeText(message);
-    alert('Mensagem copiada. Envie no WhatsApp para a recepção.');
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
   };
 
   return (

@@ -352,9 +352,14 @@ const DashboardScreen: React.FC = () => {
 
                   <div className="flex flex-col items-center gap-1 pt-2">
                     <span className="text-[8px] text-gray-600 uppercase tracking-widest">Desenvolvido por:</span>
-                    <span className="text-[9px] font-bold text-gold tracking-widest">
+                    <a 
+                      href="https://www.marketelli.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[9px] font-bold text-gold hover:text-white transition-colors tracking-widest"
+                    >
                       WWW.MARKETELLI.COM
-                    </span>
+                    </a>
                   </div>
                 </div>
               </div>

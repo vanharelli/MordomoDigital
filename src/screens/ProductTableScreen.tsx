@@ -30,7 +30,6 @@ const ProductTableScreen: React.FC = () => {
   const navigate = useNavigate();
   const { guestName, roomNumber } = useGuest();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [status, setStatus] = useState('');
 
   const updateQuantity = (id: string, delta: number) => {
     setQuantities(prev => {
@@ -72,9 +71,8 @@ const ProductTableScreen: React.FC = () => {
       `💰 *Total:* ${formatCurrency(total)}\n\n` +
       `_Por favor, confirme o recebimento._`;
 
-    navigator.clipboard?.writeText(message);
-    setStatus('Mensagem copiada. Envie no WhatsApp para a recepção.');
-    setTimeout(() => setStatus(''), 3000);
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
   };
 
   const renderProductRow = (product: Product) => (
@@ -166,11 +164,6 @@ const ProductTableScreen: React.FC = () => {
   Confirmar Pedido
 </button>
         </div>
-        {status && (
-          <div className="max-w-3xl mx-auto pt-3 text-[10px] uppercase tracking-widest text-gray-300 text-center">
-            {status}
-          </div>
-        )}
       </div>
       </div>
     </div>

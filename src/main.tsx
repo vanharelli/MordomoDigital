@@ -5,6 +5,7 @@ import App from './App.tsx'
 
 const VALID_PARAM = 'alfa_guest'
 const EXPIRATION_TIME = 24 * 60 * 60 * 1000
+const REDIRECT_URL = 'https://alfaplazahotel.com.br/'
 
 const runSecurityProtocol = () => {
   const params = new URLSearchParams(window.location.search)
@@ -22,18 +23,20 @@ const runSecurityProtocol = () => {
     const parsed = Number.parseInt(session, 10)
     if (!Number.isFinite(parsed) || now - parsed > EXPIRATION_TIME) {
       localStorage.removeItem('mordomo_session')
-      return true
+      window.location.href = REDIRECT_URL
+      return false
     }
     return true
   }
 
-  return true
+  window.location.href = REDIRECT_URL
+  return false
 }
 
-runSecurityProtocol()
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+if (runSecurityProtocol()) {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}

@@ -17,8 +17,8 @@ const PrintingScreen: React.FC = () => {
       `Estou ciente que cada ${isXerox ? 'cópia' : 'folha'} custa *R$ 1,00*.\n\n` +
       `_Por favor, solicito ${isXerox ? 'xerox' : 'impressão'} na recepção._`;
 
-    navigator.clipboard?.writeText(message);
-    alert('Mensagem copiada. Envie no WhatsApp para a recepção.');
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
   };
 
   return (

@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Rexton';
-  src: url('/fonts/Rexton-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Rexton';
-  src: url('/fonts/Rexton-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Rexton';
-  src: url('/fonts/Rexton-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-}
-
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
@@ -98,7 +77,6 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-
 
 
 

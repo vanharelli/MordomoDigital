@@ -41,7 +41,7 @@ const drinks = [
   { id: 2, name: 'Coca-Cola Zero (Lata)', price: 'R$ 8,00' },
   { id: 3, name: 'Guaraná Antarctica (Lata)', price: 'R$ 8,00' },
   { id: 4, name: 'Guaraná Zero (Lata)', price: 'R$ 8,00' },
-  { id: 5, name: 'Água sem Gás', price: 'R$ 6,00' },
+  { id: 5, name: 'Água sem Gás', price: 'R$ 5,00' },
   { id: 6, name: 'Água com Gás', price: 'R$ 6,00' },
   { id: 7, name: 'Suco de Laranja', price: 'R$ 12,00' },
   { id: 8, name: 'Cerveja Long Neck', price: 'R$ 14,00' },

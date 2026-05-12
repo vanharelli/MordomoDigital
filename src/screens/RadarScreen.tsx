@@ -310,10 +310,6 @@ export default function RadarScreen() {
   const borderHighlight = isDayMode ? 'border-yellow-600/50' : 'border-white/5'; // Borda dourada no dia
   const itemHover = isDayMode ? 'hover:bg-yellow-500/10' : 'hover:bg-white/5'; // Hover dourado no dia
 
-  const MapContainerStyles = "relative w-full h-[450px] rounded-[32px] overflow-hidden border-[0.5px] border-[#d4af37]/30 shadow-2xl";
-  const iOSControlIsland = "absolute top-4 right-4 flex flex-col gap-[2px] bg-[#1c1c1e]/70 backdrop-blur-md p-1 rounded-2xl border-[0.5px] border-white/10 z-[199999]";
-  const iOSButton = "p-3 bg-transparent hover:bg-white/10 transition-all active:scale-95 text-[#25c522ff] flex items-center justify-center";
-
   return (
     <div className={`w-full h-full relative overflow-hidden font-sans transition-colors duration-500 ${isDayMode ? 'bg-gray-100' : 'bg-gray-900'}`}>
       
@@ -339,35 +335,15 @@ export default function RadarScreen() {
       )}
 
       {/* MAPA */}
-      <div className="w-full px-4 sm:px-6 pt-6">
-        <div className={MapContainerStyles}>
-          <div ref={mapContainer} className="absolute inset-0 z-0" />
+      <div ref={mapContainer} className="w-full h-full absolute top-0 left-0 z-0" />
 
-          <div className={`absolute inset-0 pointer-events-none z-10 mix-blend-overlay transition-colors duration-1000 ${
-            isDayMode 
-              ? 'opacity-20 bg-yellow-600' 
-              : 'opacity-40 bg-blue-900'
-          }`}></div>
-
-          <div className={iOSControlIsland}>
-            <button 
-              onClick={() => navigate('/dashboard')}
-              className={iOSButton}
-              title="Voltar ao Dashboard"
-            >
-              <ArrowLeft size={22} />
-            </button>
-
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={iOSButton}
-              title="Menu"
-            >
-              <Menu size={22} />
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* FILTRO CINEMATOGRÁFICO DINÂMICO */}
+      {/* Dia: Dourado Sutil (Calor) | Noite: Azul Noturno (Frio/Cyber) */}
+      <div className={`absolute inset-0 pointer-events-none z-10 mix-blend-overlay transition-colors duration-1000 ${
+        isDayMode 
+          ? 'opacity-20 bg-yellow-600' 
+          : 'opacity-40 bg-blue-900'
+      }`}></div>
 
       {/* ERROR ALERT */}
       {mapError && (
@@ -405,6 +381,25 @@ export default function RadarScreen() {
           </div>
         </div>
       )}
+
+      {/* CONTROLES SUPERIORES */}
+      <div className="absolute left-4 z-[199999] flex items-center gap-3 top-6 sm:left-6 sm:gap-4">
+        <button 
+          onClick={() => navigate('/dashboard')}
+          className={`p-3 sm:p-4 shadow-lg border rounded-full transition-all hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white/90 text-yellow-600 border-yellow-500 shadow-yellow-500/20' : 'bg-gray-800 text-gray-300 border-gray-700'}`}
+          title="Voltar ao Dashboard"
+        >
+          <ArrowLeft size={24} />
+        </button>
+
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`p-3 sm:p-4 shadow-lg border rounded-full transition-all hover:scale-105 active:scale-95 ${isDayMode ? 'bg-white/90 text-yellow-600 border-yellow-500 shadow-yellow-500/20' : 'bg-gray-800 text-gray-300 border-gray-700'}`}
+          title="Menu"
+        >
+          <Menu size={24} />
+        </button>
+      </div>
 
       {/* SIDEBAR - GLASSMORPHISM FROST */}
       <div className={`absolute top-0 left-0 h-full w-full sm:w-80 z-[200000] backdrop-blur-2xl shadow-2xl transform transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1) ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${hudBg} ${borderHighlight} border-r`}>

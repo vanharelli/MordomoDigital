@@ -126,10 +126,7 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
     window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
   };
 
-  // Filter dishes for display (unless in admin mode, show all with opacity)
-  const displayDishes = adminMode 
-    ? contingencyDishes 
-    : contingencyDishes.filter(d => !hiddenDishes.includes(d.id));
+  const displayDishes = contingencyDishes;
 
   return (
     <div className="w-full animate-fade-in-up mt-8 mb-12">
@@ -150,7 +147,7 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
             <div className="px-6 pb-10">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
               {displayDishes.map((dish) => {
-                const isHidden = hiddenDishes.includes(dish.id);
+                const isHidden = adminMode ? hiddenDishes.includes(dish.id) : false;
                 
                 return (
                   <div
@@ -165,7 +162,7 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
                       rounded-3xl border border-gold/20 bg-black/40 backdrop-blur-xl
                       transition-all duration-500 ease-out flex flex-col justify-end p-6 relative overflow-hidden group
                       shadow-laser
-                      ${isHidden && adminMode ? 'opacity-40 grayscale border-red-500/50' : ''}
+                      ${isHidden ? 'opacity-40 grayscale border-red-500/50' : ''}
                     `}
                   >
                     {/* Admin Toggle Button */}

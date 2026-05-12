@@ -106,12 +106,13 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
-    
-    // Reset flow after a short delay
-    setTimeout(() => {
-      setStep(1);
-      setSelectedDish(null);
-    }, 1000);
+
+    setStep(1);
+    setSelectedDish(null);
+    setActiveIndex(0);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ left: 0, behavior: 'auto' });
+    }
   };
 
   // Filter dishes for display (unless in admin mode, show all with opacity)

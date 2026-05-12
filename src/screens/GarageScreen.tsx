@@ -20,8 +20,11 @@ const GarageScreen: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col text-white relative overflow-hidden">
-      {/* Glassmorphism Overlay Layer */}
-      <div className="absolute inset-0 bg-obsidian z-0" />
+      <div 
+        className="absolute inset-0 bg-cover bg-center z-0" 
+        style={{ backgroundImage: "url('/GARAGEM.webp')" }}
+      />
+      
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" />
 
       {/* Content Wrapper */}

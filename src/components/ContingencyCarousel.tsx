@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGuest } from '../context/GuestContext';
 import { Wine, ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,32 +7,38 @@ const contingencyDishes = [
   {
     id: 1,
     name: 'Strogonoff Clássico',
-    description: '(Frango ou Carne), Arroz Branco e Batata Palha.',
+    description: 'Frango grelhado em emulsão cremosa de tomates frescos e mostarda. Servido com arroz branco e batata palha',
     image: '/strogonoff.webp'
   },
   {
     id: 2,
-    name: 'Lagarto ao Madeira',
-    description: 'Lagarto fatiado, Molho Madeira, Arroz e Purê.',
+    name: 'Bife acebolado',
+    description: 'Carne bovina selada em alta temperatura com generosa camada de cebolas douradas. Servido com arroz branco, macarrão e salada',
     image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 3,
-    name: 'Frango às Ervas',
-    description: 'Filé Grelhado, Molho de Laranja/Ervas e Legumes.',
+    name: 'Filé de Frango',
+    description: 'Peito de frango marinado e grelhado na chapa. Servido com arroz soltinho e batata frita',
     image: 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 4,
-    name: 'Peixe Nobre',
-    description: 'Tilápia Grelhada, Arroz com Brócolis e Purê.',
+    name: 'Frango à parmegiana',
+    description: 'Peito de frango gratinado com muçarela e molho de tomates frescos. Acompanha arroz soltinho, batatas fritas e salada',
     image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   },
   {
     id: 5,
-    name: 'Sobrecoxa Dourada',
-    description: 'Sobrecoxa Assada com Batatas Coradas e Arroz.',
+    name: 'Misto Quente Tradicional',
+    description: 'Pão de forma tostado, queijo muçarela e presunto.',
     image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=1888&auto=format&fit=crop&fm=jpg'
+  },
+  {
+    id: 6,
+    name: 'Omelete',
+    description: 'Ovos selecionados batidos e preparados na manteiga, com textura leve e interior cremoso.',
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=2070&auto=format&fit=crop&fm=jpg'
   }
 ];
 
@@ -50,8 +56,6 @@ const drinks = [
 
 const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) => {
   const { guestName, roomNumber } = useGuest();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [hiddenDishes, setHiddenDishes] = useState<number[]>(() => {
     const saved = localStorage.getItem('md_hidden_dishes');
     return saved ? JSON.parse(saved) : [];
@@ -60,6 +64,9 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
   // State for multi-step flow
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedDish, setSelectedDish] = useState<string | null>(null);
+  const selectedDishDescription = selectedDish
+    ? contingencyDishes.find(d => d.name === selectedDish)?.description || null
+    : null;
 
   const toggleDishVisibility = (dishId: number) => {
     setHiddenDishes(prev => {
@@ -72,47 +79,51 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
     });
   };
 
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const scrollPosition = scrollRef.current.scrollLeft;
-      const cardWidth = 266; // w-[250px] + gap-4
-      const index = Math.round(scrollPosition / cardWidth);
-      setActiveIndex(index);
-    }
+  const resetToMenu = () => {
+    setStep(1);
+    setSelectedDish(null);
   };
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      return () => scrollContainer.removeEventListener('scroll', handleScroll);
-    }
-  }, [step]); // Re-attach listener if step changes (though component might re-mount)
+    const onFocus = () => resetToMenu();
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        resetToMenu();
+      }
+    };
+
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, []);
 
   const handleDishSelect = (dishName: string) => {
     setSelectedDish(dishName);
     setStep(2);
   };
 
+  const handleBackToMenu = () => {
+    resetToMenu();
+  };
+
   const handleFinalOrder = (drinkName: string) => {
     const drinkText = drinkName === 'Sem Bebida' ? 'sem bebida' : `com *${drinkName}*`;
+    const dishName = selectedDish;
     
     const message = `*PEDIDO RESTAURANTE - MORDOMO DIGITAL*\n\n` +
       `👤 *Hóspede:* ${guestName}\n` +
       `🚪 *Quarto:* ${roomNumber}\n\n` +
-      `🍽️ *Prato:* ${selectedDish}\n` +
+      `🍽️ *Prato:* ${dishName}\n` +
       `🥤 *Bebida:* ${drinkText}\n\n` +
       `_Por favor, confiram o pedido._`;
 
     const encodedMessage = encodeURIComponent(message);
+    resetToMenu();
     window.open(`https://wa.me/556132639131?text=${encodedMessage}`, '_blank');
-
-    setStep(1);
-    setSelectedDish(null);
-    setActiveIndex(0);
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ left: 0, behavior: 'auto' });
-    }
   };
 
   // Filter dishes for display (unless in admin mode, show all with opacity)
@@ -136,26 +147,24 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
               Menu Executivo (Contingência)
             </h2>
 
-            <div 
-              ref={scrollRef}
-              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 py-10"
-              style={{
-                paddingLeft: 'calc(-100px + 40vw)',
-                paddingRight: 'calc(-100px + 40vw)'
-              }}
-            >
-              {displayDishes.map((dish, index) => {
-                const isActive = index === activeIndex;
+            <div className="px-6 pb-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
+              {displayDishes.map((dish) => {
                 const isHidden = hiddenDishes.includes(dish.id);
                 
                 return (
                   <div
                     key={dish.id}
+                    onClick={() => {
+                      if (!adminMode) {
+                        handleDishSelect(dish.name);
+                      }
+                    }}
                     className={`
-                      snap-center shrink-0 w-[250px] aspect-[4/5]
+                      w-full max-w-[320px] aspect-[4/5]
                       rounded-3xl border border-gold/20 bg-black/40 backdrop-blur-xl
                       transition-all duration-500 ease-out flex flex-col justify-end p-6 relative overflow-hidden group
-                      ${isActive ? 'scale-100 opacity-100 blur-0 shadow-laser' : 'scale-[0.9] opacity-50 blur-[4px]'}
+                      shadow-laser
                       ${isHidden && adminMode ? 'opacity-40 grayscale border-red-500/50' : ''}
                     `}
                   >
@@ -195,15 +204,14 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
                       <h3 className="font-bold text-xl leading-tight text-white drop-shadow-lg text-center">
                         {dish.name}
                       </h3>
-                      
-                      <p className={`text-[10px] text-gray-300 text-center line-clamp-3 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-                        {dish.description}
-                      </p>
 
-                      <div className={`w-full transition-all duration-500 ${isActive ? 'max-h-20 opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'}`}>
+                      <div className="w-full mt-4">
                         {!adminMode ? (
                           <button 
-                            onClick={() => handleDishSelect(dish.name)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDishSelect(dish.name);
+                            }}
                             className="w-full text-[10px] text-white/90 uppercase tracking-widest border border-gold/50 rounded-xl px-4 py-3 font-bold hover:bg-gold hover:text-black hover:border-gold transition-all shadow-lg backdrop-blur-sm bg-black/30"
                           >
                             SELECIONAR
@@ -218,6 +226,7 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
                   </div>
                 );
               })}
+              </div>
             </div>
           </motion.div>
         ) : (
@@ -230,7 +239,7 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
           >
             <div className="flex items-center gap-4 mb-6">
               <button 
-                onClick={() => setStep(1)}
+                onClick={handleBackToMenu}
                 className="p-2 -ml-2 text-gold hover:bg-white/5 rounded-full transition-colors"
               >
                 <ChevronLeft size={24} />
@@ -245,6 +254,11 @@ const ContingencyCarousel: React.FC<{ adminMode?: boolean }> = ({ adminMode }) =
               <div className="p-4 border-b border-white/10 bg-white/5">
                 <p className="text-xs text-gray-400">Prato selecionado:</p>
                 <p className="text-sm font-bold text-white">{selectedDish}</p>
+                {selectedDishDescription && (
+                  <p className="text-[10px] text-gray-300 mt-1">
+                    {selectedDishDescription}
+                  </p>
+                )}
               </div>
               
               <div className="max-h-[50vh] overflow-y-auto scrollbar-hide">

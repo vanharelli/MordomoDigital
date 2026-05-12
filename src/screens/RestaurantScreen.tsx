@@ -91,7 +91,7 @@ const RestaurantScreen: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col justify-center items-center overflow-hidden">
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
           <ContingencyCarousel adminMode={adminMode} />
           
           {adminMode && (

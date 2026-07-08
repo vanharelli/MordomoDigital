@@ -11,19 +11,15 @@ interface Product {
 }
 
 const products: Product[] = [
-  // Bebidas Geladas
-  { id: '1', name: 'Coca-Cola 310ml (Lata)', price: 8.00, category: 'drinks' },
-  { id: '2', name: 'Coca-Cola Zero 310ml (Lata)', price: 8.00, category: 'drinks' },
-  { id: '3', name: 'Guaraná Antártica 350ml (Lata)', price: 8.00, category: 'drinks' },
-  { id: '4', name: 'Água Mineral 500ml (Sem Gás)', price: 5.00, category: 'drinks' },
-  { id: '5', name: 'Água Mineral 500ml (Com Gás)', price: 6.00, category: 'drinks' },
-  { id: '10', name: 'Energético Monster', price: 20.00, category: 'drinks' },
-  // Snacks e Doces
-  { id: '6', name: 'Chocolate KitKat', price: 8.00, category: 'snacks' },
-  { id: '7', name: 'Chocolate Snickers', price: 8.00, category: 'snacks' },
-  { id: '11', name: 'Chocolate Twix', price: 8.00, category: 'snacks' },
-  { id: '8', name: 'Salgadinho Doritos', price: 8.00, category: 'snacks' },
-  { id: '9', name: 'Salgadinho Ruffles', price: 8.00, category: 'snacks' },
+  // Bebidas
+  { id: '1', name: 'Água sem Gás', price: 5.00, category: 'drinks' },
+  { id: '2', name: 'Água com Gás', price: 6.00, category: 'drinks' },
+  { id: '3', name: 'Cerveja Heineken', price: 15.00, category: 'drinks' },
+  { id: '4', name: 'Cerveja Amstel', price: 10.00, category: 'drinks' },
+  { id: '5', name: 'Guaraná', price: 8.00, category: 'drinks' },
+  { id: '6', name: 'Coca', price: 8.00, category: 'drinks' },
+  { id: '7', name: 'Coca Zero', price: 8.00, category: 'drinks' },
+  { id: '8', name: 'Suco', price: 8.00, category: 'drinks' },
 ];
 
 const ProductTableScreen: React.FC = () => {
@@ -134,16 +130,6 @@ const ProductTableScreen: React.FC = () => {
           </h3>
           <div className="space-y-2">
             {products.filter(p => p.category === 'drinks').map(renderProductRow)}
-          </div>
-        </section>
-
-        {/* Snacks Section */}
-        <section>
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2 uppercase tracking-wide">
-            PETISCOS e Doces
-          </h2>
-          <div className="space-y-2">
-            {products.filter(p => p.category === 'snacks').map(renderProductRow)}
           </div>
         </section>
       </div>

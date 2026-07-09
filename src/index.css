@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -60,7 +62,7 @@
 }
 
 /* =========================================
-   ELITE RESPONSIVE SHELL (MOBILE-FIRST)
+   RESPONSIVE SHELL (MOBILE-FIRST)
    ========================================= */
 #root {
   width: 100%;
@@ -78,5 +80,77 @@
     scrollbar-width: none;
 }
 
+/* =========================================
+   ATMOSFERA — grain + vinheta dourada
+   ========================================= */
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
 
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 29;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(218, 165, 32, 0.08), transparent 55%),
+    radial-gradient(140% 100% at 50% 115%, rgba(0, 0, 0, 0.65), transparent 60%);
+}
 
+/* Título display de luxo */
+.lux-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Linha decorativa dourada */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.7), transparent);
+}
+
+/* Texto com brilho varrendo (shimmer) */
+.gold-shimmer {
+  background: linear-gradient(100deg, #daa520 20%, #f6e7b6 40%, #daa520 60%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+
+/* Reveal em cascata (CSS-only para telas internas) */
+.reveal > * {
+  opacity: 0;
+  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.reveal > *:nth-child(1) { animation-delay: 0.05s; }
+.reveal > *:nth-child(2) { animation-delay: 0.12s; }
+.reveal > *:nth-child(3) { animation-delay: 0.19s; }
+.reveal > *:nth-child(4) { animation-delay: 0.26s; }
+.reveal > *:nth-child(5) { animation-delay: 0.33s; }
+.reveal > *:nth-child(6) { animation-delay: 0.40s; }
+.reveal > *:nth-child(7) { animation-delay: 0.47s; }
+.reveal > *:nth-child(8) { animation-delay: 0.54s; }
+.reveal > *:nth-child(n+9) { animation-delay: 0.6s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal > *, .gold-shimmer {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}

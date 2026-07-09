@@ -74,16 +74,16 @@ const ExtrasScreen: React.FC = () => {
             <ArrowLeft size={20} />
           </button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold tracking-widest text-gold uppercase">Toalha e Extras</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-wider">Quarto {roomNumber} • {guestName}</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Toalhas & Extras</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-wider mt-1">Suíte {roomNumber} • {guestName}</p>
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 pb-32 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 pb-32 scrollbar-hide reveal">
           <div className="bg-black/40 border border-white/10 rounded-2xl p-4 mb-6 backdrop-blur-sm">
             <p className="text-xs text-gray-300 text-center italic font-medium">
-              Selecione os itens extras que deseja receber em sua suíte.
+              Escolha o que precisa e receba na porta da sua suíte em poucos minutos.
             </p>
           </div>
 

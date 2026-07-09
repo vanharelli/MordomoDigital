@@ -23,26 +23,29 @@ const GuardaVolumeScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Guarda Volume</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Informações</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Guarda-Volumes</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Sua bagagem protegida</p>
           </div>
           <div className="w-10" />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide reveal">
           <div className="relative group overflow-hidden rounded-2xl border border-gold/20 bg-black/40 p-6 shadow-2xl backdrop-blur-sm">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Info size={80} className="text-gold" />
             </div>
 
-            <h2 className="text-xl font-bold text-gold mb-4 flex items-center gap-2">
+            <h2 className="lux-title text-2xl text-gold mb-4 flex items-center gap-2">
               <Info size={20} />
-              Valor
+              Bagagem em boas mãos
             </h2>
 
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                O valor do guarda volume é de <span className="text-white font-bold">R$ 10,00</span> por unidade do que for guardar.
+                Chegou antes do check-in ou quer aproveitar a cidade depois do check-out? Deixe suas malas conosco, em área reservada e monitorada.
+              </p>
+              <p>
+                O serviço custa <span className="text-white font-bold">R$ 10,00</span> por volume guardado. Basta falar com a recepção.
               </p>
             </div>
           </div>

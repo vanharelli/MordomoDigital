@@ -40,27 +40,27 @@ const HairDryerScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Secador de Cabelo</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Empréstimo na Recepção</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Secador de Cabelo</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Empréstimo gratuito na recepção</p>
           </div>
           <div className="w-10" /> {/* Spacer */}
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide reveal">
           <div className="relative group overflow-hidden rounded-2xl border border-gold/20 bg-black/40 p-6 shadow-2xl backdrop-blur-sm">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Info size={80} className="text-gold" />
             </div>
-            
-            <h2 className="text-xl font-bold text-gold mb-4 flex items-center gap-2">
+
+            <h2 className="lux-title text-2xl text-gold mb-4 flex items-center gap-2">
               <Info size={20} />
-              Termos de Empréstimo
+              Condições de empréstimo
             </h2>
-            
+
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                Siga as condições abaixo:
+                Solicite pelo aplicativo e retire o secador na recepção em poucos minutos. Veja como é simples:
               </p>
 
               <ul className="space-y-3 pt-2">
@@ -70,18 +70,18 @@ const HairDryerScreen: React.FC = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>É obrigatório assinar um termo de responsabilidade na recepção.</span>
+                  <span>Na retirada, basta assinar o termo de responsabilidade na recepção.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Ao sair do quarto, o secador deve ser devolvido à recepção.</span>
+                  <span>Ao sair do quarto, devolva o secador à recepção.</span>
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center italic text-[10px] text-gray-400 backdrop-blur-sm">
-            Este serviço não possui custo adicional.
+            Cortesia do hotel — sem custo adicional para você.
           </div>
         </div>
 
@@ -90,7 +90,7 @@ const HairDryerScreen: React.FC = () => {
           {showConfirm ? (
             <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
               <p className="text-xs text-gray-300 text-center">
-                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+                Vamos abrir o seu WhatsApp com a solicitação já preenchida — é só tocar em enviar.
               </p>
               <button
                 onClick={handleWhatsAppRequest}

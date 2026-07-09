@@ -39,29 +39,29 @@ const PrintingScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">{title}</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Solicitação na Recepção</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">{title}</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Atendimento na recepção</p>
           </div>
           <div className="w-10" />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide reveal">
           <div className="relative group overflow-hidden rounded-2xl border border-gold/20 bg-black/40 p-6 shadow-2xl backdrop-blur-sm">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Printer size={80} className="text-gold" />
             </div>
 
-            <h2 className="text-xl font-bold text-gold mb-4 flex items-center gap-2">
+            <h2 className="lux-title text-2xl text-gold mb-4 flex items-center gap-2">
               <Info size={20} />
-              Informações
+              Simples e imediato
             </h2>
 
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                Cada {isXerox ? 'cópia' : 'folha impressa'} custa <span className="text-white font-bold">R$ 1,00</span>.
+                Precisou de {isXerox ? 'uma cópia' : 'um documento impresso'}? A recepção resolve na hora, por apenas <span className="text-white font-bold">R$ 1,00</span> por {isXerox ? 'cópia' : 'folha'}.
               </p>
               <p>
-                Basta enviar o documento clicando no botão abaixo para solicitar diretamente na recepção.
+                Toque no botão abaixo, envie o documento pelo WhatsApp e retire na recepção.
               </p>
             </div>
           </div>

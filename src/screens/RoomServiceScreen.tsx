@@ -41,26 +41,26 @@ const RoomServiceScreen: React.FC = () => {
             <ArrowLeft size={20} />
           </button>
           <div className="flex-1">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Serviço de Quarto</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-wider">Arrumação e Limpeza</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Arrumação da Suíte</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-wider mt-1">Limpeza e organização diárias</p>
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 pb-32 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 pb-32 scrollbar-hide reveal">
           <div className="relative group overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-sm">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Info size={80} className="text-gold" />
             </div>
-            
-            <h2 className="text-xl font-bold text-gold mb-4 flex items-center gap-2">
+
+            <h2 className="lux-title text-2xl text-gold mb-4 flex items-center gap-2">
               <Info size={20} />
-              Protocolo de Arrumação
+              Como funciona a arrumação
             </h2>
-            
+
             <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
               <p>
-                Para que nossa equipe de governança possa realizar a limpeza e organização da sua suíte, siga os passos abaixo:
+                Nossa equipe de governança deixa sua suíte impecável em poucos minutos. Para agilizar o atendimento, siga os passos abaixo:
               </p>
               
               <div className="flex items-start gap-3 bg-red-950/40 border border-red-900/30 p-4 rounded-xl backdrop-blur-sm">
@@ -78,19 +78,19 @@ const RoomServiceScreen: React.FC = () => {
               <ul className="space-y-4 pt-2">
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Entregue a chave na **recepção** ao sair.</span>
+                  <span>Entregue a chave na <strong className="text-white">recepção</strong> ao sair.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>O quarto deve estar totalmente **desocupado**.</span>
+                  <span>Deixe o quarto totalmente <strong className="text-white">desocupado</strong>.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Coloque a **Placa de Maçaneta** na porta indicando que deseja a arrumação.</span>
+                  <span>Pendure a <strong className="text-white">placa de arrumação</strong> na maçaneta da porta.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Solicite o serviço através do botão dourado abaixo.</span>
+                  <span>Toque no botão dourado abaixo e pronto — nós cuidamos do resto.</span>
                 </li>
               </ul>
             </div>
@@ -103,7 +103,7 @@ const RoomServiceScreen: React.FC = () => {
           {showConfirm ? (
             <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
               <p className="text-xs text-gray-300 text-center">
-                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+                Vamos abrir o seu WhatsApp com a solicitação já preenchida — é só tocar em enviar.
               </p>
               <button
                 onClick={handleWhatsAppRequest}

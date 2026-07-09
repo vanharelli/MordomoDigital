@@ -38,50 +38,52 @@ const GarageScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Garagem</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Solicitação de Veículo</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Garagem</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Seu carro pronto na porta</p>
           </div>
           <div className="w-10" /> {/* Spacer */}
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide reveal">
           <div className="relative group overflow-hidden rounded-2xl border border-gold/20 bg-black/40 p-6 shadow-2xl backdrop-blur-sm">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Car size={80} className="text-gold" />
             </div>
-            
-            <h2 className="text-xl font-bold text-gold mb-4 flex items-center gap-2">
-              <Info size={20} />
-              Como funciona?
-            </h2>
-            
-            <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
 
+            <h2 className="lux-title text-2xl text-gold mb-4 flex items-center gap-2">
+              <Info size={20} />
+              Como funciona
+            </h2>
+
+            <div className="space-y-4 text-sm text-gray-300 leading-relaxed">
+              <p>
+                Avise pelo aplicativo e seu carro estará pronto na porta do hotel, sem fila e sem espera.
+              </p>
 
               <ul className="space-y-3 pt-2">
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Temos serviço de Valet.</span>
+                  <span>Serviço de manobrista incluído na sua estadia.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>A vaga na garagem é rotativa, mas seu carro fica garantido lá dentro.</span>
+                  <span>As vagas são rotativas, com seu carro sempre acomodado na área interna.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>A chave fica na recepção (OBRIGATORIO)</span>
+                  <span>A chave do veículo fica sob guarda da recepção — condição obrigatória do serviço.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_5px_rgba(212,175,55,1)]" />
-                  <span>Para permanência do carro sem hospedagem, o valor é de R$ 50 o dia.</span>
+                  <span>Após o check-out, a diária da garagem é de <strong className="text-white">R$ 50,00</strong>.</span>
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center italic text-[10px] text-gray-400 backdrop-blur-sm">
-            Recomendamos solicitar com 5 a 10 minutos de antecedência.
+            Solicite com 5 a 10 minutos de antecedência e saia sem esperar.
           </div>
         </div>
 
@@ -90,7 +92,7 @@ const GarageScreen: React.FC = () => {
           {showConfirm ? (
             <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
               <p className="text-xs text-gray-300 text-center">
-                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+                Vamos abrir o seu WhatsApp com a solicitação já preenchida — é só tocar em enviar.
               </p>
               <button
                 onClick={handleWhatsAppRequest}

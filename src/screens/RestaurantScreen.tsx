@@ -75,10 +75,10 @@ const RestaurantScreen: React.FC = () => {
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-lg font-bold tracking-widest uppercase text-gold">
-                Restaurante {adminMode && <span className="text-red-500 text-[10px] ml-2">(MODO ADMIN)</span>}
+              <h1 className="lux-title text-2xl text-gold leading-none">
+                Restaurante {adminMode && <span className="text-red-500 text-[10px] ml-2 font-sans font-bold">(MODO ADMIN)</span>}
               </h1>
-              <p className="text-[10px] text-gray-300 uppercase tracking-wider">Menu Executivo & Especialidades</p>
+              <p className="text-[10px] text-gray-300 uppercase tracking-wider mt-1">Pratos executivos e especialidades da casa</p>
             </div>
           </div>
           

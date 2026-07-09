@@ -119,16 +119,19 @@ const ProductTableScreen: React.FC = () => {
             >
               <ArrowLeft size={20} />
             </button>
-            <h1 className="text-1xl font-bold tracking-widest text-gold uppercase">Tabela de Produtos</h1>
+            <div>
+              <h1 className="lux-title text-2xl text-gold leading-none">Bebidas & Snacks</h1>
+              <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Entrega direto na sua suíte</p>
+            </div>
           </div>
 
-          <div className="p-6 space-y-8 max-w-3xl mx-auto pb-48">
+          <div className="p-6 space-y-8 max-w-3xl mx-auto pb-48 reveal">
             {/* Drinks Section */}
         <section>
-          <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2 uppercase tracking-wide">
-              Bebidas
+          <h3 className="lux-title text-xl text-emerald-400 mb-4 flex items-center gap-2 tracking-wide">
+              Bebidas geladas
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-2 reveal">
             {products.filter(p => p.category === 'drinks').map(renderProductRow)}
           </div>
         </section>

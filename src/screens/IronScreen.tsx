@@ -100,8 +100,8 @@ const IronScreen: React.FC = () => {
             <ArrowLeft size={24} />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold tracking-widest uppercase text-gold">Lavar e Passar</h1>
-            <p className="text-[10px] text-gray-300 uppercase tracking-tighter">Serviço de Lavanderia</p>
+            <h1 className="lux-title text-2xl text-gold leading-none">Lavanderia</h1>
+            <p className="text-[10px] text-gray-300 uppercase tracking-[0.2em] mt-1">Suas roupas impecáveis</p>
           </div>
           <div className="w-10" />
         </div>
@@ -139,9 +139,9 @@ const IronScreen: React.FC = () => {
 
           {/* Clothes List */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold text-gold uppercase tracking-[0.2em] px-2 flex items-center gap-2">
-              <Shirt size={14} />
-              Selecione as Peças
+            <h2 className="lux-title text-xl text-gold px-2 flex items-center gap-2">
+              <Shirt size={16} />
+              Escolha as peças
             </h2>
             
             <div className="grid grid-cols-1 gap-2">
@@ -191,7 +191,7 @@ const IronScreen: React.FC = () => {
           {showConfirm ? (
             <div className="bg-white/5 border border-gold/30 rounded-xl p-4 space-y-3">
               <p className="text-xs text-gray-300 text-center">
-                Ao clicar no botão abaixo, você será redirecionado ao WhatsApp com uma mensagem pré-programada. Basta enviar sem alterar nada.
+                Vamos abrir o seu WhatsApp com a solicitação já preenchida — é só tocar em enviar.
               </p>
               <button
                 onClick={handleWhatsAppRequest}

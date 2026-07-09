@@ -239,7 +239,7 @@ const DashboardScreen: React.FC = () => {
               <div className="flex items-center space-x-2 z-10 shrink-0">
                   <button
                     onClick={() => setIsInfoOpen(true)}
-                    className="hidden sm:block text-gold border-[0.5px] border-gold p-3 rounded-lg hover:bg-gold/10 active:scale-95 transition-all"
+                    className="text-gold border-[0.5px] border-gold p-3 rounded-lg hover:bg-gold/10 active:scale-95 transition-all"
                     aria-label="Informações do hotel"
                   >
                     <Info size={24} />
